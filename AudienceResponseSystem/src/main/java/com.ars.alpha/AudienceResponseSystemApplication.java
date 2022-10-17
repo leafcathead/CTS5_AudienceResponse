@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AudienceResponseSystemApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(AudienceResponseSystemApplication.class, args);
 	}
 
