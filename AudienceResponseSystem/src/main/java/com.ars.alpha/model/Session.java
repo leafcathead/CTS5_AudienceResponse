@@ -19,12 +19,12 @@ public class Session {
     private UUID owner;
     private Timestamp timestamp;
 
-    public Long getSessionID() {
-        return sessionID;
+    public Long getID() {
+        return ID;
     }
 
-    public void setSessionID(Long sessionID) {
-        this.sessionID = sessionID;
+    public void setID(Long ID) {
+        this.ID = ID;
     }
 
     public Session() {
