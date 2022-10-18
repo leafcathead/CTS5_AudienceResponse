@@ -6,7 +6,7 @@ import java.util.UUID;
 // These will work once we know what database we use. For now they will cause errors.
 // @Entity
 // @Table(name = "Message")
-public class Comment {
+public class Message {
 
     private UUID message;
     private Session session;
@@ -14,7 +14,7 @@ public class Comment {
     private User poster;
     private Timestamp timestamp;
 
-    public Comment() {
+    public Message() {
 
     }
 
