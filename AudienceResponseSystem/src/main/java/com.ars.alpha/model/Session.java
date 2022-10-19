@@ -16,18 +16,33 @@ public class Session {
     @Column(name = "ID", nullable = false)
     private Long ID;
 
-    private UUID owner;
+    @Column(name = "Owner", nullable = false)
+    private Long owner;
+
+    @Column(name = "Timestamp", nullable = false) // This line might have to be removed? Can we do this just in Table definition?
     private Timestamp timestamp;
+
+
+    public Session() {
+
+    }
 
     public Long getID() {
         return ID;
+    }
+
+    public Long getOwner() {
+        return owner;
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
     public void setID(Long ID) {
         this.ID = ID;
     }
 
-    public Session() {
 
-    }
+
 }
