@@ -12,7 +12,7 @@
 	<artifactId>alpha</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Audience Response System</name>
-	<description>Alpha development of our Audience Response Systen</description>
+	<description>Alpha development of our Audience Response System</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
