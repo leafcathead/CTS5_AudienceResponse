@@ -8,9 +8,7 @@ import com.ars.alpha.service.TestStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.SQLException;
@@ -79,6 +77,14 @@ public class ARSRestController {
             return 500;
         }
 
+        return 0;
+    }
+
+    @PostMapping(value="/testPost")
+    int testingPost(@RequestBody TestStudent student) {
+        System.out.println("Post detected");
+        System.out.println(student);
+        System.out.println(student.getDisplayName());
         return 0;
     }
 
