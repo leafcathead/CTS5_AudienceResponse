@@ -1,0 +1,44 @@
+@startuml
+package com.ars.alpha.model {
+
+class SessionUser
+class Session
+class Message
+
+}
+
+package com.ars.alpha.service {
+
+class SessionService implements SessionServiceInterface
+class UserService implements UserServiceInterface
+class MessageService implements UserServiceInterface
+
+interface SessionServiceInterface
+interface UserServiceInterface
+interface MessageServiceInterface
+
+}
+
+package com.ars.alpha.dao {
+
+interface SessionRepository extends JpaRepository
+interface UserRepository extends JpaRepository
+interface MessageRepository extends JpaRepository
+
+}
+
+package com.ars.alpha.controller {
+
+class ARSRestController
+
+}
+
+UserService -- UserRepository
+SessionService -- SessionRepository
+MessageService -- MessageRepository
+
+
+UserService -- ARSRestController
+SessionService -- ARSRestController
+MessageService -- ARSRestController
+@enduml

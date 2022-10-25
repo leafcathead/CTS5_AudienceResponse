@@ -15,6 +15,9 @@ public class Session {
     private Long id;
 
 
+    @Column()
+    private String sessionJoinID;
+
     @OneToOne
     @JoinColumn(name = "OwnerID", nullable = false)
     private SessionUser owner;
