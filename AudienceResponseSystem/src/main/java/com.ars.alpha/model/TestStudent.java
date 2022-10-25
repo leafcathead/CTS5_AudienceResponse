@@ -7,17 +7,25 @@ import javax.persistence.*;
 public class TestStudent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long ID;
 
     @Column(name = "DisplayName")
     private String displayName;
 
+    public TestStudent (String displayName) {
+        this.displayName = displayName;
+    }
+
+    public TestStudent() {
+
+    }
+
     public Long getId() {
-        return id;
+        return ID;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.ID = id;
     }
 
     public String getDisplayName() {

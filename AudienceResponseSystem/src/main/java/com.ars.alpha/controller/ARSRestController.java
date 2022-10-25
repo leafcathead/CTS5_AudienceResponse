@@ -2,7 +2,9 @@ package com.ars.alpha.controller;
 
 import com.ars.alpha.dao.TestStudentDAO;
 import com.ars.alpha.dao.TestStudentRepository;
+import com.ars.alpha.exception.TestStudentStoredProcedureException;
 import com.ars.alpha.model.TestStudent;
+import com.ars.alpha.service.TestStudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -24,7 +26,7 @@ public class ARSRestController {
 //    }
 
     @Autowired
-    private TestStudentRepository testStudentRepo;
+    private TestStudentService testStudentService;
 
     @GetMapping("/")
     ModelAndView welcome () {
@@ -39,11 +41,8 @@ public class ARSRestController {
 
         System.out.println("Received");
         try {
-            List<TestStudent> myList = testStudentRepo.findAll();
-            System.out.println(myList.size());
-            for (TestStudent tester : myList) {
-                System.out.println(tester.getDisplayName());
-            }
+            String displayName = "Jimmy John";
+            testStudentService.addStudent(displayName);
 
             if (false) {
                 throw new SQLException();
@@ -53,6 +52,31 @@ public class ARSRestController {
 
             System.out.println("Uh-oh");
             return 1;
+        }
+
+        return 0;
+    }
+
+    @GetMapping("/testAddStudentSPROC")
+    int testAddStudentSPROC() {
+
+        System.out.println("Received");
+        try {
+            String displayName = "francis";
+            testStudentService.addStudentBySPROC(displayName);
+
+            if (false) {
+                throw new SQLException();
+            }
+
+        } catch (SQLException e) {
+
+            System.out.println("Uh-oh");
+            return 1;
+        } catch(TestStudentStoredProcedureException e) {
+
+            System.out.println("Procedure bug");
+            return 500;
         }
 
         return 0;
