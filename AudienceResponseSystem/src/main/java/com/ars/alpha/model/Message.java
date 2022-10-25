@@ -25,7 +25,7 @@ public class Message {
 
     @ManyToOne
     @JoinColumn(name = "SessionID")
-    private Session session;
+    private SessionRoom session;
     @ManyToOne
     @JoinColumn(name = "ReplyTo")
     private Message replyTo;
@@ -42,11 +42,11 @@ public class Message {
         this.replyTo = replyTo;
     }
 
-    public Session getSession() {
+    public SessionRoom getSession() {
         return session;
     }
 
-    public void setSession(Session session) {
+    public void setSession(SessionRoom session) {
         this.session = session;
     }
 

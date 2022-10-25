@@ -7,15 +7,15 @@ import java.sql.Timestamp;
 // These will work once we know what database we use. For now they will cause errors.
 // @Entity
 @Entity
-@Table(name = "Session")
-public class Session {
+@Table(name = "SessionRoom")
+public class SessionRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
     private Long id;
 
 
-    @Column()
+    @Column(name = "sessionPassword")
     private String sessionJoinID;
 
     @OneToOne
@@ -30,7 +30,7 @@ public class Session {
     }
 
 
-    public Session() {
+    public SessionRoom() {
 
     }
 

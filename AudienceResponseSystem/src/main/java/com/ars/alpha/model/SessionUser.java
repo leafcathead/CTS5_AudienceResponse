@@ -18,13 +18,13 @@ public class SessionUser {
 
     @ManyToOne
     @JoinColumn(name = "SessionID")
-    Session session;
+    SessionRoom session;
 
-    public Session getSession() {
+    public SessionRoom getSession() {
         return session;
     }
 
-    public void setSession(Session session) {
+    public void setSession(SessionRoom session) {
         this.session = session;
     }
 
