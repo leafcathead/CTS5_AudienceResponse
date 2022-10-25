@@ -2,9 +2,7 @@ package com.ars.alpha.model;
 
 
 import javax.persistence.*;
-import java.sql.Date;
 import java.sql.Timestamp;
-import java.util.UUID;
 
 // These will work once we know what database we use. For now they will cause errors.
 // @Entity
@@ -19,12 +17,12 @@ public class Session {
 
     @OneToOne
     @JoinColumn(name = "OwnerID", nullable = false)
-    private User owner;
+    private SessionUser owner;
 
     @Column(name = "Timestamp", nullable = false) // This line might have to be removed? Can we do this just in Table definition?
     private Timestamp timestamp;
 
-    public void setOwner(User owner) {
+    public void setOwner(SessionUser owner) {
         this.owner = owner;
     }
 
@@ -37,7 +35,7 @@ public class Session {
         return id;
     }
 
-    public User getOwner() {
+    public SessionUser getOwner() {
         return owner;
     }
 

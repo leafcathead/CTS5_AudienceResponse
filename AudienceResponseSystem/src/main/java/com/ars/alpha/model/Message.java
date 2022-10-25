@@ -19,10 +19,47 @@ public class Message {
     @Column(name = "MsgContents", nullable = false)
     private String messageContents;
 
+    @ManyToOne
+    @JoinColumn(name = "PosterID")
+    private SessionUser poster;
 
-  //  private Session session;
-  //  private User poster;
+    @ManyToOne
+    @JoinColumn(name = "SessionID")
+    private Session session;
+    @ManyToOne
+    @JoinColumn(name = "ReplyTo")
+    private Message replyTo;
+
+
+    @Column(name="Timestamp", nullable = false, updatable = false)
     private Timestamp timestamp;
+
+    public Message getReplyTo() {
+        return replyTo;
+    }
+
+    public void setReplyTo(Message replyTo) {
+        this.replyTo = replyTo;
+    }
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
+    public SessionUser getPoster() {
+        return poster;
+    }
+
+    public void setPoster(SessionUser poster) {
+        this.poster = poster;
+    }
+    //  private Session session;
+  //  private User poster;
+
 
     public Long getId() {
         return id;

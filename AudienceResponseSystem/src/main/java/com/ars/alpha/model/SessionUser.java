@@ -1,14 +1,13 @@
 package com.ars.alpha.model;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 // These will work once we know what database we use. For now they will cause errors.
 // @Entity
 // @Table(name = "User")
 @Entity
 @Table(name = "User")
-public class User {
+public class SessionUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
@@ -37,7 +36,7 @@ public class User {
         this.id = id;
     }
 
-    public User() {
+    public SessionUser() {
 
     }
 
