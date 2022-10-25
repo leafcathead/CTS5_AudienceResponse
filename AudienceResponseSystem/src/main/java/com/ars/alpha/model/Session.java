@@ -14,7 +14,7 @@ public class Session {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
-    private Long ID;
+    private Long id;
 
     @Column(name = "Owner", nullable = false)
     private Long owner;
@@ -28,7 +28,7 @@ public class Session {
     }
 
     public Long getID() {
-        return ID;
+        return id;
     }
 
     public Long getOwner() {
@@ -40,7 +40,7 @@ public class Session {
     }
 
     public void setID(Long ID) {
-        this.ID = ID;
+        this.id = ID;
     }
 
 
