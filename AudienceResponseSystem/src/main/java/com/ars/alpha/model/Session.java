@@ -16,11 +16,17 @@ public class Session {
     @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(name = "Owner", nullable = false)
-    private Long owner;
+
+    @OneToOne
+    @JoinColumn(name = "OwnerID", nullable = false)
+    private User owner;
 
     @Column(name = "Timestamp", nullable = false) // This line might have to be removed? Can we do this just in Table definition?
     private Timestamp timestamp;
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
 
 
     public Session() {
@@ -31,7 +37,7 @@ public class Session {
         return id;
     }
 
-    public Long getOwner() {
+    public User getOwner() {
         return owner;
     }
 

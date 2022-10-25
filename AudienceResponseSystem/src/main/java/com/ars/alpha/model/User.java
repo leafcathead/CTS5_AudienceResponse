@@ -17,6 +17,18 @@ public class User {
     @Column(name = "DisplayName")
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "SessionID")
+    Session session;
+
+    public Session getSession() {
+        return session;
+    }
+
+    public void setSession(Session session) {
+        this.session = session;
+    }
+
     public Long getId() {
         return id;
     }
