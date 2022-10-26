@@ -4,7 +4,10 @@ package com.ars.alpha.controller;
 import com.ars.alpha.dao.TestStudentRepository;
 import com.ars.alpha.exception.TestStudentStoredProcedureException;
 import com.ars.alpha.model.TestStudent;
+import com.ars.alpha.service.MessageService;
+import com.ars.alpha.service.SessionService;
 import com.ars.alpha.service.TestStudentService;
+import com.ars.alpha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -25,6 +28,19 @@ public class ARSRestController {
 
     @Autowired
     private TestStudentService testStudentService;
+
+    @Autowired
+    private SessionService sessionService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private MessageService messageService;
+
+
+
+
 
     @GetMapping("/")
     ModelAndView welcome () {
