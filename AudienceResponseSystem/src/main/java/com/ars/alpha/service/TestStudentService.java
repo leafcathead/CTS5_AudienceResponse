@@ -8,6 +8,8 @@ import org.hibernate.HibernateException;
 import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceException;
@@ -20,6 +22,7 @@ public class TestStudentService implements TestStudentInterface{
     private TestStudentRepository testStudentRepo;
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public int addStudent(String displayName) {
         testStudentRepo.save(new TestStudent(displayName));
         return 0;

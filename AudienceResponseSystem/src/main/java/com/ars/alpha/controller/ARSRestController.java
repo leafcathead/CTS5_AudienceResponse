@@ -3,6 +3,7 @@ package com.ars.alpha.controller;
 
 import com.ars.alpha.dao.TestStudentRepository;
 import com.ars.alpha.exception.TestStudentStoredProcedureException;
+import com.ars.alpha.model.SessionUser;
 import com.ars.alpha.model.TestStudent;
 import com.ars.alpha.service.MessageService;
 import com.ars.alpha.service.SessionService;
@@ -97,13 +98,6 @@ public class ARSRestController {
         return 0;
     }
 
-    @PostMapping(value="/testPost")
-    int testingPost(@RequestBody TestStudent student) {
-        System.out.println("Post detected");
-        System.out.println(student);
-        System.out.println(student.getDisplayName());
-        return 0;
-    }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ModelAndView pageNotFound () {

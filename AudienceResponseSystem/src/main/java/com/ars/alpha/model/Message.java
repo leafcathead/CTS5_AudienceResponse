@@ -60,6 +60,14 @@ public class Message {
     //  private Session session;
   //  private User poster;
 
+    public String getMessageContents() {
+        return this.messageContents;
+    }
+
+    public void setMessageContents(String newMessage) {
+        this.messageContents = newMessage;
+    }
+
 
     public Long getId() {
         return id;

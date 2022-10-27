@@ -1,5 +1,6 @@
 package com.ars.alpha.model;
 
+
 import javax.persistence.*;
 
 // These will work once we know what database we use. For now they will cause errors.
@@ -36,7 +37,17 @@ public class SessionUser {
         this.id = id;
     }
 
+    public String getDisplayName() { return this.name; }
+
+    public void setDisplayName (String newName) {
+        this.name = newName;
+    }
+
     public SessionUser() {
+        this.id = 1234L;
+        this.name = "Bobby";
+        this.session = new SessionRoom();
+
 
     }
 
