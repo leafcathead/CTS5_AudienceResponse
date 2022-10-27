@@ -49,7 +49,7 @@ public class SessionRoomController {
 
 
     @CrossOrigin
-    @RequestMapping(value = "/testPost", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("/testPost")
     SessionUser testingPost(@RequestBody TestStudent student) {
         System.out.println("Post detected");
         System.out.println(student);
