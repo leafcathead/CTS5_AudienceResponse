@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=\, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        #issMap {
+            height: 180px;
+        }
+    </style>
+
+    <title>Fetch JSON from API</title>
+</head>
+<body>
+
+
+
+
+<!--<p>-->
+<!--    First Name: <span id="fName"></span><br />-->
+<!--    Last Name: <span id="lName"></span><br/>-->
+<!--    Id:      <span id="id"></span><br/>-->
+<!--    contacts<br/>-->
+<!--    home address:      <span id="wAdd"></span><br/>-->
+<!--    work address:      <span id="hAdd"></span><br/>-->
+
+<!--</p>-->
+
+<!--    Comment Box Example 1     -->
+<h1>Comment Box Samples</h1> <br/>
+
+<h1>Sample 1</h1>
+
+<div class="row d-flex justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-0 border" style="background-color: #f0f2f5;">
+            <div class="card-body p-4">
+                <div class="form-outline mb-4">
+                    <input type="text" id="addANote" class="form-control" placeholder="Type comment..." />
+                    <label class="form-label" for="addANote">+ Add a note</label>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <p>Type your note, and hit enter to add it</p>
+
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                                <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(4).webp" alt="avatar" width="25"
+                                     height="25" />
+                                <p class="small mb-0 ms-2">Martha</p>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                                <p class="small text-muted mb-0">Upvote?</p>
+                                <i class="far fa-thumbs-up mx-2 fa-xs text-black" style="margin-top: -0.16rem;"></i>
+                                <p class="small text-muted mb-0">3</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <p>Type your note, and hit enter to add it</p>
+
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                                <img src="" alt="avatar" width="25"
+                                     height="25" />
+                                <p class="small mb-0 ms-2">Johny</p>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                                <p class="small text-muted mb-0">Upvote?</p>
+                                <i class="far fa-thumbs-up mx-2 fa-xs text-black" style="margin-top: -0.16rem;"></i>
+                                <p class="small text-muted mb-0">4</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <p>Type your note, and hit enter to add it</p>
+
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                                <img src="" alt="avatar" width="25"
+                                     height="25" />
+                                <p class="small mb-0 ms-2">Mary Kate</p>
+                            </div>
+                            <div class="d-flex flex-row align-items-center text-primary">
+                                <p class="small mb-0">Upvoted</p>
+                                <i class="fas fa-thumbs-up mx-2 fa-xs" style="margin-top: -0.16rem;"></i>
+                                <p class="small mb-0">2</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <p>Type your note, and hit enter to add it</p>
+
+                        <div class="d-flex justify-content-between">
+                            <div class="d-flex flex-row align-items-center">
+                                <img src="" alt="avatar" width="25"
+                                     height="25" />
+                                <p class="small mb-0 ms-2">Johny</p>
+                            </div>
+                            <div class="d-flex flex-row align-items-center">
+                                <p class="small text-muted mb-0">Upvote?</p>
+                                <i class="far fa-thumbs-up ms-2 fa-xs text-black" style="margin-top: -0.16rem;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--  End of  Comment Box Sample 1     -->
+
+
+<!--  comment code Sample 2 -->
+<h1>Sample 2</h1>
+
+
+<section style="background-color: #eee;">
+    <div class="container my-5 py-5">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-12 col-lg-10 col-xl-8">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-start align-items-center">
+                            <img class="rounded-circle shadow-1-strong me-3"
+                                 src="" alt="avatar" width="60"
+                                 height="60" />
+                            <div>
+                                <h6 class="fw-bold text-primary mb-1">Lily Coleman</h6>
+                                <p class="text-muted small mb-0">
+                                    Shared publicly - Jan 2020
+                                </p>
+                            </div>
+                        </div>
+
+                        <p class="mt-3 mb-4 pb-2">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
+                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip consequat.
+                        </p>
+
+                        <div class="small d-flex justify-content-start">
+                            <a href="#!" class="d-flex align-items-center me-3">
+                                <i class="far fa-thumbs-up me-2"></i>
+                                <p class="mb-0">Like</p>
+                            </a>
+                            <a href="#!" class="d-flex align-items-center me-3">
+                                <i class="far fa-comment-dots me-2"></i>
+                                <p class="mb-0">Comment</p>
+                            </a>
+                            <a href="#!" class="d-flex align-items-center me-3">
+                                <i class="fas fa-share me-2"></i>
+                                <p class="mb-0">Share</p>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+                        <div class="d-flex flex-start w-100">
+                            <img class="rounded-circle shadow-1-strong me-3"
+                                 src="" alt="avatar" width="40"
+                                 height="40" />
+                            <div class="form-outline w-100">
+                <textarea class="form-control" id="textAreaExample" rows="4"
+                          style="background: #fff;"></textarea>
+                                <label class="form-label" for="textAreaExample">Message</label>
+                            </div>
+                        </div>
+                        <div class="float-end mt-2 pt-1">
+                            <button type="button" class="btn btn-primary btn-sm">Post comment</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!--  End of  Comment Box Example 2     -->
+
+
+
+
+
+
+
+
+
+<!--   Comment Box Example 3     -->
+
+
+<h1>Sample 3</h1>
+
+
+<section style="background-color: #e7effd;">
+    <div class="container my-5 py-5 text-dark">
+        <div class="row d-flex justify-content-center">
+            <div class="col-md-11 col-lg-9 col-xl-7">
+                <div class="d-flex flex-start mb-4">
+                    <img class="rounded-circle shadow-1-strong me-3"
+                         src="" alt="avatar" width="65"
+                         height="65" />
+                    <div class="card w-100">
+                        <div class="card-body p-4">
+                            <div class="">
+                                <h5>Johny Cash</h5>
+                                <p class="small">3 hours ago</p>
+                                <p>
+                                    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque
+                                    ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus
+                                    viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla.
+                                    Donec lacinia congue felis in faucibus ras purus odio, vestibulum in
+                                    vulputate at, tempus viverra turpis.
+                                </p>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <a href="#!" class="link-muted me-2"><i class="fas fa-thumbs-up me-1"></i>132</a>
+                                        <a href="#!" class="link-muted"><i class="fas fa-thumbs-down me-1"></i>15</a>
+                                    </div>
+                                    <a href="#!" class="link-muted"><i class="fas fa-reply me-1"></i> Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-start">
+                    <img class="rounded-circle shadow-1-strong me-3"
+                         src="" alt="avatar" width="65"
+                         height="65" />
+                    <div class="card w-100">
+                        <div class="card-body p-4">
+                            <div class="">
+                                <h5>Mindy Campbell</h5>
+                                <p class="small">5 hours ago</p>
+                                <p>
+                                    Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus
+                                    cumque doloribus dolorum dolor repellat nemo animi at iure autem fuga
+                                    cupiditate architecto ut quam provident neque, inventore nisi eos quas?
+                                </p>
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <a href="#!" class="link-muted me-2"><i class="fas fa-thumbs-up me-1"></i>158</a>
+                                        <a href="#!" class="link-muted"><i class="fas fa-thumbs-down me-1"></i>13</a>
+                                    </div>
+                                    <a href="#!" class="link-muted"><i class="fas fa-reply me-1"></i> Reply</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+<!--  End of  Comment Box Example 3     -->
+
+
+
+
+
+
+
+
+
+
+
+
+<h1>Fetch JSON from API Response/Request restructure Arraylist elements/objects as Paragraphs </h1>
+<div id="myList" class="vr" style="height: 250px; margin: 50px;" >
+
+
+</div>
+
+
+<h1>Fetch JSON from API (Response/Request) and restructuring Arraylist's elements/objects as table's rows </h1>
+
+<table class="table table-striped">
+    <tr class="bg-info">
+        <td>first name</td>
+        <td>last name</td>
+        <td>mobile</td>
+        <td>gender</td>
+        <td>address</td>
+
+
+    </tr>
+    <tbody id="myTable">
+
+    </tbody>
+
+</table>
+
+<script>
+
+
+    // const api_url = 'https://api.wheretheiss.at/v1/satellites/25544';
+    //  const api_url =  'http://localhost:8080/users';
+    //   const api_url =  'http://localhost:8080/getJsonObject';
+    //   const api_url =  'http://localhost:8080/contacts';
+
+
+    //
+    // async function getData() {
+    //     const response = await fetch(api_url);
+    //     const data = await response.json();
+    //  in case individual object
+    //  const { lastName, firstName } = data;
+    //    document.getElementById('fName').textContent = data.firstName;
+    //      document.getElementById('lName').textContent = data.lastName;
+    //   document.getElementById('id').textContent = data.id;
+    //     document.getElementById('wAdd').textContent = data.arrayBuffer();
+    //     document.getElementById('id').textContent = data.id;
+
+    //       console.log(data);
+    // //in case arraylist
+    //
+    //
+    //
+    //
+    //     }
+
+    // async  function destructJsonAndReformData(){
+    //       const response = await fetch(api_url);
+    //       const data = await response.json();
+    //       let table = document.getElementById('myList')
+    //       for (let i =0; i < data.length; i++){
+    //
+    //
+    //           data[i];
+    //
+    //
+    //
+    //           console.log(data[i]);
+    //       }
+    //
+    //
+    //   }
+    //   destructJsonAndReformData();
+
+
+
+    //  getData();
+
+
+
+
+
+
+
+    //  setInterval(getData, 1000);
+
+    const api_url =  'http://localhost:8080/session/testPost';
+
+    async function destructJsonAndReformData(){
+        const response = await fetch(api_url);
+        const data = await response.json();
+
+        // var table = document.getElementById('myTable');
+        // var listX =  document.getElementById('myList');
+        //
+        // for (var i = 0; i < data.length; i++){
+        //
+        //     var row = `<tr>
+		// 					<td>${data[i].firstName}</td>
+		// 					<td>${data[i].lastName}</td>
+		// 					<td>${data[i].mobile}</td>
+		// 					<td>${data[i].address}</td>
+		// 					<td>${data[i].gender}</td>
+		// 			  </tr>`;
+        //     table.innerHTML += row;
+
+            // var par =`<p>${data[i].firstName} -- ${data[i].lastName} -- ${data[i].mobile} -- ${data[i].address} -- ${data[i].gender}</p>`;
+            //     listX.innerHTML +=  par;
+            console.log(data);
+       // }
+    }
+
+    destructJsonAndReformData();
+
+    //  setInterval(destructJsonAndReformData, 2000);
+</script>
+</body>
+</html>

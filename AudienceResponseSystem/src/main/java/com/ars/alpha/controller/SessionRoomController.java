@@ -8,6 +8,7 @@ import com.ars.alpha.service.TestStudentService;
 import com.ars.alpha.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Entity;
@@ -47,7 +48,8 @@ public class SessionRoomController {
 
 
 
-    @PostMapping(value="/testPost")
+    @CrossOrigin
+    @RequestMapping(value = "/testPost", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     SessionUser testingPost(@RequestBody TestStudent student) {
         System.out.println("Post detected");
         System.out.println(student);
