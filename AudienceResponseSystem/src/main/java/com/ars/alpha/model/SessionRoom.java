@@ -1,6 +1,9 @@
 package com.ars.alpha.model;
 
 
+import org.hibernate.type.descriptor.sql.NVarcharTypeDescriptor;
+
+import javax.lang.model.type.NullType;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -8,10 +11,18 @@ import java.sql.Timestamp;
 // @Entity
 @Entity
 @Table(name = "SessionRoom")
+@NamedStoredProcedureQuery(name = "CREATE_SESSION", procedureName = "CREATE_SESSION", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "newSessionID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "newUserID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "randomPassword", type = String.class) })
+@NamedStoredProcedureQuery(name = "favoriteNum", procedureName = "FAVORITE_NUM", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "useless", type = Integer.class),
+        @StoredProcedureParameter(mode = ParameterMode.OUT, name = "out", type = Integer.class),
+        @StoredProcedureParameter(mode = ParameterMode.OUT, name = "favoriteNum", type = Integer.class)})
 public class SessionRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "ID")
     private Long id;
 
 
@@ -19,10 +30,10 @@ public class SessionRoom {
     private String sessionJoinID;
 
     @OneToOne
-    @JoinColumn(name = "OwnerID", nullable = false)
+    @JoinColumn(name = "OwnerID")
     private SessionUser owner;
 
-    @Column(name = "Timestamp", nullable = false) // This line might have to be removed? Can we do this just in Table definition?
+    @Column(name = "Timestamp") // This line might have to be removed? Can we do this just in Table definition?
     private Timestamp timestamp;
 
     public void setOwner(SessionUser owner) {

@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class SessionUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "ID")
     private Long id;
 
     @Column(name = "DisplayName")

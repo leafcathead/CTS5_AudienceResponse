@@ -32,11 +32,8 @@ public class SessionRoomController {
 
     @GetMapping("/createSession")
     Map<String, Object> createSession() {
-        Map<String, Object> myMap = new HashMap<String, Object>();
-        myMap.put("User", new SessionUser());
-        myMap.put("Session", new SessionRoom());
-
-        return myMap;
+        System.out.println("Create session listener...");
+        return sessionService.createSession();
     }
 
     @PostMapping("/joinSession")
