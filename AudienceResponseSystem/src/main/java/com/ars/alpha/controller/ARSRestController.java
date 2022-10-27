@@ -19,6 +19,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class ARSRestController {
 
 //    @GetMapping("/")

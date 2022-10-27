@@ -28,11 +28,18 @@ public class SessionRoomController {
     private UserService userService;
 
 
-    @GetMapping("/createNewSession")
+    @GetMapping("/createSession")
     Map<String, Object> createSession() {
         Map<String, Object> myMap = new HashMap<String, Object>();
         myMap.put("User", new SessionUser());
         myMap.put("Session", new SessionRoom());
+
+        return myMap;
+    }
+
+    @PostMapping("/joinSession")
+    Map<String, Object> joinSession() {
+        Map<String, Object> myMap = null;
 
         return myMap;
     }
