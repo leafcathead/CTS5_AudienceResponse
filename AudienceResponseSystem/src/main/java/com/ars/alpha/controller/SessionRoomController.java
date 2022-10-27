@@ -15,7 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:8080",methods={RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD})
+@RequestMapping("/session")
 public class SessionRoomController {
 
     @Autowired
