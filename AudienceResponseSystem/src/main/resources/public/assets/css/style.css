@@ -1,0 +1,203 @@
+:root {
+/*COLORS*/
+--primary-color: #e7ecf1;
+--secondary-color: #grey;
+
+/*FONT*/
+--primary-font: 'Open Sans', Helvetica, Arial, sans-serif
+--secondary-font: 'freehand'
+--font-light:400;
+--font-bold:700;
+--font-size-text: 14px;
+--font-size-title: 22px;
+--font-size-section: 45px;
+
+/*SIZE*/
+--primary-size: 25px;
+--primary-margin: var(--primary-size);
+--primary-padding: var(--primary-size);
+
+/* Background */
+
+background-color:rgb(124, 124, 124);
+}
+
+.form-top{
+
+    margin-left:auto;
+}
+
+.button-element{
+  margin-right:2%;
+}
+.navbar{
+
+    height: 120px;
+}
+.logo-text{
+
+    font-family: var(--primary-font);
+    color: var(--primary-color);
+
+}
+.body-div{
+ background-origin: padding-box;
+
+}
+
+.body-content{
+  font-family: var(--primary-font);
+  font-size: var(--font-size-title);
+  background-color: whitesmoke;
+  padding-bottom: 5%;
+  padding-top: 5%;
+  padding-right: 20%;
+  padding-left: 20%;
+  text-align: left;
+  
+
+}
+
+.rosponser{
+  font-family: var(--secondary-font);
+  padding-bottom: 1%;
+  padding-top: 5%;
+  padding-right: 20%;
+  padding-left: 20%;
+  font-size:  30px;
+  font-weight: var(--font-bold);
+  text-align: center;
+  padding-bottom: 8%;
+  text-align: left;
+  background-color: whitesmoke;
+
+}
+
+
+
+
+
+
+/*  create a session */
+
+
+.gradient-custom-2 {
+  /* fallback for old browsers */
+  background: #1d1d1c;
+  
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(to right, #24211f, #888585, #2b2828, #ebe7e9);
+  
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, #cecdcc, #5a5858, #353333, #292727);
+  }
+  
+  @media (min-width: 768px) {
+  .gradient-form {
+  height: 100vh !important;
+  }
+  }
+  @media (min-width: 769px) {
+  .gradient-custom-2 {
+  border-top-right-radius: .3rem;
+  border-bottom-right-radius: .3rem;
+  }
+  }
+
+
+
+
+
+/* External footer code */
+
+footer {
+    background: #3e4042;
+  }
+  .text-small {
+  font-size: 0.9rem;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+a:hover, a:focus {
+  text-decoration: none;
+}
+
+.form-control {
+  background: #212529;
+  border-color: #545454;
+}
+
+.form-control:focus {
+  background: #494b4e;
+}
+
+body {
+    font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; }
+  
+  h1, h2, h3, h4, h5, h6,
+  .h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; }
+  
+  a {
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease; }
+    a, a:hover {
+      text-decoration: none !important; }
+  
+  .content {
+    height: 70vh; }
+  
+  .footer-99382 {
+    padding: 7rem 0;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    color: #777;
+    position: relative;
+    font-family: "Poppins", sans-serif; }
+    .footer-99382:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7); }
+    .footer-99382 h3 {
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 30px; }
+    .footer-99382 .footer-site-logo {
+      font-size: 1.5rem;
+      color: #fff; }
+    .footer-99382 .nav-links li {
+      margin-bottom: 10px; }
+      .footer-99382 .nav-links li a {
+        color: #999999; }
+        .footer-99382 .nav-links li a:hover {
+          color: #fff; }
+    .footer-99382 .btn.btn-tertiary {
+      background-color: #1d1b1c;
+      color: #fff;
+      border-radius: 30px;
+      border: none;
+      padding: 10px 20px; }
+    .footer-99382 .social li {
+      display: inline-block; }
+      .footer-99382 .social li a {
+        color: gray;
+        padding: 7px; }
+        .footer-99382 .social li a:hover {
+          color: #fff; }
+    .footer-99382 .copyright {
+      border-top: 1px solid #595959; }
+  
