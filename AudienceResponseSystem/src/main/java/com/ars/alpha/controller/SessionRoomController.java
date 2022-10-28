@@ -3,10 +3,14 @@ package com.ars.alpha.controller;
 import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.model.SessionUser;
 import com.ars.alpha.model.TestStudent;
+import com.ars.alpha.other.Password;
 import com.ars.alpha.service.SessionService;
 import com.ars.alpha.service.TestStudentService;
 import com.ars.alpha.service.UserService;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.util.JSONPObject;
+import org.apache.tomcat.util.json.JSONParser;
+import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -37,10 +41,11 @@ public class SessionRoomController {
     }
 
     @PostMapping("/joinSession")
-    Map<String, Object> joinSession() {
-        Map<String, Object> myMap = null;
+    Map<String, Long> joinSession(@RequestBody Password password) {
+        System.out.println("Join session");
+        System.out.println("Password: " + password.getPassword());
 
-        return myMap;
+        return sessionService.joinSession(password.getPassword());
     }
 
 

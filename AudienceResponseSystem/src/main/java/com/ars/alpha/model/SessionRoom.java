@@ -15,10 +15,12 @@ import java.sql.Timestamp;
         @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "newSessionID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "newUserID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "randomPassword", type = String.class) })
-@NamedStoredProcedureQuery(name = "favoriteNum", procedureName = "FAVORITE_NUM", parameters = {
-        @StoredProcedureParameter(mode = ParameterMode.IN, name = "useless", type = Integer.class),
-        @StoredProcedureParameter(mode = ParameterMode.OUT, name = "out", type = Integer.class),
-        @StoredProcedureParameter(mode = ParameterMode.OUT, name = "favoriteNum", type = Integer.class)})
+@NamedStoredProcedureQuery(name = "GET_SESSION_ROOM_ID_FROM_PASSWORD", procedureName = "GET_SESSION_ROOM_ID_FROM_PASSWORD", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionPassword", type = String.class),
+        @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "sessionID", type = Long.class) })
+@NamedStoredProcedureQuery(name = "JOIN_SESSION", procedureName = "JOIN_SESSION", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "newUserID", type = Long.class) })
 public class SessionRoom {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

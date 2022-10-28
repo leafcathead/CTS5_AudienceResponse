@@ -1,11 +1,10 @@
 package com.ars.alpha.service;
 
 import com.ars.alpha.dao.SessionRepository;
-import com.ars.alpha.dao.TestStudentRepository;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -32,6 +31,29 @@ public class SessionService implements SessionServiceInterface {
 //        }
 
         return sessionRepository.CREATE_SESSION(1L, 1L, "Hel");
+    }
+
+    @Override
+    public Map<String, Long> joinSession(String password) {
+        Map<String, Long> returnMap = new HashMap<String, Long>();
+        // First I have to get the session ID from the password.
+        Long sessionID = sessionRepository.GET_SESSION_ROOM_ID_FROM_PASSWORD(password, 1L);
+        System.out.println("Session ID: " + sessionID);
+
+        if (sessionID == 0) {
+
+            returnMap.put("userID", 0L);
+            returnMap.put("sessionID", 0L);
+        }
+
+        // Now we can add them to the session
+        Long userID = sessionRepository.JOIN_SESSION(sessionID, 1L);
+        System.out.println("User ID: " + userID);
+
+        returnMap.put("userID", userID);
+        returnMap.put("sessionID", sessionID);
+
+        return (Map<String,Long>) returnMap;
     }
 
     @Override

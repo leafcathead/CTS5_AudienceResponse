@@ -9,13 +9,14 @@ GO
 
 CREATE OR ALTER PROCEDURE CREATE_SESSION (
 	@newSessionID BIGINT OUTPUT,
-	@newUserID BIGINT OUTPUT
+	@newUserID BIGINT OUTPUT,
+	@randomPassword nvarchar(4) OUTPUT
 )
 AS
 BEGIN
 
 	BEGIN TRANSACTION
-	DECLARE @randomPassword nvarchar(4)
+
 	SET @randomPassword = SUBSTRING(CONVERT(varchar(255), NEWID()), 0, 5)
 
 	WHILE (EXISTS (SELECT * FROM SessionRoom sr WHERE sr.SessionPassword = @randomPassword))
@@ -34,7 +35,7 @@ BEGIN
 
 	UPDATE SessionUser
 	SET DisplayName = CONCAT('User#', @newUserID)
-	WHERE ID = @newSessionID
+	WHERE ID = @newUserID
 
 	-- Insert into SessionRoom now
 
