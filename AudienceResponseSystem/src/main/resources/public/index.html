@@ -58,12 +58,13 @@
             <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Q&A</a>
           </li>
         </ul>
-      
+<!--      JOIN SESSION-->
           <element class="form-top" >
-        <form method="get" action="http://localhost:8080/printMe" class="d-flex">
-            <input class="form-control me-2" type="text" placeholder="Session-ID..." aria-label="JoinField">
+        <form method="post" action="http://localhost:8080/session/joinSession" class="d-flex">
+            <input class="form-control me-2" name="password" type="text" placeholder="Session-ID..." aria-label="JoinField">
             <element class="button-element"><button class="btn btn-secondary" type="submit">join</button></element>
-            <a href="#createSessionSection"> <button class="btn btn-secondary" type="button">create </button></a>
+          <!--      Create SESSION-->
+            <a href="./creatSession.html"> <button class="btn btn-secondary" type="button">create </button></a>
           </form>
         </element>
       </div>
@@ -117,11 +118,11 @@
                       <h4 class="mt-1 mb-5 pb-1">We are the ARS team</h4>
                     </div>
     
-                    <form action="" method="">
+                    <form action="http://localhost:8080/session/createSession" method="GET">
                       <p>Session Name</p>
     
                       <div class="form-outline mb-4">
-                        <input type="email" id="form2Example11" class="form-control"
+                        <input name="null" type="email" id="form2Example11" class="form-control"
                           placeholder="Type the name of the session..." />
                         <label class="form-label" for="form2Example11"></label>
                       </div>
