@@ -50,8 +50,8 @@ public class SessionService implements SessionServiceInterface {
         Long userID = sessionRepository.JOIN_SESSION(sessionID, 1L);
         System.out.println("User ID: " + userID);
 
-        returnMap.put("userID", userID);
-        returnMap.put("sessionID", sessionID);
+        returnMap.put("newUserID", userID);
+        returnMap.put("newSessionID", sessionID);
 
         return (Map<String,Long>) returnMap;
     }
