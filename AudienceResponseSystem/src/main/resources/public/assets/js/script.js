@@ -18,7 +18,7 @@ async function getData(){
  //   var table = document.getElementById('joinSessionParag');
      var listX =  document.getElementById('joinSessionParag');
 
-    // for (var i = 0; i < data.length; i++){
+    for (var i = 0; i < data.length; i++){
 
     //     var row = `<tr>
     // 					<td>${data[i].firstName}</td>
@@ -28,12 +28,12 @@ async function getData(){
     // 					<td>${data[i].gender}</td>
     // 			  </tr>`;
     //     table.innerHTML += row;
-    //
-    //  var par =`<p>${data.firstName}-- ${data[i].lastName} -- ${data[i].mobile} -- ${data[i].address} -- ${data[i].gender}</p>`;
-    //      listX.innerHTML +=  par;
+
+     var par =`<p>${data.newUserID}-- ${data[i].randomPassword} -- ${data[i].newSessionID}</p><br/>`;
+         listX.innerHTML +=  par;
 
     console.log(data);
-    //  }
+     }
 }
 
 getData();
