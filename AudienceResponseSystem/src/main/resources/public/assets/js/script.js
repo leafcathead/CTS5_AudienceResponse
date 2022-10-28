@@ -16,7 +16,7 @@ async function getData(){
     const data = await response.json();
 
  //   var table = document.getElementById('joinSessionParag');
-     var listX =  document.getElementById('joinSessionParag');
+     var listX =  document.getElementById('createSession');
 
     for (var i = 0; i < data.length; i++){
 
