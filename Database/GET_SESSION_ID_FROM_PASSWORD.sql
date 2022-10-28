@@ -18,22 +18,10 @@ BEGIN
 	ELSE
 		BEGIN
 			-- Later versions will raise an error here instead.
-			SET @sessionID = 2;
+			SET @sessionID = 0;
 		END
 
 
 	RETURN 0;
 END
 
-SELECT *
-FROM SessionRoom
-
-DECLARE @thing1 BIGINT
-
-EXECUTE GET_SESSION_ROOM_ID_FROM_PASSWORD
-	@sessionPassword = '1DDF',
-	@sessionID = @thing1
-
-SELECT @thing1
-
-SELECT * FROM SessionRoom sr WHERE sr.SessionPassword = '1DDF'
