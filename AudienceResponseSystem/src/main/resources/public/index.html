@@ -2,9 +2,8 @@
 <html lang="en">
 
 <!--Calling your own JS methods from script.js-->
-<script type="module" src="./assets/js/script.js">
-
-</script>
+<script type="module" src="./assets/js/script.js"></script>
+<script type="module" src="./assets/js/header.js"></script>
 <title>ARS</title>
 
 <my-header>
@@ -15,7 +14,32 @@
 <body>
 
 
+
+
+
     <script src="./assets/js/script.js">
+
+
+      const form = document.getElementById('form');
+
+      form.addEventListener('submit', function(e) {
+        // Prevent default behavior:
+        e.preventDefault();
+        // Create new FormData object:
+        const formData = new FormData(form);
+        // Convert formData object to URL-encoded string:
+        const payload = new URLSearchParams(formData);
+        // Post the payload using Fetch:
+        fetch('http:/localhost:8080/session/joinSession', {
+          method: 'POST',
+          body: payload,
+        })
+                .then(res => res.json())
+                .then(data => console.log(data))
+      })
+
+
+
     </script>
     <section class="h-100 gradient-form" style="background-color: whitesmoke;">
       <div class="container py-5 h-100">
@@ -75,7 +99,7 @@
 
 </body>
 
-
+<script type="module" src="./assets/js/footer.js"></script>
 <my-footer></my-footer>
 
 </html>
