@@ -13,23 +13,22 @@
 
 <body>
 
-<div class="form-group">
-  <label >Join Session</label>
-  <input type="text" id="pass" class="form-control">
-</div>
-<div class="form-group">
-  <button class="btn btn-primary btn-sm" onclick="addPassword()">join</button>
-</div>
+
+
+  <h1>Output</h1>
+  <div id="outputDiv"></div>
+
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script>
+
 /**
  * We can post the request through two ways first:
  * AJAX
  * */
 
-
+var div =  document.getElementById('outputDiv');
 
 function addPassword() {
   let data = {
@@ -46,10 +45,15 @@ function addPassword() {
     type: 'POST',
     dataType: 'JSON',
     success: function (resp) {
-
       console.log(resp);
+   //   const userId = resp.newUserID;
+      var par =`<p> USER NAME ID:  ${resp.newUserID} </p> <br/> <p>SESSION ID: ${resp.newSessionID}  </p>`;
+      div.innerHTML = par;
+    //  document.getElementById('output').textContent = resp.newUserID;
+
     }
   });
+
 }
 
 
@@ -113,9 +117,9 @@ function addPassword() {
   // })
   //
   //
-
-
     </script>
+
+
     <section class="h-100 gradient-form" style="background-color: whitesmoke;">
       <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -158,6 +162,7 @@ function addPassword() {
                     <h4 class="mb-4"></h4>
 <!--                   paragraph   -->
                     <p id="joinSessionParag" class="small mb-0"><h1>JSON OUTPUT joinSession</h1><br/>     The outputs has to be shown here when we invoke joinSession<br/><br/><br/><br/><br/><br/><br/></p>
+                    <div></div>
                   </div>
                 </div>
               </div>

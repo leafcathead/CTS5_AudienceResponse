@@ -3,20 +3,24 @@ class myHeader extends HTMLElement{
     connectedCallback(){
         //<my-Header> </my-Header>
         this.innerHTML =`
+
                 <head>
                 <meta charSet="UTF-8">
                     <meta http-equiv="X-UA-Compatible" content="IE=edge">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
                            <!-- Links -->
+                           <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
                             <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
                                 <link rel="preconnect" href="https://fonts.googleapis.com">
-                                    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin>
+                                    <link rel="preconnect" href="https://fonts.gstatic.com">
                                         <link
                                             href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap"
                                             rel="stylesheet">
                                             <link rel="stylesheet" href="./assets/css/style.css">
                                                 <link rel="preconnect" href="https://fonts.googleapis.com">
-                                                    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin>
+                                                    <link rel="preconnect" href="https://fonts.gstatic.com">
                                                         <link
                                                             href="https://fonts.googleapis.com/css2?family=Freehand&display=swap"
                                                             rel="stylesheet">
@@ -58,10 +62,10 @@ class myHeader extends HTMLElement{
         </ul>
 <!--      JOIN SESSION -->
           <element class="form-top" >
-        <form id="form" class="d-flex">
-            <input class="form-control me-2" name="sessionID" type="text" placeholder="Session-ID..." aria-label="JoinField">
+        <form  class="d-flex">
+            <input class="form-control me-2" id="pass" type="text" placeholder="Session-ID..." aria-label="JoinField">
             <element class="button-element">
-            <button class="btn btn-secondary" type="submit">join</button></element>
+            <button class="btn btn-secondary" onclick="addPassword()">join</button></element>
           <!--      Create SESSION-->
             <a href="./creatSession.html"> <button class="btn btn-secondary" type="button">create </button></a>
           </form>
@@ -69,6 +73,12 @@ class myHeader extends HTMLElement{
       </div>
     </div>
   </nav>
+
+
+
+
+
+
 
 
 <!-- <nav class="navbar navbar-expand-md navbar-light bg-light">
@@ -85,6 +95,9 @@ class myHeader extends HTMLElement{
              `
 
     }
+
+
+
 }
 
 customElements.define('my-header', myHeader)
