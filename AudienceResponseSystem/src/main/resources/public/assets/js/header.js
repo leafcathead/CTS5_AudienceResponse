@@ -1,6 +1,11 @@
-class myHeader extends HTMLElement{
+/**
+ * Alternative Way "tagging" to include header
+ * **/
 
+class myHeader extends HTMLElement{
     connectedCallback(){
+
+
         //<my-Header> </my-Header>
         this.innerHTML =`
 
@@ -65,7 +70,7 @@ class myHeader extends HTMLElement{
         <form  class="d-flex">
             <input class="form-control me-2" id="pass" type="text" placeholder="Session-ID..." aria-label="JoinField">
             <element class="button-element">
-            <button class="btn btn-secondary" onclick="addPassword()">join</button></element>
+            <button class="btn btn-secondary" onclick=addPassword()>join</button></element>
           <!--      Create SESSION-->
             <a href="./creatSession.html"> <button class="btn btn-secondary" type="button">create </button></a>
           </form>
