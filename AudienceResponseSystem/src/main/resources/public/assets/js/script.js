@@ -63,6 +63,18 @@ function createSession() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // function addPassword(){
 //
 //     let password =  $("#pinSession").val();
