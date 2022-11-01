@@ -21,10 +21,7 @@
 </script>
 </div>
 
-<div id="outputDiv">
-  <h1>Outputs</h1>
 
-</div>
 
 <section class="h-100 gradient-form" style="background-color: whitesmoke;">
   <div class="container py-5 h-100" id="bodyDiv">
@@ -41,7 +38,6 @@
                   <h4 class="mt-1 mb-5 pb-1">We are the ARS team</h4>
                 </div>
 
-                <form action="http://localhost:8080/session/createSession" method="GET">
                   <p>Session Name</p>
 
                   <div class="form-outline mb-4">
@@ -49,9 +45,9 @@
                            placeholder="Type the name of the session..." />
                     <label class="form-label" for="form2Example11"></label>
                   </div>
-
+                <div id="createSessionDiv" ></div>
                   <div class="text-center pt-1 mb-5 pb-1">
-                    <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="button">Create</button>
+                    <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" onclick="createSession()" type="button">Create</button>
                   </div>
 
                   <div class="d-flex align-items-center justify-content-center pb-4">
@@ -59,7 +55,7 @@
 
                   </div>
 
-                </form>
+
 
               </div>
             </div>

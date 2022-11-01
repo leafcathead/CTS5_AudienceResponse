@@ -4,12 +4,13 @@
  **/
 
 //joinSession
-  let div =  document.getElementById('userMenuDiv');
+
 
 function joinSession() {
-    let data = {
+    let div =  document.getElementById('userMenuDiv');
+    const data = {
         // password: $("#passO").val()
-        password: $("#pass").val()
+        password: $("#sessionIdInput").val()
 
     };
     console.log(data);
@@ -35,6 +36,30 @@ function joinSession() {
 
 }
 
+
+//createSession
+function createSession() {
+
+    let div =  document.getElementById('createSessionDiv');
+
+    fetch("http://localhost:8080/session/createSession")
+    .then(function(resp) {
+        return resp.json();
+    })
+    .then(function(data){
+        console.log(data);
+        var par =`<p>userID:  ${data.newUserID} </p> <br/> 
+                      <p>randomPassword: ${data.randomPassword}  </p> <br/>
+                      <p>newSessionID: ${data.newSessionID}  </p>`;
+        div.innerHTML = par;
+
+    } );
+
+
+            //   const userId = resp.newUserID;
+
+            // //   document.getElementById('outputDiv').textContent = resp.newUserID;
+}
 
 
 
