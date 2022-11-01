@@ -4,8 +4,8 @@
 --secondary-color: #grey;
 
 /*FONT*/
---primary-font: 'Open Sans', Helvetica, Arial, sans-serif
---secondary-font: 'freehand'
+--primary-font: 'Open Sans', Helvetica, Arial, sans-serif;
+/*--secondary-font:*/
 --font-light:400;
 --font-bold:700;
 --font-size-text: 14px;
@@ -59,7 +59,7 @@ background-color:rgb(124, 124, 124);
 }
 
 .rosponser{
-  font-family: var(--secondary-font);
+  font-family: var(--primary-font);
   padding-bottom: 1%;
   padding-top: 5%;
   padding-right: 20%;
@@ -86,10 +86,10 @@ background-color:rgb(124, 124, 124);
   background: #1d1d1c;
   
   /* Chrome 10-25, Safari 5.1-6 */
-  background: -webkit-linear-gradient(to right, #24211f, #888585, #2b2828, #ebe7e9);
+  background: -webkit-linear-gradient(to right, #0c0c0c, #1e1d1c, #171616, #1e1d1d);
   
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  background: linear-gradient(to right, #cecdcc, #5a5858, #353333, #292727);
+  background: linear-gradient(to right, #1a1a1a, #262525, #353333, #484444);
   }
   
   @media (min-width: 768px) {
