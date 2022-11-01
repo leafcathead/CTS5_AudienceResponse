@@ -6,20 +6,26 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <script>
+    //include header
+    $(function (){
+      $(".headerDiv").load("./assets/html/header.html");
+    });
+    //include footer
+    $(function (){
+      $(".footerDiv").load("./assets/html/footer.html");
+    });
+  </script>
+
+
 </head>
 <title>ARS</title>
 
 <body>
 
 <!-- include header with function -->
-<div class="headerDiv">
-
-<script>
-  $(function (){
-    $(".headerDiv").load("./assets/js/header.html");
-  });
-</script>
-</div>
+<div class="headerDiv"></div>
 
 
 
@@ -80,10 +86,13 @@
 </div>
 
 
-
-
-
+<!-- footer -->
+<div class="footerDiv">
+</div>
 </body>
+
+
+
 
 </html>
 
