@@ -1,6 +1,7 @@
 package com.ars.alpha.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -9,6 +10,7 @@ public class MessageService implements MessageServiceInterface {
 
 
     @Override
+    @Transactional
     public Map<String, Object> postComment(Long posterID, Long sessionID, String message) {
         return null;
     }

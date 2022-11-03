@@ -17,8 +17,12 @@ public class MessageController {
      *
      * @param newComment JSON object in the form of:
      *       {
-     *                   "poster": <Long>,
-     *                   "session": <Long>,
+     *                   "poster": {
+     *                      "id": <Long>,
+     *                      "session": {
+     *                          "id": <Long>
+     *                      }
+     *                   }
      *                   "messageContents": <String>
      *       }
      *
@@ -27,7 +31,7 @@ public class MessageController {
      */
     @PostMapping("/postComment")
     Map<String, Object> postComment(@RequestBody Message newComment) {
-        return null;
+        return messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents());
     }
 
     @PostMapping("/postReply")
