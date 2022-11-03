@@ -44,11 +44,14 @@ public class SessionUser {
     }
 
     public SessionUser() {
-        this.id = 1234L;
-        this.name = "Bobby";
+        this.id = 0L;
+        this.name = "Default Name";
         this.session = new SessionRoom();
+    }
 
-
+    public SessionUser(Long id, Long sessionID) {
+        this.id = id;
+        this.session = new SessionRoom(sessionID);
     }
 
 }

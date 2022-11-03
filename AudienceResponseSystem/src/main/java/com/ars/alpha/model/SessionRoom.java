@@ -47,6 +47,14 @@ public class SessionRoom {
 
     }
 
+    /**
+     * Constructor used in comment POST. Constructed from the SessionUser class
+     * @param id
+     */
+    public SessionRoom(Long id) {
+        this.id = id;
+    }
+
     public Long getID() {
         return id;
     }
