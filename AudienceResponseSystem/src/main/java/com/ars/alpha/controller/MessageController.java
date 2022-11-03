@@ -2,6 +2,7 @@ package com.ars.alpha.controller;
 
 import com.ars.alpha.model.Message;
 import com.ars.alpha.service.MessageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Map;
 @RequestMapping("/message")
 public class MessageController {
 
+    @Autowired
     private MessageService messageService;
 
     /**
@@ -18,11 +20,11 @@ public class MessageController {
      * @param newComment JSON object in the form of:
      *       {
      *                   "poster": {
-     *                      "id": <Long>,
-     *                      "session": {
-     *                          "id": <Long>
-     *                      }
-     *                   }
+     *                      "id": <Long>
+     *                   },
+     *                   "session": {
+     *                      "id": <Long>
+     *                   },
      *                   "messageContents": <String>
      *       }
      *
@@ -31,6 +33,9 @@ public class MessageController {
      */
     @PostMapping("/postComment")
     Map<String, Object> postComment(@RequestBody Message newComment) {
+
+        System.out.println(newComment.toString());
+
         return messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents());
     }
 

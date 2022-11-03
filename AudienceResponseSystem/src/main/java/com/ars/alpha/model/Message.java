@@ -81,4 +81,14 @@ public class Message {
 
     }
 
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", messageContents='" + messageContents + '\'' +
+                ", poster=" + poster +
+                ", session=" + session +
+                ", replyTo=" + replyTo +
+                '}';
+    }
 }
