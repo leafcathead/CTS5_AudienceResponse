@@ -1,6 +1,7 @@
 package com.ars.alpha.controller;
 
 import com.ars.alpha.model.Message;
+import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,8 @@ public class MessageController {
     }
 
     /**
+     *
+     * @param newReply
      *       {
      *                   "poster": {
      *                      "id": <Long>
@@ -59,6 +62,26 @@ public class MessageController {
         System.out.println(newReply.toString());
 
         return messageService.postReply(newReply.getPoster().getId(), newReply.getSession().getID(), newReply.getReplyTo().getId(), newReply.getMessageContents());
+    }
+
+    /**
+     *
+     *
+     * @param session
+     *      {
+     *          "session": {
+     *              "id": <Long>
+     *          }
+     *      }
+     *
+     *
+     * @return TODO
+     */
+    @GetMapping("/getMessages")
+    Map<String, Object> getMessages(@RequestBody SessionRoom session) {
+
+
+        return null;
     }
 
 

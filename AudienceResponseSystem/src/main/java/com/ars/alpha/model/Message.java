@@ -16,7 +16,7 @@ public class Message {
     @Column(name = "ID", nullable = false)
     private Long id;
 
-    @Column(name = "MsgContents", nullable = false)
+    @Column(name = "MsgContent", nullable = false)
     private String messageContents;
 
     @ManyToOne
