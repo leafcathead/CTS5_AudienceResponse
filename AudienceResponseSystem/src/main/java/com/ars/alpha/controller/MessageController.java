@@ -1,6 +1,7 @@
 package com.ars.alpha.controller;
 
 import com.ars.alpha.model.Message;
+import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +40,45 @@ public class MessageController {
         return messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents());
     }
 
+    /**
+     *
+     * @param newReply
+     *       {
+     *                   "poster": {
+     *                      "id": <Long>
+     *                   },
+     *                   "session": {
+     *                      "id": <Long>
+     *                   },
+     *                   "replyTo": {
+     *                      "id": <Long>
+     *                   },
+     *                   "messageContents": <String>
+     *       }
+     * @return TODO
+     */
     @PostMapping("/postReply")
-    Map<String, Object> postReply() {
+    Map<String, Object> postReply(@RequestBody Message newReply) {
+        System.out.println(newReply.toString());
+
+        return messageService.postReply(newReply.getPoster().getId(), newReply.getSession().getID(), newReply.getReplyTo().getId(), newReply.getMessageContents());
+    }
+
+    /**
+     *
+     *
+     * @param session
+     *      {
+     *          "session": {
+     *              "id": <Long>
+     *          }
+     *      }
+     *
+     *
+     * @return TODO
+     */
+    @GetMapping("/getMessages")
+    Map<String, Object> getMessages(@RequestBody SessionRoom session) {
 
 
         return null;

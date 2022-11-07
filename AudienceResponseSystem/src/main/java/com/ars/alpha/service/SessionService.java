@@ -13,26 +13,25 @@ public class SessionService implements SessionServiceInterface {
     @Autowired
     private SessionRepository sessionRepository;
 
+    /**
+     * Calls a SPROC to create a session. See more information in SessionRoom NamedStoredProcedureQuery and in SessionRepository interface.
+     *
+     * @return Result set from Stored Procedure Call CREATE_SESSION
+     */
     @Override
     public Map<String, Object> createSession() {
         System.out.println("Create Session Service");
 
-   //     sessionRepository.favNum(0);
-        System.out.println("Stored procedure returned");
-//        for(Map.Entry<String, Object> entry : test.entrySet()) {
-//            String key = entry.getKey();
-//            Object value = entry.getValue();
-//            System.out.println("Output from stored procedure:");
-//            System.out.println(key);
-//            System.out.println(value);
-//
-//            // do what you have to do here
-//            // In your case, another loop.
-//        }
-
         return sessionRepository.CREATE_SESSION(1L, 1L, "Hel");
     }
 
+    /**
+     * Calls two stored procedures to join a session:
+     * 1. One that retrieves the correct Session ID from a provided password. If sessionID = 0, the session does not exist.
+     * 2. Joins a user into the found session.
+     *
+     * @return Specific columns from the result set of Stored Procedure Call JOIN_SESSION
+     */
     @Override
     public Map<String, Long> joinSession(String password) {
         Map<String, Long> returnMap = new HashMap<String, Long>();
@@ -40,13 +39,15 @@ public class SessionService implements SessionServiceInterface {
         Long sessionID = sessionRepository.GET_SESSION_ROOM_ID_FROM_PASSWORD(password, 1L);
         System.out.println("Session ID: " + sessionID);
 
+        // A non-existent session is communicated to the frontend using a sessionID and userID of 0
         if (sessionID == 0) {
 
             returnMap.put("userID", 0L);
             returnMap.put("sessionID", 0L);
+            return returnMap;
         }
 
-        // Now we can add them to the session
+        // Now we can add them to the session since we know the session exists.
         Long userID = sessionRepository.JOIN_SESSION(sessionID, 1L);
         System.out.println("User ID: " + userID);
 
