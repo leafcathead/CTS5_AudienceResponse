@@ -16,6 +16,11 @@ public class MessageService implements MessageServiceInterface {
     }
 
     @Override
+    public Map<String, Object> postReply(Long posterID, Long sessionID, Long repliedToMessageID, String message) {
+        return null;
+    }
+
+    @Override
     public int changeMessageApproval() {
         return 0;
     }

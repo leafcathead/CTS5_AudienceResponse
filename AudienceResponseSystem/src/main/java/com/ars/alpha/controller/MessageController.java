@@ -55,10 +55,10 @@ public class MessageController {
      * @return TODO
      */
     @PostMapping("/postReply")
-    Map<String, Object> postReply() {
+    Map<String, Object> postReply(@RequestBody Message newReply) {
+        System.out.println(newReply.toString());
 
-
-        return null;
+        return messageService.postReply(newReply.getPoster().getId(), newReply.getSession().getID(), newReply.getReplyTo().getId(), newReply.getMessageContents());
     }
 
 
