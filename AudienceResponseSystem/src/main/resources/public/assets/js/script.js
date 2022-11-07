@@ -1,11 +1,14 @@
+// Prevent reloading
+window.onbeforeunload = function (){
+    return "If you left the page all registration data will be removed! ";
+}
+
 /**
  * We can post the request through two ways first:
  * AJAX
  **/
 
 //joinSession
-
-
 function joinSession() {
     let div =  document.getElementById('userMenuDiv');
     const data = {
