@@ -39,6 +39,21 @@ public class MessageController {
         return messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents());
     }
 
+    /**
+     *       {
+     *                   "poster": {
+     *                      "id": <Long>
+     *                   },
+     *                   "session": {
+     *                      "id": <Long>
+     *                   },
+     *                   "replyTo": {
+     *                      "id": <Long>
+     *                   },
+     *                   "messageContents": <String>
+     *       }
+     * @return TODO
+     */
     @PostMapping("/postReply")
     Map<String, Object> postReply() {
 
