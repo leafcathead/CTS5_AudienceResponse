@@ -80,8 +80,7 @@ public class MessageController {
     @GetMapping("/getMessages")
     Map<String, Object> getMessages(@RequestBody SessionRoom session) {
 
-
-        return null;
+        return messageService.getMessages(session.getID());
     }
 
 

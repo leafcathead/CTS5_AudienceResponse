@@ -1,6 +1,7 @@
 package com.ars.alpha.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
@@ -17,6 +18,18 @@ public class MessageService implements MessageServiceInterface {
 
     @Override
     public Map<String, Object> postReply(Long posterID, Long sessionID, Long repliedToMessageID, String message) {
+        return null;
+    }
+
+    /**
+     * @transaction Isolation = Repeatable_Read
+     * @param sessionID
+     * @return
+     */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Override
+    public Map<String, Object> getMessages(Long sessionID) {
+
         return null;
     }
 
