@@ -33,6 +33,7 @@ public class SessionService implements SessionServiceInterface {
      * 1. One that retrieves the correct Session ID from a provided password. If sessionID = 0, the session does not exist.
      * 2. Joins a user into the found session.
      *
+     *
      * @return Specific columns from the result set of Stored Procedure Call JOIN_SESSION
      */
     @Override
