@@ -1,9 +1,12 @@
 package com.ars.alpha.service;
 
 import com.ars.alpha.dao.SessionRepository;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
+import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.PersistenceException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,7 +39,27 @@ public class SessionService implements SessionServiceInterface {
     public Map<String, Long> joinSession(String password) {
         Map<String, Long> returnMap = new HashMap<String, Long>();
         // First I have to get the session ID from the password.
-        Long sessionID = sessionRepository.GET_SESSION_ROOM_ID_FROM_PASSWORD(password, 1L);
+        Long sessionID = 0L;
+        try {
+
+            sessionID = sessionRepository.GET_SESSION_ROOM_ID_FROM_PASSWORD(password, 1L);
+
+        } catch (PersistenceException e) {
+            if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
+                SQLServerException ex = (SQLServerException) e.getCause().getCause();
+                System.out.println(ex.toString());
+                System.out.println(ex.getErrorCode());
+                System.out.println(ex.getSQLState());
+                System.out.println(ex.getSQLServerError().getErrorNumber());
+                System.out.println(ex.getSQLServerError().getErrorMessage());
+                System.out.println(ex.getSQLServerError().getErrorSeverity());
+                System.out.println(ex.getSQLServerError().getErrorState()); // This is the important one.
+                // Do further useful stuff
+            } else {
+                throw new IllegalStateException("How???");
+            }
+        }
+
         System.out.println("Session ID: " + sessionID);
 
         // A non-existent session is communicated to the frontend using a sessionID and userID of 0
