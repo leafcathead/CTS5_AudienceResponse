@@ -1,7 +1,23 @@
-// Prevent reloading
-window.onbeforeunload = function (){
-    return "If you left the page all registration data will be removed! ";
+// // Prevent reloading
+// window.onbeforeunload = function (){
+//     return "If you left the page all registration data will be removed! ";
+// }
+
+
+ //  session check "localstorage session type"
+ //  if you have logged in before you will be directed to chatWallUser.html
+const localStorageUserId = localStorage.getItem('sessionNewUserID');
+console.log('your password is:  '+ localStorageUserId);
+if (localStorageUserId != null)
+{
+  //  alert('Your session value is  ' + sessionPassKey)
+    location.replace("chatWallUser.html")
 }
+else {
+  //  alert('Session value not exists')
+}
+
+
 
 /**
  * We can post the request through two ways first:
@@ -9,6 +25,7 @@ window.onbeforeunload = function (){
  **/
 
 //joinSession
+const inputPass = $("#sessionIdInput").val()
 function joinSession() {
     let div =  document.getElementById('userMenuDiv');
     const data = {
@@ -28,13 +45,28 @@ function joinSession() {
         dataType: 'JSON',
 
         success: function (resp) {
-            console.log(resp);
-            //   const userId = resp.newUserID;
-            var par =`<p> USER NAME ID:  ${resp.newUserID} </p> <br/> <p>SESSION ID: ${resp.newSessionID}  </p>`;
-            div.innerHTML = par;
-         //   document.getElementById('outputDiv').textContent = resp.newUserID;
+           if(resp.newUserID != null) {
+//Setting the localstorages keys and values
+              localStorage.setItem('sessionNewUserID', resp.newUserID);
+              localStorage.setItem('sessionNewSessionID', resp.newSessionID);
+
+
+               console.log("password is exist");
+                console.log(resp);
+                //   const userId = resp.newUserID;
+                var par = `<p> USER NAME ID:  ${resp.newUserID} </p> <br/> <p>SESSION ID: ${resp.newSessionID}  </p>`;
+                div.innerHTML = par;
+                //   document.getElementById('outputDiv').textContent = resp.newUserID;
+               location.replace("chatWallUser.html")
+            }else{
+                console.log("your password is not exist");
+            document.getElementById('userMenuDiv').textContent = "Your password is NOT exist";
+
+           }
 
         }
+
+
     });
 
 }
