@@ -10,9 +10,21 @@ const localStorageUserId = localStorage.getItem('sessionNewUserID');
 console.log('your password is:  '+ localStorageUserId);
 if (localStorageUserId != null)
 {
-  //  alert('Your session value is  ' + sessionPassKey)
-    location.replace("chatWallUser.html")
-}
+    // alert('do you want to continue to the chat wall session')
+    //  alert('Your session value is  ' + sessionPassKey)
+    //   location.replace("chatWallUser.html")
+        const answer = window.confirm("Do you want to continue to the chat wall session?");
+        if (answer) {
+          //  alert("Ok was pressed");
+            location.replace("chatWallUser.html")
+        } else {
+          //  alert("Cancel was pressed");
+            localStorage.removeItem('sessionNewUserID');
+            localStorage.removeItem('sessionNewSessionID');
+            location.replace("index.html")
+        }
+    }
+
 else {
   //  alert('Session value not exists')
 }
