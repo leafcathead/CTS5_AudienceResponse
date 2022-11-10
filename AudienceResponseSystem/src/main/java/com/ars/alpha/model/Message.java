@@ -34,6 +34,9 @@ public class Message {
     @Column(name="Timestamp", nullable = false, updatable = false)
     private Timestamp timestamp;
 
+    @Column(name="IsApproved", nullable = false)
+    private boolean visible = false;
+
     public Message getReplyTo() {
         return replyTo;
     }
