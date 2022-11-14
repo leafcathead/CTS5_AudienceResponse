@@ -53,7 +53,7 @@ public class MessageController {
      *                   "replyTo": {
      *                      "id": <Long>
      *                   },
-     *                   "messageContents": <String>
+     *                   "messageContent": <String>
      *       }
      * @return TODO
      */

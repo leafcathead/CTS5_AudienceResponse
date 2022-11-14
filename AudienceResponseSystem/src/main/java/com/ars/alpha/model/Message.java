@@ -10,6 +10,12 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "Message")
+@NamedStoredProcedureQuery(name = "INSERT_REPLY", procedureName = "INSERT_REPLY", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "posterID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "replyToID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "msgContent", type = String.class),
+        @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "newMessageID", type = Long.class) })
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
