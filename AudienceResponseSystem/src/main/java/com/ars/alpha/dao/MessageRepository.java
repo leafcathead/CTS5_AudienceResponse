@@ -13,6 +13,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
 
     @Procedure(name = "INSERT_REPLY")
-    Map<String, Object> INSERT_REPLY (Long posterID, Long sessionID, Long replyToID, String msgContent, Long newMessageID);
+    Long INSERT_REPLY (Long posterID, Long sessionID, Long replyToID, String msgContent, Long newMessageID);
 
 }

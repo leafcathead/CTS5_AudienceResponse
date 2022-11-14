@@ -38,27 +38,7 @@ public class MessageService implements MessageServiceInterface {
     @Override
     public Map<String, Object> postReply(Long posterID, Long sessionID, Long repliedToMessageID, String message) {
 
-        // First check to make sure the poster actually belongs to the session they claim they're in.
-        Optional<SessionUser> tmpUser = userRepository.findById(posterID);
-        Optional<SessionRoom> tmpRoom = sessionRepository.findById(sessionID);
-        Optional<Message> tmpMessage = messageRepository.findById(repliedToMessageID);
-        if (tmpUser.isEmpty() || tmpRoom.isEmpty() || tmpMessage.isEmpty()) {
-            // TODO: Error handling because User or Session or Message does not exist.
-            // Do something!
-            return null;
-        }
-
-        SessionUser poster = tmpUser.get();
-        SessionRoom session = tmpRoom.get();
-
-        // Now check to see if the poster actually belongs to that session
-        if (!Objects.equals(poster.getSession().getID(), sessionID)) {
-            //TODO: Error handling because User does not belong to that Session.
-            // Do something!
-            return null;
-        }
-
-        // Now that parameters are validated, we can begin the update.
+        Long newMessageID = messageRepository.INSERT_REPLY(posterID, sessionID, repliedToMessageID, message, 0L);
 
 
         return null;
