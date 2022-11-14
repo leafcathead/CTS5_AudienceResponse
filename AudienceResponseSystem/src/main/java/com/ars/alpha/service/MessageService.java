@@ -31,7 +31,8 @@ public class MessageService implements MessageServiceInterface {
     @Override
     @Transactional
     public Map<String, Object> postComment(Long posterID, Long sessionID, String message) {
-        return null;
+        System.out.println("Message posted");
+        return messageRepository.INSERT_MESSAGE(posterID, sessionID, message);
     }
 
     @Transactional(isolation = Isolation.REPEATABLE_READ)

@@ -1,5 +1,7 @@
 package com.ars.alpha.model;
 
+import com.ars.alpha.dao.MessageRepository;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -82,6 +84,16 @@ public class Message {
 
     public Message() {
 
+    }
+
+    public boolean checkOverSize(){
+        if (messageContents.length() >= 1024) return true;
+        return false;
+    }
+
+    public boolean checkBlasphemy(){
+        //Body of the check
+        return false;
     }
 
     @Override

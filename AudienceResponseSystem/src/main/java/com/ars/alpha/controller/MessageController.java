@@ -33,7 +33,11 @@ public class MessageController {
      * @return TODO
      */
     @PostMapping("/postComment")
-    Map<String, Object> postComment(@RequestBody Message newComment) {
+    Map<String, Object> postComment (@RequestBody Message newComment) throws Exception{
+
+        if(newComment.checkOverSize()){
+            throw new IllegalArgumentException("You cannot send a message longer than 1024 characters.");
+        }
 
         System.out.println(newComment.toString());
 
