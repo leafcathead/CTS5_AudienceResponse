@@ -16,6 +16,20 @@ import java.util.UUID;
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "replyToID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "msgContent", type = String.class),
         @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "newMessageID", type = Long.class) })
+//@NamedStoredProcedureQuery(name = "RETRIEVE_MESSAGES", procedureName = "RETRIEVE_MESSAGES", parameters = {
+//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class)})
+@NamedStoredProcedureQuery(name = "RETRIEVE_MESSAGES", procedureName = "RETRIEVE_MESSAGES", resultClasses = {Message.class}, parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class)})
+//@SqlResultSetMapping(name = "Mapping.Message", // I THINK THIS IS UNNEEDED. I HOPE TO GOD IT IS NOT NEEDED
+//                     classes = @ConstructorResult(targetClass = Message.class,
+//                               columns = {@ColumnResult(name = "ID"),
+//                                            @ColumnResult(name = "SessionID"),
+//                                            @ColumnResult(name = "MsgContent"),
+//                                             @ColumnResult(name = "PosterID"),
+//                                             @ColumnResult(name = "ReplyTo"),
+//                                             @ColumnResult(name = "Likes"),
+//                                             @ColumnResult(name = "IS_APPROVED"),
+//                                             @ColumnResult(name = "Timestamp")}))
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

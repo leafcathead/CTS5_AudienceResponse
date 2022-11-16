@@ -3,12 +3,8 @@ package com.ars.alpha.service;
 import com.ars.alpha.dao.MessageRepository;
 import com.ars.alpha.dao.SessionRepository;
 import com.ars.alpha.dao.UserRepository;
-import com.ars.alpha.model.Message;
-import com.ars.alpha.model.SessionRoom;
-import com.ars.alpha.model.SessionUser;
 import com.ars.alpha.other.Status;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -17,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.PersistenceException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class MessageService implements MessageServiceInterface {
@@ -83,9 +77,11 @@ public class MessageService implements MessageServiceInterface {
      * @param sessionID
      * @return
      */
+    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public Map<String, Object> getMessages(Long sessionID) {
-
+        System.out.println("Message service");
+        messageRepository.RETRIEVE_MESSAGES(1L);
         return null;
     }
 
