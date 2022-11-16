@@ -49,6 +49,10 @@ public class SessionUser {
         this.session = new SessionRoom();
     }
 
+    public SessionUser(Long id) {
+        this.id = id;
+    }
+
     public SessionUser(Long id, Long sessionID) {
         this.id = id;
         this.session = new SessionRoom(sessionID);

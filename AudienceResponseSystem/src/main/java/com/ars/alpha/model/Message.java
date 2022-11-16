@@ -57,6 +57,9 @@ public class Message {
     @Column(name="IsApproved", nullable = false)
     private boolean visible = false;
 
+    @Column(name="Likes")
+    private int likes = 0;
+
     public Message getReplyTo() {
         return replyTo;
     }
@@ -100,8 +103,34 @@ public class Message {
         this.id = id;
     }
 
+    public int getLikes() {
+        return this.likes;
+    }
+
+    public boolean getVisible() {
+        return this.visible;
+    }
+
+    public Timestamp getTimestamp() {
+        return this.timestamp;
+    }
+
     public Message() {
 
+    }
+
+    public Message(Long ID, SessionUser user, String messageContent, int likes, boolean visible, Message replyTo, Timestamp timestamp) {
+        this.id = ID;
+        this.poster = user;
+        this.messageContent = messageContent;
+        this.likes = likes;
+        this.visible = visible;
+        this.replyTo = replyTo;
+        this.timestamp = timestamp;
+    }
+
+    public Message(Long id) {
+        this.id = id;
     }
 
     @Override

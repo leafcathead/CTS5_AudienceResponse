@@ -3,6 +3,8 @@ package com.ars.alpha.service;
 import com.ars.alpha.dao.MessageRepository;
 import com.ars.alpha.dao.SessionRepository;
 import com.ars.alpha.dao.UserRepository;
+import com.ars.alpha.model.Message;
+import com.ars.alpha.model.SessionUser;
 import com.ars.alpha.other.Status;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.PersistenceException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -79,10 +83,25 @@ public class MessageService implements MessageServiceInterface {
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
-    public Map<String, Object> getMessages(Long sessionID) {
-        System.out.println("Message service");
-        messageRepository.RETRIEVE_MESSAGES(1L);
-        return null;
+    public Map<String, Object> getMessages(java.lang.Long sessionID) {
+        System.out.println(sessionID);
+
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
+
+        List<Message> returnerList = messageRepository.RETRIEVE_MESSAGES(sessionID);
+
+        returnerMap.put("Status", Status.SUCCESS);
+        returnerMap.put("Code", 0);
+
+        Map<Integer, Message> messageMap = new HashMap<Integer, Message>();
+        for (int i = 0; i < returnerList.size(); i++) {
+            Message m = returnerList.get(i);
+//            messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo(), m.getTimestamp()));
+            messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo() == null ? null : new Message(m.getReplyTo().getId()), m.getTimestamp()));
+        }
+        returnerMap.put("Messages", messageMap);
+
+        return returnerMap;
     }
 
     @Override
