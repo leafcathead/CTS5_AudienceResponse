@@ -6,12 +6,16 @@ import com.ars.alpha.dao.UserRepository;
 import com.ars.alpha.model.Message;
 import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.model.SessionUser;
+import com.ars.alpha.other.Status;
+import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.PersistenceException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,27 +33,56 @@ public class MessageService implements MessageServiceInterface {
     SessionRepository sessionRepository;
 
     @Override
-    @Transactional
     public Map<String, Object> postComment(Long posterID, Long sessionID, String message) {
         return null;
     }
 
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    /**
+     * Posts a reply to the database. Has very simple error checking that will return an ID of 0 if an error is encountered.
+     * @param posterID
+     * @param sessionID
+     * @param repliedToMessageID
+     * @param message
+     * @return HashMap<String, Object> containing:
+     *          1. STATUS
+     *          2. EXIT CODE
+     *          3. Message ID
+     */
     @Override
     public Map<String, Object> postReply(Long posterID, Long sessionID, Long repliedToMessageID, String message) {
 
-        Long newMessageID = messageRepository.INSERT_REPLY(posterID, sessionID, repliedToMessageID, message, 0L);
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
 
+        try {
+            Long newMessageID = messageRepository.INSERT_REPLY(posterID, sessionID, repliedToMessageID, message, 0L);
+            returnerMap.put("Status", Status.SUCCESS);
+            returnerMap.put("Code", 0);
+            returnerMap.put("MessageID", newMessageID);
 
-        return null;
+        } catch (PersistenceException e) {
+            System.out.println("Exception caught!");
+            if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
+                SQLServerException ex = (SQLServerException) e.getCause().getCause();
+                System.out.println(ex.getSQLServerError().getErrorMessage());
+                System.out.println(ex.getSQLServerError().getErrorState()); // This is the important one.
+                // Do further useful stuff
+                returnerMap.put("Status", Status.ERROR);
+                returnerMap.put("Code", ex.getSQLServerError().getErrorState());
+                returnerMap.put("messageID", 0L);
+
+            } else {
+                throw new IllegalStateException("How???");
+            }
+
+        }
+
+        return returnerMap;
     }
 
     /**
-     * @transaction Isolation = Repeatable_Read
      * @param sessionID
      * @return
      */
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
     @Override
     public Map<String, Object> getMessages(Long sessionID) {
 

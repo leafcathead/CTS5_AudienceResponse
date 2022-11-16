@@ -23,7 +23,7 @@ public class Message {
     private Long id;
 
     @Column(name = "MsgContent", nullable = false)
-    private String messageContents;
+    private String messageContent;
 
     @ManyToOne
     @JoinColumn(name = "PosterID")
@@ -70,11 +70,11 @@ public class Message {
   //  private User poster;
 
     public String getMessageContents() {
-        return this.messageContents;
+        return this.messageContent;
     }
 
-    public void setMessageContents(String newMessage) {
-        this.messageContents = newMessage;
+    public void setMessageContent(String newMessage) {
+        this.messageContent = newMessage;
     }
 
 
@@ -94,7 +94,7 @@ public class Message {
     public String toString() {
         return "Message{" +
                 "id=" + id +
-                ", messageContents='" + messageContents + '\'' +
+                ", messageContent='" + messageContent + '\'' +
                 ", poster=" + poster +
                 ", session=" + session +
                 ", replyTo=" + replyTo +

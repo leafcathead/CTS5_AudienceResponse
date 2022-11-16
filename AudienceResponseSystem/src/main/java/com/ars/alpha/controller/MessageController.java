@@ -30,7 +30,12 @@ public class MessageController {
      *       }
      *
      *
-     * @return TODO
+     * @return JSON object in the form
+     *      {
+     *          "Status": <SUCCESS, WARNING, ERROR>
+     *          "MessageID": <Long>,
+     *          "Code": <int>
+     *      }
      */
     @PostMapping("/postComment")
     Map<String, Object> postComment(@RequestBody Message newComment) {
