@@ -1,5 +1,7 @@
 package com.ars.alpha.service;
 
+import com.ars.alpha.model.Message;
+
 import java.util.Map;
 
 public interface MessageServiceInterface {

@@ -30,7 +30,12 @@ public class MessageController {
      *       }
      *
      *
-     * @return TODO
+     * @return JSON object in the form
+     *      {
+     *          "Status": <SUCCESS, WARNING, ERROR>
+     *          "MessageID": <Long>,
+     *          "Code": <int>
+     *      }
      */
     @PostMapping("/postComment")
     Map<String, Object> postComment (@RequestBody Message newComment) throws Exception{
@@ -57,7 +62,7 @@ public class MessageController {
      *                   "replyTo": {
      *                      "id": <Long>
      *                   },
-     *                   "messageContents": <String>
+     *                   "messageContent": <String>
      *       }
      * @return TODO
      */
@@ -73,17 +78,35 @@ public class MessageController {
      *
      * @param session
      *      {
-     *          "session": {
-     *              "id": <Long>
-     *          }
+     *          "id": <Long>
      *      }
      *
      *
-     * @return TODO
+     * @return a Complicated JSON object. Unnecessary information in JSON object omitted.
+     *      {
+     *          "Status": <ERROR, WARNING, SUCESS>,
+     *          "Code": <int>,
+     *          "Messages": {
+     *             "0": {
+     *                  "id": <Long>,
+     *                  "poster": {
+     *                      "id": <Long>
+     *                  },
+     *                  "replyTo": {
+     *                      "id": <Long>
+     *                  },
+     *                  "timestamp": <Timestamp>,
+     *                  "visible": <boolean>,
+     *                  "likes": <int>,
+     *                  "messageContents": <String>
+     *             },
+     *             ...
+     *          }
+     *      }
      */
     @GetMapping("/getMessages")
-    Map<String, Object> getMessages(@RequestBody SessionRoom session) {
-
+    public @ResponseBody Map<String, Object> getMessages(@RequestBody SessionRoom session) {
+        System.out.println(session.toString());
         return messageService.getMessages(session.getID());
     }
 
