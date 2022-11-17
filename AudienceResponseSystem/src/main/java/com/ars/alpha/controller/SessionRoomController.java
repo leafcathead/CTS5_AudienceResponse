@@ -65,6 +65,7 @@ public class SessionRoomController {
      */
     @PostMapping("/joinSession")
     Map<String, Long> joinSession(@RequestBody Password password) {
+        System.out.println();
         System.out.println("Join session");
         System.out.println("Password: " + password.getPassword());
 

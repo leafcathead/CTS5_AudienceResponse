@@ -12,10 +12,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
+import com.ars.alpha.other.Password;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.Before;
@@ -44,6 +48,7 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.StringWriter;
 
 
 @RunWith(SpringRunner.class)
@@ -51,6 +56,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @Transactional
 class SessionTests extends AbstractTransactionalJUnit4SpringContextTests {
+
+    final static JsonFactory jFactory = new JsonFactory();
 
 
     @InjectMocks
@@ -70,7 +77,10 @@ class SessionTests extends AbstractTransactionalJUnit4SpringContextTests {
     }
 
 
-
+    /**
+     * Checks to make sure we can get sessions from the database.
+     * @throws Exception
+     */
     @Test
     @Transactional
     public void creatingSessionsDatabase() throws Exception {
@@ -79,6 +89,10 @@ class SessionTests extends AbstractTransactionalJUnit4SpringContextTests {
 
     }
 
+    /**
+     * Checks to make sure we can successfully create and receive a new session and its new user.
+     * @throws Exception
+     */
     @Test
     @Transactional
     public void creatingSessionBackend() throws Exception {
@@ -113,12 +127,36 @@ class SessionTests extends AbstractTransactionalJUnit4SpringContextTests {
         TestObj sessionInfo = new ObjectMapper().readValue(responseString, TestObj.class);
 
 
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeStringField("password", sessionInfo.randomPassword);
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        String jsonString = writer.toString();
+
+        result = this.mockMvc.perform(post("/session/joinSession").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+     //           .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.newUserID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("['newUserID']", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.newSessionID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("['newSessionID']", greaterThanOrEqualTo(1)))
+                .andReturn();
+
 
     }
 
     @Test
     @Transactional
     public void joiningFakeSession() {
+
+        final String fakeSessionPass = "XXXX";
+
+        // Use the service to check that a random String does not exist.
+
+        // Send a post to join the session, check to make sure you get a 0 for both parameters back.
 
     }
 
