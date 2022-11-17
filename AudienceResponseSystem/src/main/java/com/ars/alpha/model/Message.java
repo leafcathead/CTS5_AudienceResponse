@@ -17,7 +17,7 @@ import java.util.UUID;
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "PosterID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "SessionId", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "MsgContent", type = String.class),
-        @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "MesageId", type = Long.class)
+        @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "MessageId", type = Long.class)
 })
 
 @NamedStoredProcedureQuery(name = "INSERT_REPLY", procedureName = "INSERT_REPLY", parameters = {
