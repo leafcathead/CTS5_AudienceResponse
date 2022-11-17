@@ -30,11 +30,27 @@ public class MessageService implements MessageServiceInterface {
     @Autowired
     SessionRepository sessionRepository;
 
-    @Override
-    public Map<String, Object> postComment(Long posterID, Long sessionID, String message) {
-        System.out.println("Message posted");
-        return messageRepository.INSERT_MESSAGE(posterID, sessionID, message);
+    /**
+     * Posts a comment to the database
+     *
+     * @param posterID
+     * @param sessionID
+     * @param message
+     * @param iD
+     * @return HashMap<String, Object> containing:
+     * 1.  Status
+     * 2.  Exit code
+     * 3.  Message Id
+     */
+    public Map<String, Object> postComment(Long posterID, Long sessionID, String message, Long iD) {
+        Map<String, Object> ret = new HashMap<String, Object>();
+        Long msgID = messageRepository.INSERT_MESSAGE(posterID, sessionID, message, iD);
+        ret.put("Status", Status.SUCCESS);
+        ret.put("Code", 0);
+        ret.put("MessageID", iD);
+        return ret;
     }
+
 
     /**
      * Posts a reply to the database. Has very simple error checking that will return an ID of 0 if an error is encountered.

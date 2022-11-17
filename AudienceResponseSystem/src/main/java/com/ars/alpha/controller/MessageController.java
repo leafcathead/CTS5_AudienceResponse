@@ -46,7 +46,7 @@ public class MessageController {
 
         System.out.println(newComment.toString());
 
-        return messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents());
+        return messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents(), 0L);
     }
 
     /**

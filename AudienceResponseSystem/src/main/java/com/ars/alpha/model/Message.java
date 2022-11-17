@@ -12,6 +12,14 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "Message")
+
+@NamedStoredProcedureQuery(name = "INSERT_MESSAGE", procedureName = "INSERT_MESSAGE", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "PosterID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "SessionId", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "MsgContent", type = String.class),
+        @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "MesageId", type = Long.class)
+})
+
 @NamedStoredProcedureQuery(name = "INSERT_REPLY", procedureName = "INSERT_REPLY", parameters = {
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "posterID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class),
@@ -48,10 +56,10 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "SessionID")
     private SessionRoom session;
+
     @ManyToOne
     @JoinColumn(name = "ReplyTo")
     private Message replyTo;
-
 
     @Column(name="Timestamp", nullable = false, updatable = false)
     private Timestamp timestamp;

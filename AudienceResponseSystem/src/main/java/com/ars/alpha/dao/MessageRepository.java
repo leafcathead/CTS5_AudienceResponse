@@ -19,7 +19,7 @@ import java.util.Map;
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Procedure(name = "INSERT_MESSAGE")
-    Map<String, Object> INSERT_MESSAGE(Long newSessionID, Long newUserID, String Message);
+    Long INSERT_MESSAGE(Long PosterID, Long SessionId, String MsgContent, Long MesageId);
 
     @Procedure(name = "INSERT_REPLY")
     Long INSERT_REPLY (Long posterID, Long sessionID, Long replyToID, String msgContent, Long newMessageID) throws PersistenceException;
