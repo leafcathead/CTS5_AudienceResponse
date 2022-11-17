@@ -46,6 +46,7 @@ public class SessionService implements SessionServiceInterface {
             sessionID = sessionRepository.GET_SESSION_ROOM_ID_FROM_PASSWORD(password, 1L);
 
         } catch (PersistenceException e) {
+            System.out.println("Caught persistence exception");
             if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
                 SQLServerException ex = (SQLServerException) e.getCause().getCause();
                 System.out.println(ex.toString());
@@ -59,6 +60,8 @@ public class SessionService implements SessionServiceInterface {
             } else {
                 throw new IllegalStateException("How???");
             }
+        } catch (Exception e) {
+            System.out.println("What?");
         }
 
         System.out.println("Session ID: " + sessionID);

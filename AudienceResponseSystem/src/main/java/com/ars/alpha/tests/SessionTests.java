@@ -17,11 +17,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
+import com.ars.alpha.dao.SessionRepository;
 import com.ars.alpha.other.Password;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.AssertionsForClassTypes;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +50,8 @@ import org.junit.jupiter.api.Test;
 
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.PersistenceException;
+import java.io.IOException;
 import java.io.StringWriter;
 
 
@@ -62,6 +66,10 @@ class SessionTests extends AbstractTransactionalJUnit4SpringContextTests {
 
     @InjectMocks
     SessionRoomController sessionController;
+
+    @InjectMocks
+    @Autowired
+    SessionRepository sessionRepository;
 
 
 
@@ -148,15 +156,45 @@ class SessionTests extends AbstractTransactionalJUnit4SpringContextTests {
 
     }
 
+    /**
+     * Tests that a session that does not exist, returns the correct error codes.
+     * @throws Exception
+     */
     @Test
     @Transactional
-    public void joiningFakeSession() {
+    public void joiningFakeSession() throws Exception {
 
         final String fakeSessionPass = "XXXX";
 
         // Use the service to check that a random String does not exist.
+        Long sessionID;
+        try {
+            sessionID = sessionRepository.GET_SESSION_ROOM_ID_FROM_PASSWORD(fakeSessionPass, 0L);
+        } catch (PersistenceException e){
+            sessionID = 0L;
+        }
+
+        assertEquals(0, sessionID);
 
         // Send a post to join the session, check to make sure you get a 0 for both parameters back.
+
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeStringField("password", fakeSessionPass);
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        String jsonString = writer.toString();
+
+         this.mockMvc.perform(post("/session/joinSession").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                //           .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.userID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("['userID']", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.sessionID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("['sessionID']", Matchers.is(0)))
+                .andReturn();
 
     }
 

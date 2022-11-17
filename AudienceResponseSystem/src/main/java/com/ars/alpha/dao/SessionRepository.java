@@ -2,6 +2,7 @@ package com.ars.alpha.dao;
 
 import com.ars.alpha.model.SessionRoom;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import org.hibernate.HibernateException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
