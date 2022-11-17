@@ -8,6 +8,7 @@ import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.core.IsNull.notNullValue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -15,6 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
@@ -88,9 +92,41 @@ class SessionTests extends AbstractTransactionalJUnit4SpringContextTests {
                 .andExpect((ResultMatcher) jsonPath("['newSessionID']", greaterThanOrEqualTo(1)))
                 .andExpect((ResultMatcher) jsonPath("$.randomPassword", notNullValue()))
                 .andReturn();
+        String responseString = result.getResponse().getContentAsString();
 
-        
+        TestObj someClass = new ObjectMapper().readValue(responseString, TestObj.class);
+
+        assertEquals(4,  someClass.randomPassword.length());
 
     }
+
+    @Test
+    @Transactional
+    public void joiningRealSession() throws Exception {
+
+        // Create session to test.
+        MvcResult result =  this.mockMvc.perform(get("/session/createSession").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        String responseString = result.getResponse().getContentAsString();
+
+        TestObj sessionInfo = new ObjectMapper().readValue(responseString, TestObj.class);
+
+
+
+    }
+
+    @Test
+    @Transactional
+    public void joiningFakeSession() {
+
+    }
+
+    static class TestObj {
+        public Long newUserID;
+        public Long newSessionID;
+        public String randomPassword;
+    }
+
 
 }
