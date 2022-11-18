@@ -26,7 +26,7 @@ public class MessageController {
      *                   "session": {
      *                      "id": <Long>
      *                   },
-     *                   "messageContents": <String>
+     *                   "messageContent": <String>
      *       }
      *
      *
@@ -84,7 +84,7 @@ public class MessageController {
      *
      * @return a Complicated JSON object. Unnecessary information in JSON object omitted.
      *      {
-     *          "Status": <ERROR, WARNING, SUCESS>,
+     *          "Status": <ERROR, WARNING, SUCCESS>,
      *          "Code": <int>,
      *          "Messages": {
      *             "0": {

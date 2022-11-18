@@ -47,7 +47,7 @@ public class MessageService implements MessageServiceInterface {
         Long msgID = messageRepository.INSERT_MESSAGE(posterID, sessionID, message, iD);
         ret.put("Status", Status.SUCCESS);
         ret.put("Code", 0);
-        ret.put("MessageID", iD);
+        ret.put("MessageID", msgID);
         return ret;
     }
 
