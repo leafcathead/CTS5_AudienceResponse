@@ -27,6 +27,7 @@ import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.model.SessionUser;
 import com.ars.alpha.other.Password;
 import com.ars.alpha.other.Status;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -173,13 +174,6 @@ class MessageTests extends AbstractTransactionalJUnit4SpringContextTests {
     @Transactional
     public void insertSeveralMessages() throws Exception {
 
-//        SessionUser userOwner = new SessionUser(TEST_USERID_OWNER);
-//        SessionUser user2 = new SessionUser(TEST_USERID_2);
-//        SessionUser user3 = new SessionUser(TEST_USERID_3);
-
-        StringWriter writer = new StringWriter();
-        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
-
         String jsonString = writeMessageJSON(TEST_USERID_2, TEST_SESSION_ID, null, "Guten Tag!");
 
         // Post the first message
@@ -229,6 +223,183 @@ class MessageTests extends AbstractTransactionalJUnit4SpringContextTests {
 
     }
 
+
+
+    @Test
+    @Transactional
+    public void insertSeveralReplies() throws Exception {
+
+        ObjectMapper objMapper = new ObjectMapper();
+        String responseString;
+
+        // Post the first message. The one that will be replied to
+
+        String jsonString = writeMessageJSON(TEST_USERID_2, TEST_SESSION_ID, null, "Guten Tag!");
+
+        MvcResult result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+        MessageTests.TestObj messageInfo = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        // Post the second message as a reply to the first one.
+
+        jsonString = writeMessageJSON(TEST_USERID_3, TEST_SESSION_ID, messageInfo.MessageID, "I am replying to you!");
+
+        result = this.mockMvc.perform(post("/message/postReply").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+        messageInfo = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        // Make the third comment a reply to the second one.
+
+        jsonString = writeMessageJSON(TEST_USERID_OWNER, TEST_SESSION_ID, messageInfo.MessageID, "Gute Nacht!");
+
+        result = this.mockMvc.perform(post("/message/postReply").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+    }
+
+    @Test
+    @Transactional
+    public void getMessagesTest() throws Exception {
+
+        ObjectMapper objMapper = new ObjectMapper();
+        String responseString;
+
+        // Check for an empty session.
+
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeStringField("id", String.valueOf(TEST_SESSION_ID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        String jsonString = writer.toString();
+
+        MvcResult result = this.mockMvc.perform(get("/message/getMessages").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andReturn();
+
+
+
+        // Post the first message. The one that will be replied to
+
+        jsonString = writeMessageJSON(TEST_USERID_2, TEST_SESSION_ID, null, "Guten Tag!");
+
+        result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+        MessageTests.TestObj messageInfo = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        // Post the second message as a reply to the first one.
+
+        jsonString = writeMessageJSON(TEST_USERID_3, TEST_SESSION_ID, messageInfo.MessageID, "I am replying to you!");
+
+        result = this.mockMvc.perform(post("/message/postReply").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+        messageInfo = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        // Make the third comment a reply to the second one.
+
+        jsonString = writeMessageJSON(TEST_USERID_OWNER, TEST_SESSION_ID, messageInfo.MessageID, "Gute Nacht!");
+
+        result = this.mockMvc.perform(post("/message/postReply").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        // Insert another regular message
+
+        jsonString = writeMessageJSON(TEST_USERID_OWNER, TEST_SESSION_ID, null, "Okay! That's everything for today.");
+
+        result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        // Now to actually check how many comments there are!
+
+
+
+
+    }
+
+    @Test
+    @Transactional
+    public void testBadMessageRequests() {
+        // TODO ONCE ERROR CHECKING IS FINISHED!
+    }
+
+
+    /**
+     * This helper function writes JSON strings for the messages.
+     *
+     * @param poster
+     * @param session
+     * @param replyToID
+     * @param message
+     * @return
+     * @throws IOException
+     */
     private String writeMessageJSON(Long poster, Long session, Long replyToID, String message) throws IOException {
         StringWriter writer = new StringWriter();
         JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
@@ -240,38 +411,23 @@ class MessageTests extends AbstractTransactionalJUnit4SpringContextTests {
         jsonGenerator.writeObjectField("id", String.valueOf(session));
         jsonGenerator.writeEndObject();
         jsonGenerator.writeStringField("messageContent", message);
-        jsonGenerator.writeEndObject();
         if (replyToID != null) {
             jsonGenerator.writeObjectFieldStart("replyTo");
             jsonGenerator.writeObjectField("id", String.valueOf(replyToID));
             jsonGenerator.writeEndObject();
         }
+        jsonGenerator.writeEndObject();
         jsonGenerator.close();
         return writer.toString();
     }
 
-    @Test
-    @Transactional
-    public void insertSeveralReplies() {
-
-    }
-
-    @Test
-    @Transactional
-    public void complicatedTest() {
-
-    }
-
-    @Test
-    @Transactional
-    public void testBadMessageRequests() {
-
-    }
-
+    @JsonIgnoreProperties(ignoreUnknown = true)
     static class TestObj {
         public Long newUserID;
         public Long newSessionID;
         public String randomPassword;
+
+        public Long MessageID;
 
     }
 
