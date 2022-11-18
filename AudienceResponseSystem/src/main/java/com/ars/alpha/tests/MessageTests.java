@@ -7,8 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.not;
 import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
 import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.isEnum;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -306,8 +305,13 @@ class MessageTests extends AbstractTransactionalJUnit4SpringContextTests {
         MvcResult result = this.mockMvc.perform(get("/message/getMessages").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Messages", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Messages", anEmptyMap()))
                 .andReturn();
-
 
 
         // Post the first message. The one that will be replied to
@@ -378,7 +382,24 @@ class MessageTests extends AbstractTransactionalJUnit4SpringContextTests {
 
         // Now to actually check how many comments there are!
 
+        writer = new StringWriter();
+        jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeStringField("id", String.valueOf(TEST_SESSION_ID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        jsonString = writer.toString();
 
+        result = this.mockMvc.perform(get("/message/getMessages").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Messages", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Messages", aMapWithSize(4)))
+                .andReturn();
 
 
     }
