@@ -64,7 +64,12 @@ public class MessageController {
      *                   },
      *                   "messageContent": <String>
      *       }
-     * @return TODO
+     * @return JSON object in the form
+     *      {
+     *          "Status": <SUCCESS, WARNING, ERROR>
+     *          "MessageID": <Long>,
+     *          "Code": <int>
+     *      }
      */
     @PostMapping("/postReply")
     Map<String, Object> postReply(@RequestBody Message newReply) {
