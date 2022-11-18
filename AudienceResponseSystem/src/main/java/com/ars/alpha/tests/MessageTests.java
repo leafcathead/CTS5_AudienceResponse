@@ -70,7 +70,7 @@ import java.io.StringWriter;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @Transactional
-class MessageTests extends AbstractTransactionalJUnit4SpringContextTests {
+public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests {
 
     final static JsonFactory jFactory = new JsonFactory();
 

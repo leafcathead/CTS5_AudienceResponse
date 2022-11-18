@@ -59,7 +59,7 @@ import java.io.StringWriter;
 @AutoConfigureMockMvc
 @SpringBootTest @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 @Transactional
-class SessionTests extends AbstractTransactionalJUnit4SpringContextTests {
+public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests {
 
     final static JsonFactory jFactory = new JsonFactory();
 
