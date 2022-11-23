@@ -1,10 +1,9 @@
 package com.ars.alpha.service;
 
+import java.util.Map;
+
 public interface UserServiceInterface {
 
-    public int bindUserToSession();
-    public int validateUserInSession();
-    public int removeUserFromSession();
-    public int updateUserUsername();
+    Map<String, Object> updateDisplayName(Long userID, Long sessionID, String newName);
 
 }
