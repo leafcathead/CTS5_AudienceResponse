@@ -128,7 +128,11 @@ public class MessageController {
      *              },
      *              "messageContent": <String>
      *          }
-     * @return TODO
+     * @return JSON object in the form
+     *           {
+     *              "Status": <SUCCESS, WARNING, ERROR>,
+     *              "Code": <int>
+     *           }
      */
     @PutMapping("/updateMessageContent")
     Map<String, Object> updateMessageContent(@RequestBody Message m) {
