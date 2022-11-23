@@ -13,4 +13,6 @@ public interface MessageServiceInterface {
     Map<String, Object> getMessages(Long sessionID);
     public int changeMessageApproval();
 
+    Map<String, Object> updateMessageContent(Long messageID, Long posterID, Long sessionID, String newContent);
+
 }

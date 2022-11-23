@@ -115,6 +115,27 @@ public class MessageController {
         return messageService.getMessages(session.getID());
     }
 
+    /**
+     *
+     * @param m JSON object in the form of:
+     *          {
+     *              "id": <Long>,
+     *              "poster": {
+     *                  "id": <Long>
+     *              },
+     *              "session": {
+     *                  "id": <Long>
+     *              },
+     *              "messageContent": <String>
+     *          }
+     * @return TODO
+     */
+    @PutMapping("/updateMessageContent")
+    Map<String, Object> updateMessageContent(@RequestBody Message m) {
+        System.out.println("Updating message...");
+        return messageService.updateMessageContent(m.getId(), m.getPoster().getId(), m.getSession().getID(), m.getMessageContents());
+    }
+
 
 
 }

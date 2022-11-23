@@ -125,4 +125,14 @@ public class MessageService implements MessageServiceInterface {
     public int changeMessageApproval() {
         return 0;
     }
+
+    @Override
+    public Map<String, Object> updateMessageContent(Long messageID, Long posterID, Long sessionID, String newContent) {
+
+        // Need a SPROC to validate and update the variable.
+
+        return null;
+    }
 }
+
+
