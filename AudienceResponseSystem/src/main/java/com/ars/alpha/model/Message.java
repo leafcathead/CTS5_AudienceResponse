@@ -30,6 +30,11 @@ import java.util.UUID;
 //        @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class)})
 @NamedStoredProcedureQuery(name = "RETRIEVE_MESSAGES", procedureName = "RETRIEVE_MESSAGES", resultClasses = {Message.class}, parameters = {
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class)})
+@NamedStoredProcedureQuery(name = "UPDATE_MESSAGE", procedureName = "UPDATE_MESSAGE", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "messageID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "posterID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "newBody", type = String.class)})
 //@SqlResultSetMapping(name = "Mapping.Message", // I THINK THIS IS UNNEEDED. I HOPE TO GOD IT IS NOT NEEDED
 //                     classes = @ConstructorResult(targetClass = Message.class,
 //                               columns = {@ColumnResult(name = "ID"),

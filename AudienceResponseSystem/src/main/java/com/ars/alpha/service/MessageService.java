@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.PersistenceException;
+import java.sql.DataTruncation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -129,10 +130,42 @@ public class MessageService implements MessageServiceInterface {
     @Override
     public Map<String, Object> updateMessageContent(Long messageID, Long posterID, Long sessionID, String newContent) {
 
-        // Need a SPROC to validate and update the variable.
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
 
-        return null;
+        try {
+
+            if (newContent.length() > 500) {
+                throw new IllegalArgumentException("Message content will be truncated.");
+            }
+
+            messageRepository.UPDATE_MESSAGE(messageID, posterID, sessionID, newContent);
+
+            returnerMap.put("Status", Status.SUCCESS);
+            returnerMap.put("Code", 0);
+
+        } catch (PersistenceException e) {
+            System.out.println("Exception caught!");
+            if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
+                SQLServerException ex = (SQLServerException) e.getCause().getCause();
+                returnerMap.put("Status", Status.ERROR);
+                returnerMap.put("Code", ex.getSQLServerError().getErrorState());
+            } else {
+                throw new IllegalStateException("How???");
+            }
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage().equals("Message content will be truncated.")) {
+                returnerMap.put("Status", Status.ERROR);
+                returnerMap.put("Code", 2);
+            } else {
+                throw new IllegalStateException("Illegal Argument somewhere...");
+            }
+
+        }
+
+        return returnerMap;
     }
+
+
 }
 
 
