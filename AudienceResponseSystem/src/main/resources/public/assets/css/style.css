@@ -41,9 +41,12 @@ background-color:rgb(124, 124, 124);
 
 }
 .body-div{
+
  background-origin: padding-box;
 
+
 }
+
 
 .body-content{
   font-family: var(--primary-font);
@@ -58,29 +61,43 @@ background-color:rgb(124, 124, 124);
 
 }
 
-.rosponser{
+.sponsor{
   font-family: var(--primary-font);
+  color: whitesmoke;
   padding-bottom: 1%;
-  padding-top: 5%;
-  padding-right: 20%;
+  padding-top: 3%;
+  padding-right: 5%;
   padding-left: 20%;
   font-size:  30px;
-  font-weight: var(--font-bold);
+
   text-align: center;
-  padding-bottom: 8%;
+  padding-bottom: 1%;
   text-align: left;
-  background-color: whitesmoke;
+  background-color: #131313;
 
 }
 
 
 
+/*new login*/
+.bg-image-vertical {
+  position: relative;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-size: auto 100%;
+}
+
+@media (min-width: 1025px) {
+  .h-custom-2 {
+    height: 100%;
+  }
+}
+/*end of new login*/
 
 
 
 /*  create a session */
-
-
 .gradient-custom-2 {
   /* fallback for old browsers */
   background: #1d1d1c;

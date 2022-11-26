@@ -66,13 +66,15 @@ function joinSession() {
                console.log("password is exist");
                 console.log(resp);
                 //   const userId = resp.newUserID;
-                var par = `<p> USER NAME ID:  ${resp.newUserID} </p> <br/> <p>SESSION ID: ${resp.newSessionID}  </p>`;
-                div.innerHTML = par;
+                // var par = `<p> USER NAME ID:  ${resp.newUserID} </p> <br/> <p>SESSION ID: ${resp.newSessionID}  </p>`;
+                // div.innerHTML = par;
                 //   document.getElementById('outputDiv').textContent = resp.newUserID;
                location.replace("chatWallUser.html")
             }else{
+
+               const wrong =  window.confirm("session is not exsit or password is incorrect");
                 console.log("your password is not exist");
-            document.getElementById('userMenuDiv').textContent = "Your password is NOT exist";
+         //   document.getElementById('userMenuDiv').textContent = "Your password is NOT exist";
 
            }
 
@@ -94,10 +96,10 @@ function createSession() {
         return resp.json();
     })
     .then(function(data){
-        console.log(data);
+    console.log(data);
         var par =`<p>userID:  ${data.newUserID} </p> <br/> 
                       <p>randomPassword: ${data.randomPassword}  </p> <br/>
-                      <p>newSessionID: ${data.newSessionID}  </p>`;
+                      <p>newSessionID: ${data.newSessionID}  </p> `;
         div.innerHTML = par;
 
     } );
