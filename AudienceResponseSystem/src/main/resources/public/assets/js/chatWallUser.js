@@ -14,7 +14,7 @@ if(userID==null){
 }
 
 
-function logOut(){
+function logOutUser(){
 
     localStorage.removeItem('userID');
     localStorage.removeItem('sessionID');

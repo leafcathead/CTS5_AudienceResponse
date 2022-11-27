@@ -18,7 +18,7 @@
     <div class="p-4 pt-5">
       <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(./assets/chatWallAssets/images/user.png);"></a>
       <p id="userInfo">
-        <script>document.getElementById("userInfo").innerHTML = "Owner ID: " + ownerID + "<br>" + "SessionID:  " + sessionID + "<br>" + "Session Password:  " + sessionPassword;
+        <script>document.getElementById("userInfo").innerHTML = "OwnerID:   " + ownerID + "<br>" + "SessionID:   " + sessionID + "<br>" + "Session Password:  " + sessionPassword;
 
 
         </script></p></br></br></br></br></br></br></br></br></br></br></br></br>
@@ -92,16 +92,16 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="nav navbar-nav ml-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home</a>
+              <a class="nav-link" href="#">Chat wall</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
+              <a class="nav-link" href="#">Statistics</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Portfolio</a>
+              <a class="nav-link" href="#">Vote</a>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Contact</a>
+            <li class="nav-item" >
+              <a class="nav-link" href="#" style="color: red">Delete session</a>
             </li>
           </ul>
         </div>
@@ -122,9 +122,6 @@
             <div class="card">
               <div class="card-body">
                 <div class="d-flex flex-start align-items-center">
-                  <img class="rounded-circle shadow-1-strong me-3"
-                       src="" alt="avatar" width="60"
-                       height="60" />
                   <div>
                     <h6 class="fw-bold text-primary mb-1">Mucella Cetin</h6>
                     <p class="text-muted small mb-0">
@@ -142,25 +139,16 @@
                 </p>
 
                 <div class="small d-flex justify-content-start">
-                  <a href="#!" class="d-flex align-items-center me-3">
-                    <i class="far fa-thumbs-up me-2"></i>
-                    <p class="mb-0">Like</p>
-                  </a>
+
                   <a href="#!" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
-                    <p class="mb-0">Comment</p>
+                    <p class="mb-0">Like</p>
                   </a>
-                  <a href="#!" class="d-flex align-items-center me-3">
-                    <i class="fas fa-share me-2"></i>
-                    <p class="mb-0">Share</p>
-                  </a>
+
                 </div>
               </div>
               <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
                 <div class="d-flex flex-start w-100">
-                  <img class="rounded-circle shadow-1-strong me-3"
-                       src="" alt="avatar" width="40"
-                       height="40" />
                   <div class="form-outline w-100">
                 <textarea class="form-control" id="textAreaExample" placeholder="Write your comment..." rows="4"
                           style="background: #fff;"></textarea>
