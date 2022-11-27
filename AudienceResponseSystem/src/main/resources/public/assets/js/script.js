@@ -6,28 +6,28 @@
 
  //  session check "localstorage session type"
  //  if you have logged in before you will be directed to chatWallUser.html
-const localStorageUserId = localStorage.getItem('sessionNewUserID');
-console.log('your password is:  '+ localStorageUserId);
-if (localStorageUserId != null)
-{
-    // alert('do you want to continue to the chat wall session')
-    //  alert('Your session value is  ' + sessionPassKey)
-    //   location.replace("chatWallUser.html")
-        const answer = window.confirm("Do you want to continue to the chat wall session?");
-        if (answer) {
-          //  alert("Ok was pressed");
-            location.replace("chatWallUser.html")
-        } else {
-          //  alert("Cancel was pressed");
-            localStorage.removeItem('sessionNewUserID');
-            localStorage.removeItem('sessionNewSessionID');
-            location.replace("index.html")
-        }
-    }
-
-else {
-  //  alert('Session value not exists')
-}
+// const localStorageUserId = localStorage.getItem('sessionNewUserID');
+// console.log('your password is:  '+ localStorageUserId);
+// if (localStorageUserId != null)
+// {
+//     // alert('do you want to continue to the chat wall session')
+//     //  alert('Your session value is  ' + sessionPassKey)
+//     //   location.replace("chatWallUser.html")
+//         const answer = window.confirm("Do you want to continue to the chat wall session?");
+//         if (answer) {
+//           //  alert("Ok was pressed");
+//             location.replace("chatWallUser.html")
+//         } else {
+//           //  alert("Cancel was pressed");
+//             localStorage.removeItem('sessionNewUserID');
+//             localStorage.removeItem('sessionNewSessionID');
+//             location.replace("index.html")
+//         }
+//     }
+//
+// else {
+//   //  alert('Session value not exists')
+// }
 
 
 
@@ -37,7 +37,7 @@ else {
  **/
 
 //joinSession
-const inputPass = $("#sessionIdInput").val()
+const inputPass = $("#sessionIdInput").val();
 function joinSession() {
     let div =  document.getElementById('userMenuDiv');
     const data = {
@@ -59,8 +59,8 @@ function joinSession() {
         success: function (resp) {
            if(resp.newUserID != null) {
 //Setting the localstorages keys and values
-              localStorage.setItem('sessionNewUserID', resp.newUserID);
-              localStorage.setItem('sessionNewSessionID', resp.newSessionID);
+              localStorage.setItem('userID', resp.newUserID);
+              localStorage.setItem('sessionID', resp.newSessionID);
 
 
                console.log("password is exist");
@@ -97,10 +97,24 @@ function createSession() {
     })
     .then(function(data){
     console.log(data);
-        var par =`<p>userID:  ${data.newUserID} </p> <br/> 
-                      <p>randomPassword: ${data.randomPassword}  </p> <br/>
-                      <p>newSessionID: ${data.newSessionID}  </p> `;
-        div.innerHTML = par;
+    if(data.newUserID !=null){
+        localStorage.setItem('ownerID', data.newUserID);
+        localStorage.setItem('sessionID', data.newSessionID);
+       localStorage.setItem('sessionPassword', data.randomPassword);
+        console.log("it is stored!");
+         location.replace("chatWallOwner.html");
+    }
+
+    else{
+        console.log("something went wrong");
+    }
+       // localStorage.setItem('ownerID', data.newUserID);
+       // localStorage.setItem('sessionID', data.newSessionID);
+      //  location.replace("chatWallOwner.html");
+      //    var par =`<p>userID:  ${data.newUserID} </p> <br/>
+      //                  <p>randomPassword: ${data.randomPassword}  </p> <br/>
+      //                  <p>newSessionID: ${data.newSessionID}  </p> `;
+      //    div.innerHTML = par;
 
     } );
 

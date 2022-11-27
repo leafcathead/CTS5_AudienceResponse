@@ -5,18 +5,18 @@
 //store data on the session storage will be removed by closing the browser
 //sessionStorage.setItem('password', '8D1F')
 
-const sessionNewUserID = localStorage.getItem('sessionNewUserID');
-const sessionNewSessionID = localStorage.getItem('sessionNewSessionID');
+const userID = localStorage.getItem('userID');
+const sessionID = localStorage.getItem('sessionID');
 
 //check if user logged in
-if(sessionNewUserID==null){
+if(userID==null){
     location.replace("index.html")
 }
 
 
 function logOut(){
 
-    localStorage.removeItem('sessionNewUserID');
-    localStorage.removeItem('sessionNewSessionID');
+    localStorage.removeItem('userID');
+    localStorage.removeItem('sessionID');
     location.replace("index.html")
 }
