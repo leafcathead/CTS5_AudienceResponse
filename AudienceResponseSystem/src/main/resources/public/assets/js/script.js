@@ -5,8 +5,8 @@
 //console.log('your password is:  '+ localStorageUserId);
 
 
-  // session check "localstorage session type"
-  // if you have logged in before you will be directed to chatWallUser.html
+// session check "localstorage session type owner/user type"
+// if you have logged in before you will be directed to chatWallUser.html
 const localStorageUserID = localStorage.getItem('userID');
 const localStorageOwnerID = localStorage.getItem('ownerID');
 const localStorageSessionID = localStorage.getItem('sessionID');
@@ -14,9 +14,6 @@ const localStorageSessionPassword = localStorage.getItem('sessionPassword');
 
 //in case user
 if (localStorageUserID != null) {
-    // alert('do you want to continue to the chat wall session')
-    //  alert('Your session value is  ' + sessionPassKey)
-    //   location.replace("chatWallUser.html")
         const answer = window.confirm("Hi user, do you want to continue to the chat wall session?");
         if (answer) {
           //  alert("Ok was pressed");
@@ -27,13 +24,14 @@ if (localStorageUserID != null) {
             localStorage.removeItem('sessionID');
             location.replace("index.html")
         }
+
+    // alert('do you want to continue to the chat wall session')
+    //  alert('Your session value is  ' + sessionPassKey)
+    //   location.replace("chatWallUser.html")
     }
 
 //in case owner
 if (localStorageOwnerID != null) {
-    // alert('do you want to continue to the chat wall session')
-    //  alert('Your session value is  ' + sessionPassKey)
-    //   location.replace("chatWallUser.html")
     const answer = window.confirm("Hi owner, do you want to continue to the chat wall session?");
     if (answer) {
         //  alert("Ok was pressed");
@@ -61,9 +59,8 @@ else {
 //joinSession
 const inputPass = $("#sessionIdInput").val();
 function joinSession() {
-    let div =  document.getElementById('userMenuDiv');
     const data = {
-        // password: $("#passO").val()
+
         password: $("#sessionIdInput").val()
 
     };
@@ -128,7 +125,7 @@ function createSession() {
     }
 
     else{
-        console.log("something went wrong");
+        console.log("check your data source");
     }
        // localStorage.setItem('ownerID', data.newUserID);
        // localStorage.setItem('sessionID', data.newSessionID);
@@ -145,6 +142,7 @@ function createSession() {
 
             // //   document.getElementById('outputDiv').textContent = resp.newUserID;
 }
+
 
 
 

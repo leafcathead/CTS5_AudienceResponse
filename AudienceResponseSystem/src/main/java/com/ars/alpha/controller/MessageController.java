@@ -109,7 +109,8 @@ public class MessageController {
      *          }
      *      }
      */
-    @GetMapping("/getMessages")
+   //Must be post type JS can't send GET request with body!!!
+    @PostMapping("/getMessages")
     public @ResponseBody Map<String, Object> getMessages(@RequestBody SessionRoom session) {
         System.out.println(session.toString());
         return messageService.getMessages(session.getID());

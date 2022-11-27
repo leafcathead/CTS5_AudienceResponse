@@ -3,8 +3,7 @@
 
 
 //store data on the session storage will be removed by closing the browser
-//sessionStorage.setItem('password', '8D1F')
-
+//sessionStorage.setItem('password', '8D1F') .e.g
 const userID = localStorage.getItem('userID');
 const sessionID = localStorage.getItem('sessionID');
 
@@ -14,9 +13,149 @@ if(userID==null){
 }
 
 
+
+
+
+
+
+//get posts from DB
+function getPosts() {
+       let posts = document.getElementById('cardDiv');
+
+    const data = { id: sessionID };
+    console.log(data);
+    fetch("http://localhost:8080/message/getMessages", {
+        method: 'POST',
+        body: JSON.stringify({
+            id: sessionID
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+
+         //   for (var i = 0; i < data.length; i++){
+
+                const card =
+                    `
+            <div class="card">
+              <div class="card-body">
+                <div class="d-flex flex-start align-items-center">
+
+                  <div>
+                    <h6 class="fw-bold text-primary mb-1"></h6>
+                    <p class="text-muted small mb-0">
+                      Shared publicly - Jan 2022
+                    </p>
+                  </div>
+                </div>
+
+                <p class="mt-3 mb-4 pb-2">
+                  
+                      
+                </p>
+
+                <div class="small d-flex justify-content-start">
+
+                  <a href="#!" class="d-flex align-items-center me-3">
+                    <i class="far fa-comment-dots me-2"></i>
+                    <p class="mb-0">reply</p>
+                  </a>
+
+                </div>
+              </div>
+              <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+                <div class="d-flex flex-start w-100">
+                  <div class="form-outline w-100">
+                <textarea class="form-control" id="textAreaExample" placeholder="Your comment must be less than 1024 letter..." rows="4"
+                          style="background: #fff;"></textarea>
+                    <label class="form-label" for="textAreaExample">Message</label>
+                  </div>
+                </div>
+                <div class="float-end mt-2 pt-1">
+                  <button type="button" class="btn btn-primary btn-sm" onclick="getPosts()">Post comment</button>
+                  <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+                </div>
+              </div>
+            </div>
+
+`;
+
+                  posts.innerHTML += card;
+         //  }
+        })
+
+}
+
+
+
+
+//sign out for user chat wall
 function logOutUser(){
 
     localStorage.removeItem('userID');
     localStorage.removeItem('sessionID');
     location.replace("index.html")
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+//testing codes
+
+// fetch('http://localhost:8080/message/getMessages', {
+//     method: 'POST',
+//     body: data,
+// })
+//     .then(res => res.json())
+//     .then(data => console.log(data))
+
+//     $.ajax({
+//         url: 'http://localhost:8080/message/getMessages',
+//         headers: {
+//             'Content-Type': 'application/json',
+//             'Accept': 'application/json'
+//         },
+//         data: JSON.stringify(data),
+//         type: 'POST',
+//         dataType: 'JSON',
+//         success: function (resp) {
+//           //  if(resp.newUserID != null) {
+// //Setting the localstorages keys and values
+//             //    localStorage.setItem('userID', resp.newUserID);
+//            //     localStorage.setItem('sessionID', resp.newSessionID);
+//
+//
+//            //     console.log("password is exist");
+//                 console.log(resp);
+//                 //   const userId = resp.newUserID;
+//                 // var par = `<p> USER NAME ID:  ${resp.newUserID} </p> <br/> <p>SESSION ID: ${resp.newSessionID}  </p>`;
+//                 // div.innerHTML = par;
+//                 //   document.getElementById('outputDiv').textContent = resp.newUserID;
+//          //       location.replace("chatWallUser.html")
+//       //      }else{
+//
+//          //       const wrong =  window.confirm("session is not exsit or password is incorrect");
+//            //     console.log("your password is not exist");
+//                 //   document.getElementById('userMenuDiv').textContent = "Your password is NOT exist";
+//
+//         //    }
+//
+//         }
+//
+//
+//     });
