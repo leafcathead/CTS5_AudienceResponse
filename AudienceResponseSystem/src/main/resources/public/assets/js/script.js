@@ -2,32 +2,55 @@
 // window.onbeforeunload = function (){
 //     return "If you left the page all registration data will be removed! ";
 // }
+//console.log('your password is:  '+ localStorageUserId);
 
 
- //  session check "localstorage session type"
- //  if you have logged in before you will be directed to chatWallUser.html
-// const localStorageUserId = localStorage.getItem('sessionNewUserID');
-// console.log('your password is:  '+ localStorageUserId);
-// if (localStorageUserId != null)
-// {
-//     // alert('do you want to continue to the chat wall session')
-//     //  alert('Your session value is  ' + sessionPassKey)
-//     //   location.replace("chatWallUser.html")
-//         const answer = window.confirm("Do you want to continue to the chat wall session?");
-//         if (answer) {
-//           //  alert("Ok was pressed");
-//             location.replace("chatWallUser.html")
-//         } else {
-//           //  alert("Cancel was pressed");
-//             localStorage.removeItem('sessionNewUserID');
-//             localStorage.removeItem('sessionNewSessionID');
-//             location.replace("index.html")
-//         }
-//     }
-//
-// else {
-//   //  alert('Session value not exists')
-// }
+  // session check "localstorage session type"
+  // if you have logged in before you will be directed to chatWallUser.html
+const localStorageUserID = localStorage.getItem('userID');
+const localStorageOwnerID = localStorage.getItem('ownerID');
+const localStorageSessionID = localStorage.getItem('sessionID');
+const localStorageSessionPassword = localStorage.getItem('sessionPassword');
+
+//in case user
+if (localStorageUserID != null) {
+    // alert('do you want to continue to the chat wall session')
+    //  alert('Your session value is  ' + sessionPassKey)
+    //   location.replace("chatWallUser.html")
+        const answer = window.confirm("Hi user, do you want to continue to the chat wall session?");
+        if (answer) {
+          //  alert("Ok was pressed");
+            location.replace("chatWallUser.html")
+        } else {
+          //  alert("Cancel was pressed");
+            localStorage.removeItem('userID');
+            localStorage.removeItem('sessionID');
+            location.replace("index.html")
+        }
+    }
+
+//in case owner
+if (localStorageOwnerID != null) {
+    // alert('do you want to continue to the chat wall session')
+    //  alert('Your session value is  ' + sessionPassKey)
+    //   location.replace("chatWallUser.html")
+    const answer = window.confirm("Hi owner, do you want to continue to the chat wall session?");
+    if (answer) {
+        //  alert("Ok was pressed");
+        location.replace("chatWallOwner.html")
+    } else {
+        //  alert("Cancel was pressed");
+        localStorage.removeItem('ownerID');
+        localStorage.removeItem('sessionID');
+        localStorage.removeItem('sessionPassword');
+
+        location.replace("index.html")
+    }
+}
+
+else {
+  //  alert('Session value not exists')
+}
 
 
 
