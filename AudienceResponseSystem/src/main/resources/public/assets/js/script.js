@@ -1,4 +1,4 @@
-// // Prevent reloading
+//  Prevent reloading "Optional feature"
 // window.onbeforeunload = function (){
 //     return "If you left the page all registration data will be removed! ";
 // }
@@ -43,7 +43,6 @@ if (localStorageOwnerID != null) {
         localStorage.removeItem('ownerID');
         localStorage.removeItem('sessionID');
         localStorage.removeItem('sessionPassword');
-
         location.replace("index.html")
     }
 }
