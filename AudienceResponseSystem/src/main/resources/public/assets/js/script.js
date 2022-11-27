@@ -48,7 +48,7 @@ if (localStorageOwnerID != null) {
 }
 
 else {
-  //  alert('Session value not exists')
+    console.log("No localstorage session used yet! ");
 }
 
 
