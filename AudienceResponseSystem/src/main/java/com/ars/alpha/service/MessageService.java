@@ -127,6 +127,7 @@ public class MessageService implements MessageServiceInterface {
 //            Map<String, Object> singleMessage = new HashMap<String, Object>();
 //            singleMessage.put("id", m.getId());
 //            singleMessage.put("posterID", m.getPoster().getId());
+//            singleMessage.put("posterDisplayName": m.getPoster().getDisplayName();
 //            singleMessage.put("sessionOwnerID", m.getSession().getOwner().getId());
 //            singleMessage.put("messageContent", m.getMessageContents());
 //            singleMessage.put("likes", m.getLikes());

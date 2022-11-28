@@ -21,16 +21,21 @@ public class SessionUserController {
      * @param su Json object in the form:
      *           {
      *              "id": <Long>,
-     *              "name": <String>,
+     *              "displayName": <String>,
      *              "session": {
      *                  "id": <Long>
      *              }
      *           }
-     * @return TODO
+     * @return JSON object in the form:
+     *         {
+     *             "Status": <SUCCESS, WARNING, ERROR>,
+     *             "Code": <int>
+     *         }
      */
     @PutMapping("/updateDisplayName")
     Map<String, Object> updateMessageContent(@RequestBody SessionUser su) {
         System.out.println("Updating display name...");
+        System.out.println(su.toString());
         return userService.updateDisplayName(su.getId(), su.getSession().getID(), su.getDisplayName());
     }
 

@@ -120,6 +120,7 @@ public class MessageController {
      *             "sessionOwnerID": <Long>,
      *             "Timestamp": <Timestamp>,
      *             "posterID": <Long>,
+     *             "posterDisplayName": <String>,
      *             "messageContent": <String>,
      *             "likes": <int>
      *         }

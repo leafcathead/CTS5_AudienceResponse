@@ -74,15 +74,5 @@ public class SessionRoomController {
 
 
 
-    @CrossOrigin
-    @GetMapping("/testPost")
-    SessionUser testingPost(@RequestBody TestStudent student) {
-        System.out.println("Post detected");
-        System.out.println(student);
-        System.out.println(student.getDisplayName());
-
-        SessionUser newUser = new SessionUser();
-        return newUser;
-    }
 
 }
