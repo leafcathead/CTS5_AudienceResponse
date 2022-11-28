@@ -187,6 +187,32 @@ public class MessageService implements MessageServiceInterface {
         return returnerMap;
     }
 
+    @Override
+    public Map<String, Object> updateMessageVisibility(Long messageID, Long posterID, Long sessionID) {
+
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
+
+        try {
+
+            messageRepository.FLIP_VISIBILITY(messageID, posterID, sessionID);
+
+            returnerMap.put("Status", Status.SUCCESS);
+            returnerMap.put("Code", 0);
+
+        } catch (PersistenceException e) {
+            System.out.println("Exception caught!");
+            if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
+                SQLServerException ex = (SQLServerException) e.getCause().getCause();
+                returnerMap.put("Status", Status.ERROR);
+                returnerMap.put("Code", ex.getSQLServerError().getErrorState());
+            } else {
+                throw new IllegalStateException("How???");
+            }
+        }
+
+        return returnerMap;
+    }
+
 
 }
 

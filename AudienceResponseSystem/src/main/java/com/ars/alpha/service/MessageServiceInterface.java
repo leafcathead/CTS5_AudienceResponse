@@ -15,4 +15,6 @@ public interface MessageServiceInterface {
 
     Map<String, Object> updateMessageContent(Long messageID, Long posterID, Long sessionID, String newContent);
 
+    Map<String, Object> updateMessageVisibility(Long messageID, Long posterID, Long sessionID);
+
 }

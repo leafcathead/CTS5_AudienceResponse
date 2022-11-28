@@ -159,6 +159,32 @@ public class MessageController {
         return messageService.updateMessageContent(m.getId(), m.getPoster().getId(), m.getSession().getID(), m.getMessageContents());
     }
 
+    /**
+     *
+     * @param m JSON Object in the form:
+     *          {
+     *              "id": <Long>,
+     *              "poster": {
+     *                  "id": <Long>
+     *              },
+     *              "session": {
+     *                  "id": <Long>
+     *              }
+     *          }
+     * @return JSON Object formatted like this:
+     *          {
+     *              "Status": <SUCCESS, WARNING, ERROR>,
+     *              "Code": <int>
+     *          }
+     */
+    @PutMapping("/updateVisibility")
+    Map<String, Object> updateMessageVisibility(@RequestBody Message m) {
+
+        // We don't need the new value of the visibility, calling this method just flips it.
+
+        return messageService.updateMessageVisibility(m.getId(), m.getPoster().getId(), m.getSession().getID());
+    }
+
 
 
 
