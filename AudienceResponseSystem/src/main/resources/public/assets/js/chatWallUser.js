@@ -20,7 +20,7 @@ if(userID==null){
 
 //get posts from DB
 function getPosts() {
-       let posts = document.getElementById('cardDiv');
+       const posts = document.getElementById('cardDiv');
 
     const data = { id: sessionID };
     console.log(data);
@@ -39,10 +39,13 @@ function getPosts() {
         .then((data) => {
             console.log(data)
 
-         //   for (var i = 0; i < data.length; i++){
+               // for (var i = 0; i < data.length; i++) {
+            //It not array!!!
+            console.log(data.length);
+           //     }
 
-                const card =
-                    `
+                    const card =
+                        `
             <div class="card">
               <div class="card-body">
                 <div class="d-flex flex-start align-items-center">
@@ -86,8 +89,10 @@ function getPosts() {
 
 `;
 
-                  posts.innerHTML += card;
-         //  }
+                    posts.innerHTML += card;
+
+
+            //    }
         })
 
 }
