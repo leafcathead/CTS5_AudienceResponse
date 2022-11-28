@@ -108,8 +108,25 @@ public class MessageController {
      *             ...
      *          }
      *      }
+     *
+     *      ALTERNATE JSON RESPONSE BODY:
+     *      {
+     *     "Status": <SUCCESS, WARNING, ERROR>,
+     *     "Messages": {
+     *         "0": {
+     *             "visible": <boolean>,
+     *             "replyTo": <Long or NULL>,
+     *             "id": <Long>,
+     *             "sessionOwnerID": <Long>,
+     *             "Timestamp": <Timestamp>,
+     *             "posterID": <Long>,
+     *             "messageContent": <String>,
+     *             "likes": <int>
+     *         }
+     *     "Code": <int>
      */
    //Must be post type JS can't send GET request with body!!!
+        // LAME! -Connor
     @PostMapping("/getMessages")
     public @ResponseBody Map<String, Object> getMessages(@RequestBody SessionRoom session) {
         System.out.println(session.toString());

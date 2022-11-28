@@ -97,6 +97,9 @@ public class MessageService implements MessageServiceInterface {
 
     /**
      * @param sessionID
+     *
+     *
+     *
      * @return
      */
     @Transactional(isolation = Isolation.REPEATABLE_READ)
@@ -111,12 +114,30 @@ public class MessageService implements MessageServiceInterface {
         returnerMap.put("Status", Status.SUCCESS);
         returnerMap.put("Code", 0);
 
-        Map<Integer, Message> messageMap = new HashMap<Integer, Message>();
+        Map<Integer, Object> messageMap = new HashMap<Integer, Object>();
+        // Not sure how helpful this construction was. Experimenting with a different one.
         for (int i = 0; i < returnerList.size(); i++) {
             Message m = returnerList.get(i);
 //            messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo(), m.getTimestamp()));
             messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo() == null ? null : new Message(m.getReplyTo().getId()), m.getTimestamp()));
         }
+
+//        for (int i = 0; i < returnerList.size(); i++) {
+//            Message m = returnerList.get(i);
+//            Map<String, Object> singleMessage = new HashMap<String, Object>();
+//            singleMessage.put("id", m.getId());
+//            singleMessage.put("posterID", m.getPoster().getId());
+//            singleMessage.put("sessionOwnerID", m.getSession().getOwner().getId());
+//            singleMessage.put("messageContent", m.getMessageContents());
+//            singleMessage.put("likes", m.getLikes());
+//            singleMessage.put("visible", m.getVisible());
+//            singleMessage.put("replyTo", m.getReplyTo() == null ? null : m.getReplyTo().getId());
+//            singleMessage.put("Timestamp", m.getTimestamp());
+//            messageMap.put(i, singleMessage);
+//        }
+
+
+
         returnerMap.put("Messages", messageMap);
 
         return returnerMap;
