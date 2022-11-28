@@ -8,6 +8,10 @@ import javax.persistence.*;
 // @Table(name = "User")
 @Entity
 @Table(name = "SessionUser")
+@NamedStoredProcedureQuery(name = "UPDATE_DISPLAY_NAME", procedureName = "UPDATE_DISPLAY_NAME", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "userID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "newName", type = String.class) })
 public class SessionUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,14 +47,16 @@ public class SessionUser {
         this.name = newName;
     }
 
-    public SessionUser() {
-        this.id = 0L;
-        this.name = "Default Name";
-        this.session = new SessionRoom();
+    public SessionUser () {
+
     }
 
     public SessionUser(Long id) {
         this.id = id;
+    }
+
+    public SessionUser(Long id, String name) {
+        this.id = id; this.name = name;
     }
 
     public SessionUser(Long id, Long sessionID) {
@@ -58,4 +64,12 @@ public class SessionUser {
         this.session = new SessionRoom(sessionID);
     }
 
+    @Override
+    public String toString() {
+        return "SessionUser{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", session=" + session.toString() +
+                '}';
+    }
 }

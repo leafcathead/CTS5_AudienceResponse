@@ -24,11 +24,21 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Procedure(name = "INSERT_REPLY")
     Long INSERT_REPLY (Long posterID, Long sessionID, Long replyToID, String msgContent, Long newMessageID) throws PersistenceException;
 
+    /**
+     * Returns an ordered list by MessageID
+     *
+     * @param sessionID
+     * @return
+     * @throws PersistenceException
+     */
     @Procedure(name = "RETRIEVE_MESSAGES")
     List<Message> RETRIEVE_MESSAGES(Long sessionID) throws PersistenceException;
 
     @Procedure(name = "UPDATE_MESSAGE")
     void UPDATE_MESSAGE(Long messageID, Long posterID, Long sessionID, String newBody) throws PersistenceException;
+
+    @Procedure(name = "FLIP_VISIBILITY")
+    void FLIP_VISIBILITY(Long messageID, Long posterID, Long sessionID) throws PersistenceException;
 
 //    @Query(value = "RETRIEVE_MESSAGES(:sessionID);", nativeQuery = true)
 //    List<Message> RETRIEVE_MESSAGES(@Param("sessionID") Long sessionID);

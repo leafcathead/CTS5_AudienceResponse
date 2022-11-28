@@ -35,6 +35,10 @@ import java.util.UUID;
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "posterID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "newBody", type = String.class)})
+@NamedStoredProcedureQuery(name = "FLIP_VISIBILITY", procedureName = "FLIP_VISIBILITY", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "messageID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "posterID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class)})
 //@SqlResultSetMapping(name = "Mapping.Message", // I THINK THIS IS UNNEEDED. I HOPE TO GOD IT IS NOT NEEDED
 //                     classes = @ConstructorResult(targetClass = Message.class,
 //                               columns = {@ColumnResult(name = "ID"),
