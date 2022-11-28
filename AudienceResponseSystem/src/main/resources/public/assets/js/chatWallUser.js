@@ -15,7 +15,15 @@ if(userID==null){
 
 
 
-
+// {
+//     "poster": {
+//     "id":  97
+// },
+//     "session": {
+//     "id":  54
+// },
+//     "messageContent": "I am the user of 97 attended to session 54 this is my comment"
+// }
 
 
 //get posts from DB
@@ -37,37 +45,43 @@ function getPosts() {
             return response.json()
         })
         .then((data) => {
-            console.log(data)
+         //   console.log(data)
 
-               // for (var i = 0; i < data.length; i++) {
-            //It not array!!!
-            console.log(data.length);
-           //     }
+            for (var i = 0; i <  Object.keys(data).length; i++) {
+            //It not an array!!!
 
-                    const card =
-                        `
+            console.log(data.Messages[i].messageContents);
+
+                let timeStamp = data.Messages[i].timestamp;
+                let dateFormat = new Date(timeStamp);
+
+                const card =
+                    `
             <div class="card">
               <div class="card-body">
                 <div class="d-flex flex-start align-items-center">
 
                   <div>
-                    <h6 class="fw-bold text-primary mb-1"></h6>
+                    <h6 class="fw-bold text-primary mb-1">Written by:  ${data.Messages[i].poster.id }#user</h6>
                     <p class="text-muted small mb-0">
-                      Shared publicly - Jan 2022
+                      Shared publicly - ${dateFormat }
                     </p>
                   </div>
                 </div>
 
                 <p class="mt-3 mb-4 pb-2">
                   
-                      
+                       ${data.Messages[i].messageContents}
                 </p>
 
                 <div class="small d-flex justify-content-start">
 
                   <a href="#!" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
-                    <p class="mb-0">reply</p>
+                    <p class="mb-0">reply&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                  </a>                <a href="#!" class="d-flex align-items-center me-3">
+                    <i class="far fa-comment-dots me-2"></i>
+                    <p class="mb-0">${data.Messages[i].likes }  likes</p>
                   </a>
 
                 </div>
@@ -81,15 +95,21 @@ function getPosts() {
                   </div>
                 </div>
                 <div class="float-end mt-2 pt-1">
-                  <button type="button" class="btn btn-primary btn-sm" onclick="getPosts()">Post comment</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="">Post comment</button>
                   <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
                 </div>
               </div>
             </div>
+<!--            I will change it to padding/Margin-->
+            <br/><br/><br/><br/><br/><br/>
 
 `;
 
-                    posts.innerHTML += card;
+                posts.innerHTML += card;
+
+               }
+
+
 
 
             //    }
