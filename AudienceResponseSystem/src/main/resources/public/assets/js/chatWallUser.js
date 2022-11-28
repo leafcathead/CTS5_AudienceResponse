@@ -78,7 +78,10 @@ function getPosts() {
 
                   <a href="#!" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
-                    <p class="mb-0">reply</p>
+                    <p class="mb-0">reply&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                  </a>                <a href="#!" class="d-flex align-items-center me-3">
+                    <i class="far fa-comment-dots me-2"></i>
+                    <p class="mb-0">${data.Messages[i].likes }  likes</p>
                   </a>
 
                 </div>
