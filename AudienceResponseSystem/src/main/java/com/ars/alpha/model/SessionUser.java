@@ -55,6 +55,10 @@ public class SessionUser {
         this.id = id;
     }
 
+    public SessionUser(Long id, String name) {
+        this.id = id; this.name = name;
+    }
+
     public SessionUser(Long id, Long sessionID) {
         this.id = id;
         this.session = new SessionRoom(sessionID);
