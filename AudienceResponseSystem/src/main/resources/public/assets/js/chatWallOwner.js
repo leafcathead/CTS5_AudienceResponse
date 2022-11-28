@@ -6,6 +6,63 @@ const sessionID = localStorage.getItem('sessionID');
 const sessionPassword = localStorage.getItem('sessionPassword');
 
 
+//post comment
+function postComment() {
+    const comments = document.getElementById('commentDiv');
+
+    const data = {
+
+        poster: {
+            id:  ownerID
+        },
+        session: {
+            id: sessionID
+        },
+        messageContent:$("#textArea").val()
+
+    };
+    console.log(data);
+    fetch("http://localhost:8080/message/postComment", {
+        method: 'POST',
+        body: JSON.stringify({
+
+            poster: {
+                id:  ownerID
+            },
+            session: {
+                id: sessionID
+            },
+            messageContent:$("#textArea").val()
+
+
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+              console.log(data)
+
+            const answer = `
+
+            <p>
+           ${ data.Status}
+</p>
+            `;
+
+            comments.innerHTML += answer;
+         })
+
+}
+
+
+
+
+
+
 
 
 
@@ -33,7 +90,7 @@ function getPosts() {
             for (var i = 0; i <  Object.keys(data).length; i++) {
                 //It not an array!!!
 
-                console.log(data.Messages[i].messageContents);
+             //   console.log(data.Messages[i].messageContents);
 
                 let timeStamp = data.Messages[i].timestamp;
                 let dateFormat = new Date(timeStamp);
