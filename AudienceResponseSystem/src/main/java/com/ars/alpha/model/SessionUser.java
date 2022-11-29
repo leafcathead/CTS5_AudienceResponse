@@ -69,7 +69,7 @@ public class SessionUser {
         return "SessionUser{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", session=" + session.toString() +
+                ", session=" + session +
                 '}';
     }
 }

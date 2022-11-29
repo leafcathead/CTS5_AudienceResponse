@@ -130,7 +130,6 @@ public class MessageController {
         // LAME! -Connor
     @PostMapping("/getMessages")
     public @ResponseBody Map<String, Object> getMessages(@RequestBody SessionRoom session) {
-        System.out.println(session.toString());
         return messageService.getMessages(session.getID());
     }
 

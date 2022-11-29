@@ -302,7 +302,7 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
         jsonGenerator.close();
         String jsonString = writer.toString();
 
-        MvcResult result = this.mockMvc.perform(get("/message/getMessages").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        MvcResult result = this.mockMvc.perform(post("/message/getMessages").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
@@ -390,7 +390,7 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
         jsonGenerator.close();
         jsonString = writer.toString();
 
-        result = this.mockMvc.perform(get("/message/getMessages").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        result = this.mockMvc.perform(post("/message/getMessages").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
@@ -401,6 +401,39 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
                 .andExpect((ResultMatcher) jsonPath("$.Messages", aMapWithSize(4)))
                 .andReturn();
 
+        // Test adding one more message
+
+        jsonString = writeMessageJSON(TEST_USERID_2, TEST_SESSION_ID, null, "Boo!");
+
+        result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        writer = new StringWriter();
+        jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeStringField("id", String.valueOf(TEST_SESSION_ID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        jsonString = writer.toString();
+
+        result = this.mockMvc.perform(post("/message/getMessages").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Messages", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Messages", aMapWithSize(5)))
+                .andReturn();
 
     }
 
