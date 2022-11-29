@@ -44,7 +44,7 @@ public class MessageController {
             throw new IllegalArgumentException("You cannot send a message longer than 1024 characters.");
         }
 
-        System.out.println(newComment.toString());
+      //  System.out.println(newComment.toString());
 
         return messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents(), 0L);
     }

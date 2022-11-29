@@ -109,9 +109,28 @@
     </nav>
 
     <h2 class="mb-4">Chat wall</h2>
-    <h4> <p id="userName">  <script>document.getElementById("userName").innerHTML =  "Hi " + ownerID +" :)";
+    <h4> <p id="userName">  <script>document.getElementById("userName").innerHTML =  "Hi " + ownerID +", what's in your mind :)";
     </script>
     </p> </h4>
+
+
+<!--    Write Posts   -->
+    <div>
+    <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;" >
+      <div class="d-flex flex-start w-100">
+        <div id="commentDiv" class="form-outline w-100"  >
+                <textarea class="form-control" id="textArea" placeholder="Your comment must be less than 1024 letter..." rows="4"
+                          style="background: #fff;"></textarea>
+          <label class="form-label" for="textArea">Message</label>
+        </div>
+      </div>
+      <div class="float-end mt-2 pt-1">
+        <button type="button" class="btn btn-primary btn-sm" onclick="postComment()">Post comment</button>
+        <button type="reset" class="btn btn-outline-primary btn-sm">Cancel</button>
+      </div>
+    </div>
+    </div>
+    <br/><br/><br/><br/>
     <button type="button" class="btn btn-primary btn-sm" onclick="getPosts()">Get posts</button>
 
 
