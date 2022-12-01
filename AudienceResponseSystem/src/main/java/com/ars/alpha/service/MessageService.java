@@ -118,8 +118,9 @@ public class MessageService implements MessageServiceInterface {
         // Not sure how helpful this construction was. Experimenting with a different one.
         for (int i = 0; i < returnerList.size(); i++) {
             Message m = returnerList.get(i);
-//            messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo(), m.getTimestamp()));
-            messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId(), m.getPoster().getDisplayName()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo() == null ? null : new Message(m.getReplyTo().getId()), m.getTimestamp()));
+            messageMap.put(i, m);
+           // messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo(), m.getTimestamp()));
+           // messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId(), m.getPoster().getDisplayName()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo() == null ? null : new Message(m.getReplyTo().getId()), m.getTimestamp()));
         }
 
 //        for (int i = 0; i < returnerList.size(); i++) {

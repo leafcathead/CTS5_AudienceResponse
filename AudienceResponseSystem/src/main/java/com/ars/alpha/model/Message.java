@@ -1,6 +1,8 @@
 package com.ars.alpha.model;
 
 import com.ars.alpha.dao.MessageRepository;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -49,6 +51,7 @@ import java.util.UUID;
 //                                             @ColumnResult(name = "Likes"),
 //                                             @ColumnResult(name = "IS_APPROVED"),
 //                                             @ColumnResult(name = "Timestamp")}))
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
