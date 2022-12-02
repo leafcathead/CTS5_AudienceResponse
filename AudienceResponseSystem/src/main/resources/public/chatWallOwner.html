@@ -95,6 +95,9 @@
               <a class="nav-link" href="#">Chat wall</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="#">edit your name</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="#">Statistics</a>
             </li>
             <li class="nav-item">
@@ -115,7 +118,7 @@
 
 
 <!--    Write Posts   -->
-    <div>
+    <div id="answer">
     <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;" >
       <div class="d-flex flex-start w-100">
         <div id="commentDiv" class="form-outline w-100"  >
@@ -124,13 +127,17 @@
           <label class="form-label" for="textArea">Message</label>
         </div>
       </div>
+
       <div class="float-end mt-2 pt-1">
         <button type="button" class="btn btn-primary btn-sm" onclick="postComment()">Post comment</button>
         <button type="reset" class="btn btn-outline-primary btn-sm">Cancel</button>
       </div>
     </div>
     </div>
+<!--    <p id="answer"></p>-->
+
     <br/><br/><br/><br/>
+<!--    Get posts button-->
     <button type="button" class="btn btn-primary btn-sm" onclick="getPosts()">Get posts</button>
 
 
@@ -148,6 +155,11 @@
 
   </div>
 </div>
+
+
+<!--edit form-->
+
+
 
 <script src="./assets/chatWallAssets/js/jquery.min.js"></script>
 <script src="./assets/chatWallAssets/js/popper.js"></script>
