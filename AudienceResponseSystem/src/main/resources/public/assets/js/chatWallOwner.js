@@ -88,38 +88,41 @@ function getPosts() {
         .then((receivedJson) => {
            //   console.log(receivedJson)
 
-            for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
+            let posterMap = new Map(); // Create a new Map to store the incoming messages
+            for (var i = 0; i <  Object.keys(data).length; i++) {
+                //It not an array!!!
+                let m = data.Messages[i];
+                let poster;
 
+                if (typeof(m.poster) === 'number') {
+                    poster = posterMap.get(m.poster);
+                } else {
+                    posterMap.set(m.poster.id, m.poster);
+                    poster = m.poster;
+                }
 
-                console.log(receivedJson.Messages[i]);
+                console.log(m.messageContents);
 
-                let timeStamp = receivedJson.Messages[i].timestamp;
+                let timeStamp = m.timestamp;
                 let dateFormat = new Date(timeStamp);
 
-                let card = `
+                const card =
+                    `
             <div class="card">
               <div class="card-body">
                 <div class="d-flex flex-start align-items-center">
 
                   <div>
-                  <div style="  position: absolute;top: 8px;right: 16px; color: #005cbf ;font-size: 14px;">
-                  <p>
-                  <a href="">edit</a>
-                  <a href="">delete</a>
-
-                   </p>
-
-                   </div>
-                    <h6 class="fw-bold text-primary mb-1">Written by:  ${receivedJson.Messages[i].poster.id} user</h6>
+                    <h6 class="fw-bold text-primary mb-1">Written by:  ${poster.id }#user</h6>
                     <p class="text-muted small mb-0">
-                        Shared publicly -
+                      Shared publicly - ${dateFormat }
                     </p>
                   </div>
                 </div>
 
                 <p class="mt-3 mb-4 pb-2">
-
-                       ${receivedJson.Messages[i].messageContents}
+                  
+                       ${m.messageContents}
                 </p>
 
                 <div class="small d-flex justify-content-start">
@@ -129,7 +132,7 @@ function getPosts() {
                     <p class="mb-0">reply&nbsp;&nbsp;&nbsp;&nbsp;</p>
                   </a>                <a href="#!" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
-                    <p class="mb-0">${receivedJson.Messages[i].likes}  likes</p>
+                    <p class="mb-0">${m.likes }  likes</p>
                   </a>
 
                 </div>
@@ -153,14 +156,14 @@ function getPosts() {
 
 `;
 
-               posts.innerHTML += card;
+                posts.innerHTML += card;
 
-           }
-
-
+            }
 
 
 
+
+            //    }
         })
 
 }
