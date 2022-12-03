@@ -46,22 +46,13 @@ function getPosts() {
         })
         .then((data) => {
          //   console.log(data)
-            let posterMap = new Map(); // Create a new Map to store the incoming messages
+
             for (var i = 0; i <  Object.keys(data).length; i++) {
             //It not an array!!!
-              let m = data.Messages[i];
-              let poster;
 
-              if (typeof(m.poster) === 'number') {
-                  poster = posterMap.get(m.poster);
-              } else {
-                  posterMap.set(m.poster.id, m.poster);
-                  poster = m.poster;
-              }
+            console.log(data.Messages[i].messageContents);
 
-            console.log(m.messageContents);
-
-                let timeStamp = m.timestamp;
+                let timeStamp = data.Messages[i].timestamp;
                 let dateFormat = new Date(timeStamp);
 
                 const card =
@@ -71,7 +62,7 @@ function getPosts() {
                 <div class="d-flex flex-start align-items-center">
 
                   <div>
-                    <h6 class="fw-bold text-primary mb-1">Written by:  ${poster.id }#user</h6>
+                    <h6 class="fw-bold text-primary mb-1">Written by:  ${data.Messages[i].poster.id }#user</h6>
                     <p class="text-muted small mb-0">
                       Shared publicly - ${dateFormat }
                     </p>
@@ -80,7 +71,7 @@ function getPosts() {
 
                 <p class="mt-3 mb-4 pb-2">
                   
-                       ${m.messageContents}
+                       ${data.Messages[i].messageContents}
                 </p>
 
                 <div class="small d-flex justify-content-start">
@@ -90,7 +81,7 @@ function getPosts() {
                     <p class="mb-0">reply&nbsp;&nbsp;&nbsp;&nbsp;</p>
                   </a>                <a href="#!" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
-                    <p class="mb-0">${m.likes }  likes</p>
+                    <p class="mb-0">${data.Messages[i].likes }  likes</p>
                   </a>
 
                 </div>
