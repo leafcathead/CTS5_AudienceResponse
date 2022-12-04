@@ -99,6 +99,7 @@ function getPosts() {
                     comments.push({
 
                         posterID: receivedJson.Messages[i].poster,
+                        displayName: receivedJson.Messages[i].poster.displayName,
                         msgID: receivedJson.Messages[i].id,
                         timestamp: receivedJson.Messages[i].timestamp,
                         likes: receivedJson.Messages[i].likes,
@@ -106,33 +107,38 @@ function getPosts() {
                 }
                 JSON.stringify(comments);
 
-                body += `
 
-            <div class="card" id="${receivedJson.Messages[i].id}">
+
+
+                    body += `
+
+            <div class="card" id="${comments[i].msgID}">
               <div class="card-body">
                 <div class="d-flex flex-start align-items-center">
 
                   <div>
                   <div style="  position: absolute;top: 8px;right: 16px; color: #005cbf ;font-size: 14px;">
                   <p>
+                  
+
+                 
+                                 
                   <div class="edition">
-                 <a id="ed" href="" onclick=" edit(${receivedJson.Messages[i].id},'${receivedJson.Messages[i].messageContents}');">edit</a>
+                 <a id="ed" href="" onclick=" edit(${comments[i].posterID},${comments[i].msgID},'${comments[i].messageContents}');">edit</a>
                   <a href="">delete</a>
                   </div>
                    </p>
                    </div>
-                    <h6 class="fw-bold text-primary mb-1">Written by:  ${comments[i].poster} user</h6>
+                    <h6 class="fw-bold text-primary mb-1">Written by:  ${comments[i].posterID} user</h6>
                     <p class="text-muted small mb-0">
-                        Shared publicly ${dateFormat}
+                        Shared publicly ${comments[i].timestamp}
                     </p>
                  
                   </div>
                 </div>
 
                 <p class="mt-3 mb-4 pb-2">
-
-                       ${receivedJson.Messages[i].messageContents}
-                        ${receivedJson.Messages[i].id}
+                   ${comments[i].messageContents}
                 </p>
 
                 <div class="small d-flex justify-content-start">
@@ -142,7 +148,7 @@ function getPosts() {
                     <p class="mb-0">reply&nbsp;&nbsp;&nbsp;&nbsp;</p>
                   </a>                <a href="#!" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
-                    <p class="mb-0">${receivedJson.Messages[i].likes}  likes</p>
+                    <p class="mb-0">${comments[i].likes}  likes</p>
                   </a>
 
                 </div>
@@ -162,9 +168,11 @@ function getPosts() {
               </div>
             </div>
 <!--            I will change it to padding/Margin-->
-            <br/><br/><br/><br/><br/><br/>
+            <br/><br/>
 
 `;
+
+
                 $("#cardDiv").html(body);
 
 
@@ -176,17 +184,17 @@ function getPosts() {
 
 }
 
-// function hideMe(){
-//
-//     if(receivedJson.Messages[i].poster.id = ownerID){
-//         $("div.editButton").hide();
-//     }
-// }
+function hideMe(){
+
+    if(comments[i].posterID = ownerID){
+        $("div.edition").hide();
+    }
+}
 
 //edit form
-function edit(id,content){
+function edit(posterID, id, content){
 
-    console.log(id,content);
+    console.log(posterID, id, content);
 
 
 }
