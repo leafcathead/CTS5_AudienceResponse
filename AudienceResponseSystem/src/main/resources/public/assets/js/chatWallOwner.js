@@ -85,17 +85,16 @@ function getPosts() {
 
             console.log(receivedJson);
             for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
-                let timeStamp = receivedJson.Messages[i].timestamp;
-                 let dateFormat = new Date(timeStamp);
-
-
+//pushing the comment inside js array[]
                 if(receivedJson.Messages[i].poster.id){
                 comments.push({
                     posterID: receivedJson.Messages[i].poster.id,
                     displayName: receivedJson.Messages[i].poster.displayName,
                     msgID: receivedJson.Messages[i].id,
-                    likes: receivedJson.Messages[i].likes,
-                    messageContents: receivedJson.Messages[i].messageContents});
+                    timestamp: receivedJson.Messages[i].timestamp,
+                    messageContents: receivedJson.Messages[i].messageContents,
+                    likes: receivedJson.Messages[i].likes
+                    });
                 }else{
 
                     comments.push({
@@ -108,6 +107,8 @@ function getPosts() {
                         messageContents: receivedJson.Messages[i].messageContents});
                 }
                 JSON.stringify(comments);
+                let timeStamp = comments[i].timestamp;
+                let dateFormat = new Date(timeStamp);
 
 //hide controllers "never give body any js executing codes variables & []  only"
 let editBtn = "";
@@ -146,7 +147,7 @@ if(ownerID == comments[i].posterID){
                    </div>
                     <h6 class="fw-bold text-primary mb-1">Written by:  ${comments[i].posterID} user</h6>
                     <p class="text-muted small mb-0">
-                        Shared publicly ${comments[i].timestamp}
+                        Shared publicly ${dateFormat}
                     </p>
                  
                   </div>
@@ -215,7 +216,7 @@ function edit(posterID, id, content){
 
 var data="";
 
-//get posts from DB
+//get posts from DB basic version
 // function getPost() {
 //     let posts = document.getElementById('cardDiv');
 //
