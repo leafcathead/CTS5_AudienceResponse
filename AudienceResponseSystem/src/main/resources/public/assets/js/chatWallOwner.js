@@ -88,8 +88,6 @@ function getPosts() {
 
 
                 if(receivedJson.Messages[i].poster.id){
-
-
                 comments.push({
                     posterID: receivedJson.Messages[i].poster.id,
                     poster: receivedJson.Messages[i].poster.displayName,
@@ -101,6 +99,8 @@ function getPosts() {
 
                         poster: receivedJson.Messages[i].poster,
                         id: receivedJson.Messages[i].id,
+                        timestamp: receivedJson.Messages[i].timestamp,
+                        likes: receivedJson.Messages[i].likes,
                         messageContents: receivedJson.Messages[i].messageContents});
                 }
                 JSON.stringify(comments);
@@ -166,9 +166,9 @@ function getPosts() {
 `;
                 $("#cardDiv").html(body);
 
-                console.log(comments);
-            }
 
+            }
+            console.log(comments);
         })
 
 
