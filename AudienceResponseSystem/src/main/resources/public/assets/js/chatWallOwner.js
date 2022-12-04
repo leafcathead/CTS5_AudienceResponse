@@ -81,6 +81,8 @@ function getPosts() {
         .then((receivedJson) => {
 
 
+
+
             console.log(receivedJson);
             for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
                 let timeStamp = receivedJson.Messages[i].timestamp;
@@ -107,6 +109,18 @@ function getPosts() {
                 }
                 JSON.stringify(comments);
 
+//hide controllers
+let editBtn = "";
+let deleteBtn = "";
+if(ownerID == comments[i].posterID){
+    editBtn = "edit";
+    deleteBtn = "delete";
+}else{
+
+    editBtn = "";
+    deleteBtn = "";
+}
+
 
 
 
@@ -121,12 +135,13 @@ function getPosts() {
                   <p>
                   
 
-                 
+                   
                                  
                   <div class="edition">
-                 <a id="ed" href="" onclick=" edit(${comments[i].posterID},${comments[i].msgID},'${comments[i].messageContents}');">edit</a>
-                  <a href="">delete</a>
+                 <a id="ed" href="" onclick=" edit(${comments[i].posterID},${comments[i].msgID},'${comments[i].messageContents}');">${editBtn}</a>
+                  <a href="">${deleteBtn}</a>
                   </div>
+                
                    </p>
                    </div>
                     <h6 class="fw-bold text-primary mb-1">Written by:  ${comments[i].posterID} user</h6>
@@ -184,12 +199,6 @@ function getPosts() {
 
 }
 
-function hideMe(){
-
-    if(comments[i].posterID = ownerID){
-        $("div.edition").hide();
-    }
-}
 
 //edit form
 function edit(posterID, id, content){
