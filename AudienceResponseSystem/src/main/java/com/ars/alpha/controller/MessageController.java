@@ -112,9 +112,9 @@ public class MessageController {
      *      ALTERNATE JSON RESPONSE BODY:
      *      {
      *     "Status": <SUCCESS, WARNING, ERROR>,
-     *     "Messages": {
-     *         "0": {
-     *             "visible": <boolean>,
+     *        "0": {
+     *      *       "Messages": {
+     *            "visible": <boolean>,
      *             "replyTo": <Long or NULL>,
      *             "id": <Long>,
      *             "sessionOwnerID": <Long>,
