@@ -109,7 +109,7 @@ function getPosts() {
                 }
                 JSON.stringify(comments);
 
-//hide controllers
+//hide controllers "never give body any js executing codes variables & []  only"
 let editBtn = "";
 let deleteBtn = "";
 if(ownerID == comments[i].posterID){
