@@ -90,15 +90,16 @@ function getPosts() {
                 if(receivedJson.Messages[i].poster.id){
                 comments.push({
                     posterID: receivedJson.Messages[i].poster.id,
-                    poster: receivedJson.Messages[i].poster.displayName,
-                    id: receivedJson.Messages[i].id,
+                    displayName: receivedJson.Messages[i].poster.displayName,
+                    msgID: receivedJson.Messages[i].id,
+                    likes: receivedJson.Messages[i].likes,
                     messageContents: receivedJson.Messages[i].messageContents});
                 }else{
 
                     comments.push({
 
-                        poster: receivedJson.Messages[i].poster,
-                        id: receivedJson.Messages[i].id,
+                        posterID: receivedJson.Messages[i].poster,
+                        msgID: receivedJson.Messages[i].id,
                         timestamp: receivedJson.Messages[i].timestamp,
                         likes: receivedJson.Messages[i].likes,
                         messageContents: receivedJson.Messages[i].messageContents});
