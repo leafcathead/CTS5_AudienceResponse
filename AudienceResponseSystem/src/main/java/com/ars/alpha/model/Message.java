@@ -43,7 +43,6 @@ import java.util.UUID;
 @NamedStoredProcedureQuery(name = "DELETE_MESSAGE", procedureName = "DELETE_MESSAGE", parameters = {
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "PosterID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "SessionID", type = Long.class),
-        @StoredProcedureParameter(mode = ParameterMode.IN, name = "MsgContent", type = String.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "MessageID", type = Long.class)
 })
 //@SqlResultSetMapping(name = "Mapping.Message", // I THINK THIS IS UNNEEDED. I HOPE TO GOD IT IS NOT NEEDED

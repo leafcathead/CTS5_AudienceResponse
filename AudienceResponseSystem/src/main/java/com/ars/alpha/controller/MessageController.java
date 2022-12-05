@@ -191,6 +191,6 @@ public class MessageController {
     @GetMapping("/deleteMessage")
     Map<String, Object> deleteComment(@RequestBody Message delComment){
         //TODO
-        return messageService.deleteComment(delComment.getPoster().getId(), delComment.getSession().getID(), delComment.getMessageContents(), delComment.getId());
+        return messageService.deleteComment(delComment.getPoster().getId(), delComment.getSession().getID(), delComment.getId());
     }
 }

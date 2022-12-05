@@ -41,7 +41,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     void FLIP_VISIBILITY(Long messageID, Long posterID, Long sessionID) throws PersistenceException;
 
     @Procedure(name = "DELETE_MESSAGE")
-    void DELETE_MESSAGE(Long posterID, Long sessionID, String message, Long iD) throws PersistenceException;
+    void DELETE_MESSAGE(Long posterID, Long sessionID, Long iD) throws PersistenceException;
 
 //    @Query(value = "RETRIEVE_MESSAGES(:sessionID);", nativeQuery = true)
 //    List<Message> RETRIEVE_MESSAGES(@Param("sessionID") Long sessionID);
