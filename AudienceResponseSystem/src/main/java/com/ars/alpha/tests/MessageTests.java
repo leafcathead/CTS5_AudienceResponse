@@ -12,8 +12,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.isNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.testng.AssertJUnit.assertNotNull;
@@ -22,6 +21,7 @@ import static org.testng.AssertJUnit.assertTrue;
 
 import com.ars.alpha.dao.MessageRepository;
 import com.ars.alpha.dao.SessionRepository;
+import com.ars.alpha.model.Message;
 import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.model.SessionUser;
 import com.ars.alpha.other.Password;
@@ -63,6 +63,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.persistence.PersistenceException;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Optional;
 
 
 @RunWith(SpringRunner.class)
@@ -81,9 +82,10 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
     @InjectMocks
     MessageController messageController;
 
+
     @InjectMocks
     @Autowired
-    SessionRepository messageRepository;
+    MessageRepository messageRepository;
 
 
 
@@ -284,6 +286,10 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
 
     }
 
+    /**
+     * Tests @PostMapping(value = "/message/getMessages");
+     * @throws Exception
+     */
     @Test
     @Transactional
     public void getMessagesTest() throws Exception {
@@ -437,12 +443,144 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
 
     }
 
+
+    /**
+     * tests @PutMapping("updateMessageContent")
+     */
+    @Test
+    @Transactional
+    public void testChangingMessageContents() throws Exception {
+        String jsonString = writeMessageJSON(TEST_USERID_OWNER, TEST_SESSION_ID, null, "Please don't edit this message.");
+        ObjectMapper objMapper = new ObjectMapper();
+        String responseString;
+
+        // Post the first message
+        MvcResult result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+        TestObj messageInfo = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeObjectField("id", String.valueOf(messageInfo.MessageID));
+        jsonGenerator.writeObjectFieldStart("poster");
+        jsonGenerator.writeObjectField("id", String.valueOf(TEST_USERID_OWNER));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeObjectFieldStart("session");
+        jsonGenerator.writeObjectField("id", String.valueOf(TEST_SESSION_ID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeStringField("messageContent", "HAHA I CHANGED YOU!");
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        jsonString = writer.toString();
+
+        result = this.mockMvc.perform(put("/message/updateMessageContent").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        Optional<Message> m = messageRepository.findById(messageInfo.MessageID);
+        Message myMessage = m.orElse(null);
+
+        assertNotNull(myMessage);
+
+        assertEquals("HAHA I CHANGED YOU!", myMessage.getMessageContents());
+
+    }
+
+    /**
+     * Tests @PutMapping("updateVisibility")
+     */
+    @Test
+    @Transactional
+    public void testChangingMessageVisibility() throws Exception {
+
+        String jsonString = writeMessageJSON(TEST_USERID_OWNER, TEST_SESSION_ID, null, "Make me visible!");
+        ObjectMapper objMapper = new ObjectMapper();
+        String responseString;
+
+        // Post the first message
+        MvcResult result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+        TestObj messageInfo = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        // Toggle the visibility
+
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeObjectField("id", String.valueOf(messageInfo.MessageID));
+        jsonGenerator.writeObjectFieldStart("poster");
+        jsonGenerator.writeObjectField("id", String.valueOf(TEST_USERID_OWNER));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeObjectFieldStart("session");
+        jsonGenerator.writeObjectField("id", String.valueOf(TEST_SESSION_ID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        jsonString = writer.toString();
+
+        result = this.mockMvc.perform(put("/message/updateVisibility").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        Optional<Message> m = messageRepository.findById(messageInfo.MessageID);
+        Message myMessage = m.orElse(null);
+
+        assertNotNull(myMessage);
+
+        assertTrue(myMessage.getVisible());
+
+    }
+
+    /**
+     * Tests @DeleteMapping("deleteMessage")
+     */
+    @Test
+    @Transactional
+    public void testDeletingMessage() {
+        // TODO
+        assert(false);
+    }
+
+    /**
+     * Tests error code for sending messages with bad parameters for all other functions
+     */
     @Test
     @Transactional
     public void testBadMessageRequests() {
         // TODO ONCE ERROR CHECKING IS FINISHED!
+        assert(false);
     }
-
 
     /**
      * This helper function writes JSON strings for the messages.
@@ -474,6 +612,8 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
         jsonGenerator.close();
         return writer.toString();
     }
+
+
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class TestObj {
