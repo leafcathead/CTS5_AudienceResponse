@@ -1,4 +1,4 @@
-package com.ars.alpha.other;
+package com.ars.alpha;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
