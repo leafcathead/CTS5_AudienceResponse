@@ -6,6 +6,8 @@ const sessionID = localStorage.getItem('sessionID');
 const sessionPassword = localStorage.getItem('sessionPassword');
 
 
+
+
 //post comment
 function postComment() {
     let answer = document.getElementById('answer');
@@ -63,7 +65,7 @@ function postComment() {
 
 let comments =[];
 
-//get posts from DB(JS way)
+//get posts from DB(Recommended way)
 function getPosts() {
     let body = $("#cardDiv").html();
     fetch("http://localhost:8080/message/getMessages", {
@@ -90,9 +92,10 @@ function getPosts() {
                 comments.push({
                     posterID: receivedJson.Messages[i].poster.id,
                     displayName: receivedJson.Messages[i].poster.displayName,
+                    sessionID: receivedJson.Messages[i].session,
                     msgID: receivedJson.Messages[i].id,
                     timestamp: receivedJson.Messages[i].timestamp,
-                    messageContents: receivedJson.Messages[i].messageContents,
+                    msgContents: receivedJson.Messages[i].messageContents,
                     likes: receivedJson.Messages[i].likes
                     });
                 }else{
@@ -101,10 +104,11 @@ function getPosts() {
 
                         posterID: receivedJson.Messages[i].poster,
                         displayName: receivedJson.Messages[i].poster.displayName,
+                        sessionID: receivedJson.Messages[i].session,
                         msgID: receivedJson.Messages[i].id,
                         timestamp: receivedJson.Messages[i].timestamp,
                         likes: receivedJson.Messages[i].likes,
-                        messageContents: receivedJson.Messages[i].messageContents});
+                        msgContents: receivedJson.Messages[i].messageContents});
                 }
                 JSON.stringify(comments);
                 let timeStamp = comments[i].timestamp;
@@ -121,13 +125,9 @@ if(ownerID == comments[i].posterID){
     editBtn = "";
     deleteBtn = "";
 }
-
-
-
-
                     body += `
 
-            <div class="card" id="${comments[i].msgID}">
+            <div class="card" id="row-${comments[i].msgID}">
               <div class="card-body">
                 <div class="d-flex flex-start align-items-center">
 
@@ -135,13 +135,11 @@ if(ownerID == comments[i].posterID){
                   <div style="  position: absolute;top: 8px;right: 16px; color: #005cbf ;font-size: 14px;">
                   <p>
                   
-
                    
-                                 
-                  <div class="edition">
-                 <a id="ed" href="" onclick=" edit(${comments[i].posterID},${comments[i].msgID},'${comments[i].messageContents}');">${editBtn}</a>
+<!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">edit</button>-->
+                   <a data-toggle="modal" href="" onclick=" showUpdateModal(${comments[i].posterID},${comments[i].sessionID},${comments[i].msgID},'${comments[i].msgContents}');">${editBtn}</a>
                   <a href="">${deleteBtn}</a>
-                  </div>
+              
                 
                    </p>
                    </div>
@@ -154,7 +152,7 @@ if(ownerID == comments[i].posterID){
                 </div>
 
                 <p class="mt-3 mb-4 pb-2">
-                   ${comments[i].messageContents}
+                   ${comments[i].msgContents}
                 </p>
 
                 <div class="small d-flex justify-content-start">
@@ -183,12 +181,9 @@ if(ownerID == comments[i].posterID){
                 </div>
               </div>
             </div>
-<!--            I will change it to padding/Margin-->
             <br/><br/>
 
 `;
-
-
                 $("#cardDiv").html(body);
 
 
@@ -201,14 +196,81 @@ if(ownerID == comments[i].posterID){
 }
 
 
-//edit form
-function edit(posterID, id, content){
+//show data model first then call updateComment();
+function showUpdateModal(posterID,sessionID, msgID, msgContent){
+    $("#exampleModal").modal('show');
 
-    console.log(posterID, id, content);
+    $("#msgID").val(msgID);
+    $("#posterID").val(posterID);
+    $("#sessionID").val(sessionID);
+    $("#msgContent").val(msgContent);
 
+
+    console.log(posterID,sessionID, msgID, msgContent);
 
 }
 
+
+//update comment
+function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),sessionID=$("#sessionID").val(),msgContent=$("#msgContent").val(),){
+//test
+    console.log("i am update comment   " + posterID +"  " + msgID+"  " + sessionID+"  " + msgContent);
+    //VPN is not working updateMessageContent type PUT is not yet tested
+
+
+    // let answer = document.getElementById('answer');
+    //
+    // const data = {
+    //
+    //     id: msgID,
+    //     poster: {
+    //         id: posterID
+    //     },
+    //     session: {
+    //         id: sessionID
+    //     },
+    //     messageContent: $("#updateTextArea").val()
+    //
+    // };
+    // console.log(data);
+    // fetch("http://localhost:8080/message/updateMessageContent", {
+    //     method: 'PUT',
+    //     body: JSON.stringify({
+    //
+    //         id: msgID,
+    //         poster: {
+    //             id: posterID
+    //         },
+    //         session: {
+    //             id: sessionID
+    //         },
+    //         messageContent: $("#updateTextArea").val()
+    //
+    //
+    //     }),
+    //     headers: {
+    //         "Content-Type": "application/json;charset=UTF-8"
+    //     }
+    // })
+    //     .then((response) => {
+    //         return response.json()
+    //     })
+    //     .then((data) => {
+    //         console.log(data)
+    //
+    //         const parg = `
+    //
+    //
+    //   your comment has been successfully posted<br/>
+    //    <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+    //     `;
+    //
+    //         answer.innerHTML = parg;
+    //         answer = "";
+    //     })
+
+
+}
 
 
 
