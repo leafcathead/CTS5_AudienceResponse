@@ -45,10 +45,19 @@ public class MessageService implements MessageServiceInterface {
      */
     public Map<String, Object> postComment(Long posterID, Long sessionID, String message, Long iD) {
         Map<String, Object> ret = new HashMap<String, Object>();
-        Long msgID = messageRepository.INSERT_MESSAGE(posterID, sessionID, message, iD);
-        ret.put("Status", Status.SUCCESS);
-        ret.put("Code", 0);
-        ret.put("MessageID", msgID);
+        try {
+            Long msgID = messageRepository.INSERT_MESSAGE(posterID, sessionID, message, iD);
+            ret.put("Status", Status.SUCCESS);
+            ret.put("Code", 0);
+            ret.put("MessageID", msgID);
+        }catch (PersistenceException e){
+            SQLServerException ex = (SQLServerException) e.getCause();
+            System.out.println(ex.getSQLServerError().getErrorMessage());
+            System.out.println(ex.getSQLServerError().getErrorState());
+            ret.put("Status", Status.ERROR);
+            ret.put("Code", ex.getSQLServerError().getErrorState());
+            ret.put("messageID", 0L);
+        }
         return ret;
     }
 
@@ -127,6 +136,22 @@ public class MessageService implements MessageServiceInterface {
         returnerMap.put("Messages", messageMap);
 
         return returnerMap;
+    }
+
+    public Map<String, Object> deleteComment(Long posterID, Long sessionID, Long iD) {
+        Map<String, Object> ret = new HashMap<String, Object>();
+        try{
+            messageRepository.DELETE_MESSAGE(posterID, sessionID, iD);
+            ret.put("Status", Status.SUCCESS);
+            ret.put("Code", 0);
+        } catch (PersistenceException e){
+            SQLServerException ex = (SQLServerException) e.getCause();
+            System.out.println(ex.getSQLServerError().getErrorMessage());
+            System.out.println(ex.getSQLServerError().getErrorState());
+            ret.put("Status", Status.ERROR);
+            ret.put("Code", ex.getSQLServerError().getErrorState());
+        }
+        return null;
     }
 
     @Override
