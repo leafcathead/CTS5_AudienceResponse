@@ -172,7 +172,7 @@ public class MessageController {
 
     /**
      *
-     * @param m Message Object in JSON form
+     * @param delComment Message Object in JSON form
      *          {
      *              "id": <Long>,
      *              "poster": {
@@ -189,15 +189,7 @@ public class MessageController {
      *              "Code": <int>
      *          }
      */
-    @DeleteMapping("/deleteComment")
-    Map<String, Object> deleteComment(@RequestBody Message m) {
-        System.out.println("Delete");
-        return messageService.deleteMessage(m.getId(), m.getPoster().getId(), m.getSession().getID());
-    }
-
-
-
-    @GetMapping("/deleteMessage")
+    @DeleteMapping("/deleteMessage")
     Map<String, Object> deleteComment(@RequestBody Message delComment){
         //TODO
         return messageService.deleteComment(delComment.getPoster().getId(), delComment.getSession().getID(), delComment.getId());

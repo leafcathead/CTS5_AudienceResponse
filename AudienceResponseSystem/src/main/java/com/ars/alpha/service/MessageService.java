@@ -151,7 +151,7 @@ public class MessageService implements MessageServiceInterface {
             ret.put("Status", Status.ERROR);
             ret.put("Code", ex.getSQLServerError().getErrorState());
         }
-        return null;
+        return ret;
     }
 
     @Override
