@@ -45,10 +45,19 @@ public class MessageService implements MessageServiceInterface {
      */
     public Map<String, Object> postComment(Long posterID, Long sessionID, String message, Long iD) {
         Map<String, Object> ret = new HashMap<String, Object>();
-        Long msgID = messageRepository.INSERT_MESSAGE(posterID, sessionID, message, iD);
-        ret.put("Status", Status.SUCCESS);
-        ret.put("Code", 0);
-        ret.put("MessageID", msgID);
+        try {
+            Long msgID = messageRepository.INSERT_MESSAGE(posterID, sessionID, message, iD);
+            ret.put("Status", Status.SUCCESS);
+            ret.put("Code", 0);
+            ret.put("MessageID", msgID);
+        }catch (PersistenceException e){
+            SQLServerException ex = (SQLServerException) e.getCause();
+            System.out.println(ex.getSQLServerError().getErrorMessage());
+            System.out.println(ex.getSQLServerError().getErrorState());
+            ret.put("Status", Status.ERROR);
+            ret.put("Code", ex.getSQLServerError().getErrorState());
+            ret.put("messageID", 0L);
+        }
         return ret;
     }
 
@@ -118,30 +127,31 @@ public class MessageService implements MessageServiceInterface {
         // Not sure how helpful this construction was. Experimenting with a different one.
         for (int i = 0; i < returnerList.size(); i++) {
             Message m = returnerList.get(i);
-//            messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo(), m.getTimestamp()));
-            messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId(), m.getPoster().getDisplayName()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo() == null ? null : new Message(m.getReplyTo().getId()), m.getTimestamp()));
+            messageMap.put(i, m);
+           // messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo(), m.getTimestamp()));
+           // messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId(), m.getPoster().getDisplayName()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo() == null ? null : new Message(m.getReplyTo().getId()), m.getTimestamp()));
         }
-
-//        for (int i = 0; i < returnerList.size(); i++) {
-//            Message m = returnerList.get(i);
-//            Map<String, Object> singleMessage = new HashMap<String, Object>();
-//            singleMessage.put("id", m.getId());
-//            singleMessage.put("posterID", m.getPoster().getId());
-//            singleMessage.put("posterDisplayName": m.getPoster().getDisplayName();
-//            singleMessage.put("sessionOwnerID", m.getSession().getOwner().getId());
-//            singleMessage.put("messageContent", m.getMessageContents());
-//            singleMessage.put("likes", m.getLikes());
-//            singleMessage.put("visible", m.getVisible());
-//            singleMessage.put("replyTo", m.getReplyTo() == null ? null : m.getReplyTo().getId());
-//            singleMessage.put("Timestamp", m.getTimestamp());
-//            messageMap.put(i, singleMessage);
-//        }
-
 
 
         returnerMap.put("Messages", messageMap);
 
         return returnerMap;
+    }
+
+    public Map<String, Object> deleteComment(Long posterID, Long sessionID, Long iD) {
+        Map<String, Object> ret = new HashMap<String, Object>();
+        try{
+            messageRepository.DELETE_MESSAGE(posterID, sessionID, iD);
+            ret.put("Status", Status.SUCCESS);
+            ret.put("Code", 0);
+        } catch (PersistenceException e){
+            SQLServerException ex = (SQLServerException) e.getCause();
+            System.out.println(ex.getSQLServerError().getErrorMessage());
+            System.out.println(ex.getSQLServerError().getErrorState());
+            ret.put("Status", Status.ERROR);
+            ret.put("Code", ex.getSQLServerError().getErrorState());
+        }
+        return ret;
     }
 
     @Override
@@ -195,6 +205,32 @@ public class MessageService implements MessageServiceInterface {
         try {
 
             messageRepository.FLIP_VISIBILITY(messageID, posterID, sessionID);
+
+            returnerMap.put("Status", Status.SUCCESS);
+            returnerMap.put("Code", 0);
+
+        } catch (PersistenceException e) {
+            System.out.println("Exception caught!");
+            if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
+                SQLServerException ex = (SQLServerException) e.getCause().getCause();
+                returnerMap.put("Status", Status.ERROR);
+                returnerMap.put("Code", ex.getSQLServerError().getErrorState());
+            } else {
+                throw new IllegalStateException("How???");
+            }
+        }
+
+        return returnerMap;
+    }
+
+    @Override
+    public Map<String, Object> deleteMessage(Long messageID, Long posterID, Long sessionID) {
+
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
+
+        try {
+
+            messageRepository.DELETE_MESSAGE(messageID, posterID, sessionID);
 
             returnerMap.put("Status", Status.SUCCESS);
             returnerMap.put("Code", 0);

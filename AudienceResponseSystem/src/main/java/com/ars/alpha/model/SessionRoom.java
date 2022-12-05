@@ -1,6 +1,8 @@
 package com.ars.alpha.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.type.descriptor.sql.NVarcharTypeDescriptor;
 
 import javax.lang.model.type.NullType;
@@ -21,8 +23,10 @@ import java.sql.Timestamp;
 @NamedStoredProcedureQuery(name = "JOIN_SESSION", procedureName = "JOIN_SESSION", parameters = {
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "newUserID", type = Long.class) })
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class SessionRoom {
     @Id
+    @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class,property="id", scope = SessionRoom.class)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
     private Long id;

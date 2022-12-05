@@ -118,6 +118,8 @@ function createSession() {
     console.log(data);
     if(data.newUserID !=null){
         localStorage.setItem('ownerID', data.newUserID);
+       // localStorage.setItem('displayName', data.);
+
         localStorage.setItem('sessionID', data.newSessionID);
        localStorage.setItem('sessionPassword', data.randomPassword);
         console.log("it is stored!");

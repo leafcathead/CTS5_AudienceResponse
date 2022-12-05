@@ -4,6 +4,7 @@ import com.ars.alpha.model.Message;
 import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = {"http://localhost:8080"})
 @RequestMapping("/message")
+@SendTo("/topic/message")
 public class MessageController {
 
     @Autowired
@@ -109,22 +111,6 @@ public class MessageController {
      *          }
      *      }
      *
-     *      ALTERNATE JSON RESPONSE BODY:
-     *      {
-     *     "Status": <SUCCESS, WARNING, ERROR>,
-     *     "Messages": {
-     *         "0": {
-     *             "visible": <boolean>,
-     *             "replyTo": <Long or NULL>,
-     *             "id": <Long>,
-     *             "sessionOwnerID": <Long>,
-     *             "Timestamp": <Timestamp>,
-     *             "posterID": <Long>,
-     *             "posterDisplayName": <String>,
-     *             "messageContent": <String>,
-     *             "likes": <int>
-     *         }
-     *     "Code": <int>
      */
    //Must be post type JS can't send GET request with body!!!
         // LAME! -Connor
@@ -184,7 +170,28 @@ public class MessageController {
         return messageService.updateMessageVisibility(m.getId(), m.getPoster().getId(), m.getSession().getID());
     }
 
-
-
-
+    /**
+     *
+     * @param delComment Message Object in JSON form
+     *          {
+     *              "id": <Long>,
+     *              "poster": {
+     *                  "id": <Long>
+     *              },
+     *              "session": {
+     *                  "id": <Long>
+     *              }
+     *          }
+     *
+     * @return A JSON Object in the form of:
+     *          {
+     *              "Status": <SUCCESS, WARNING, ERROR>,
+     *              "Code": <int>
+     *          }
+     */
+    @DeleteMapping("/deleteMessage")
+    Map<String, Object> deleteComment(@RequestBody Message delComment){
+        //TODO
+        return messageService.deleteComment(delComment.getPoster().getId(), delComment.getSession().getID(), delComment.getId());
+    }
 }

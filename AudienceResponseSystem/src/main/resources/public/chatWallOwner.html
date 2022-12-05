@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="./assets/chatWallAssets/css/style.css">
  <script src="assets/js/chatWallOwner.js"></script>
 </head>
-<body>
+<body id="bodyDiv">
 
 
 <div class="wrapper d-flex align-items-stretch">
@@ -95,6 +95,9 @@
               <a class="nav-link" href="#">Chat wall</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="#">edit your name</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="#">Statistics</a>
             </li>
             <li class="nav-item">
@@ -115,7 +118,7 @@
 
 
 <!--    Write Posts   -->
-    <div>
+    <div id="answer">
     <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;" >
       <div class="d-flex flex-start w-100">
         <div id="commentDiv" class="form-outline w-100"  >
@@ -124,13 +127,17 @@
           <label class="form-label" for="textArea">Message</label>
         </div>
       </div>
+
       <div class="float-end mt-2 pt-1">
         <button type="button" class="btn btn-primary btn-sm" onclick="postComment()">Post comment</button>
         <button type="reset" class="btn btn-outline-primary btn-sm">Cancel</button>
       </div>
     </div>
     </div>
+<!--    <p id="answer"></p>-->
+
     <br/><br/><br/><br/>
+<!--    Get posts button-->
     <button type="button" class="btn btn-primary btn-sm" onclick="getPosts()">Get posts</button>
 
 
@@ -144,10 +151,35 @@
       </div>
     </section>
 
-    <!--  End of  Comment Box Example 2     -->
 
   </div>
 </div>
+
+<!--edit form-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input id="msgID" type="hidden"/>
+        <input id="sessionID" type="hidden"/>
+        <input id="posterID" type="hidden"/>
+        <textarea id="msgContent" style="width: 100%;" ></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+        <button onclick="updateComment()" type="button" class="btn btn-primary" data-dismiss="modal">update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
 <script src="./assets/chatWallAssets/js/jquery.min.js"></script>
 <script src="./assets/chatWallAssets/js/popper.js"></script>
