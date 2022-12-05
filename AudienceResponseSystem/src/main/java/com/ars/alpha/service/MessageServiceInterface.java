@@ -17,4 +17,6 @@ public interface MessageServiceInterface {
 
     Map<String, Object> updateMessageVisibility(Long messageID, Long posterID, Long sessionID);
 
+    Map<String, Object> deleteMessage(Long messageID, Long posterID, Long sessionID);
+
 }

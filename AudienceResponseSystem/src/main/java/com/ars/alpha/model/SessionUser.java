@@ -2,6 +2,7 @@ package com.ars.alpha.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import javax.persistence.*;
 // @Table(name = "User")
 @Entity
 @Table(name = "SessionUser")
-@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id", scope= SessionUser.class)
 @NamedStoredProcedureQuery(name = "UPDATE_DISPLAY_NAME", procedureName = "UPDATE_DISPLAY_NAME", parameters = {
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "userID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class),
@@ -40,6 +41,7 @@ public class SessionUser {
     public Long getId() {
         return id;
     }
+
 
     public void setId(Long id) {
         this.id = id;

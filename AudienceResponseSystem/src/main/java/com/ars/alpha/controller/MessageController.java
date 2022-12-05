@@ -109,22 +109,6 @@ public class MessageController {
      *          }
      *      }
      *
-     *      ALTERNATE JSON RESPONSE BODY:
-     *      {
-     *     "Status": <SUCCESS, WARNING, ERROR>,
-     *        "0": {
-     *      *       "Messages": {
-     *            "visible": <boolean>,
-     *             "replyTo": <Long or NULL>,
-     *             "id": <Long>,
-     *             "sessionOwnerID": <Long>,
-     *             "Timestamp": <Timestamp>,
-     *             "posterID": <Long>,
-     *             "posterDisplayName": <String>,
-     *             "messageContent": <String>,
-     *             "likes": <int>
-     *         }
-     *     "Code": <int>
      */
    //Must be post type JS can't send GET request with body!!!
         // LAME! -Connor
@@ -182,6 +166,31 @@ public class MessageController {
         // We don't need the new value of the visibility, calling this method just flips it.
 
         return messageService.updateMessageVisibility(m.getId(), m.getPoster().getId(), m.getSession().getID());
+    }
+
+    /**
+     *
+     * @param m Message Object in JSON form
+     *          {
+     *              "id": <Long>,
+     *              "poster": {
+     *                  "id": <Long>
+     *              },
+     *              "session": {
+     *                  "id": <Long>
+     *              }
+     *          }
+     *
+     * @return A JSON Object in the form of:
+     *          {
+     *              "Status": <SUCCESS, WARNING, ERROR>,
+     *              "Code": <int>
+     *          }
+     */
+    @DeleteMapping("/deleteComment")
+    Map<String, Object> deleteComment(@RequestBody Message m) {
+        System.out.println("Delete");
+        return messageService.deleteMessage(m.getId(), m.getPoster().getId(), m.getSession().getID());
     }
 
 
