@@ -4,6 +4,7 @@ import com.ars.alpha.model.Message;
 import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = {"http://localhost:8080"})
 @RequestMapping("/message")
+@SendTo("/topic/message")
 public class MessageController {
 
     @Autowired
