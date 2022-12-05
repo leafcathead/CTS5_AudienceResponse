@@ -19,7 +19,7 @@ import java.util.Map;
 public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Procedure(name = "INSERT_MESSAGE")
-    Long INSERT_MESSAGE(Long PosterID, Long SessionID, String MsgContent, Long MessageID);
+    Long INSERT_MESSAGE(Long PosterID, Long SessionID, String MsgContent, Long MessageID) throws PersistenceException;
 
     @Procedure(name = "INSERT_REPLY")
     Long INSERT_REPLY (Long posterID, Long sessionID, Long replyToID, String msgContent, Long newMessageID) throws PersistenceException;
@@ -39,6 +39,9 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     @Procedure(name = "FLIP_VISIBILITY")
     void FLIP_VISIBILITY(Long messageID, Long posterID, Long sessionID) throws PersistenceException;
+
+    @Procedure(name = "DELETE_MESSAGE")
+    void DELETE_MESSAGE(Long posterID, Long sessionID, String message, Long iD) throws PersistenceException;
 
 //    @Query(value = "RETRIEVE_MESSAGES(:sessionID);", nativeQuery = true)
 //    List<Message> RETRIEVE_MESSAGES(@Param("sessionID") Long sessionID);
