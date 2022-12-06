@@ -12,8 +12,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.isNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.testng.AssertJUnit.assertNotNull;
@@ -22,6 +21,7 @@ import static org.testng.AssertJUnit.assertTrue;
 
 import com.ars.alpha.dao.MessageRepository;
 import com.ars.alpha.dao.SessionRepository;
+import com.ars.alpha.model.Message;
 import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.model.SessionUser;
 import com.ars.alpha.other.Password;
@@ -63,6 +63,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.persistence.PersistenceException;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Optional;
 
 
 @RunWith(SpringRunner.class)
@@ -81,9 +82,10 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
     @InjectMocks
     MessageController messageController;
 
+
     @InjectMocks
     @Autowired
-    SessionRepository messageRepository;
+    MessageRepository messageRepository;
 
 
 
@@ -284,6 +286,10 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
 
     }
 
+    /**
+     * Tests @PostMapping(value = "/message/getMessages");
+     * @throws Exception
+     */
     @Test
     @Transactional
     public void getMessagesTest() throws Exception {
@@ -416,13 +422,8 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
                 .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
                 .andReturn();
 
-        writer = new StringWriter();
-        jsonGenerator = jFactory.createGenerator(writer);
-        jsonGenerator.writeStartObject();
-        jsonGenerator.writeStringField("id", String.valueOf(TEST_SESSION_ID));
-        jsonGenerator.writeEndObject();
-        jsonGenerator.close();
-        jsonString = writer.toString();
+
+        jsonString = writeGetMessagesJSON(TEST_SESSION_ID);
 
         result = this.mockMvc.perform(post("/message/getMessages").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -437,12 +438,339 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
 
     }
 
+
+    /**
+     * tests @PutMapping("updateMessageContent")
+     */
     @Test
     @Transactional
-    public void testBadMessageRequests() {
-        // TODO ONCE ERROR CHECKING IS FINISHED!
+    public void testChangingMessageContents() throws Exception {
+        String jsonString = writeMessageJSON(TEST_USERID_OWNER, TEST_SESSION_ID, null, "Please don't edit this message.");
+        ObjectMapper objMapper = new ObjectMapper();
+        String responseString;
+
+        // Post the first message
+        MvcResult result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+        TestObj messageInfo = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        jsonString = writeMessagePosterSessionJSON(messageInfo.MessageID, TEST_USERID_OWNER, TEST_SESSION_ID);
+
+        result = this.mockMvc.perform(put("/message/updateMessageContent").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        Optional<Message> m = messageRepository.findById(messageInfo.MessageID);
+        Message myMessage = m.orElse(null);
+
+        assertNotNull(myMessage);
+
+        assertEquals("HAHA I CHANGED YOU!", myMessage.getMessageContents());
+
     }
 
+    /**
+     * Tests @PutMapping("updateVisibility")
+     */
+    @Test
+    @Transactional
+    public void testChangingMessageVisibility() throws Exception {
+
+        String jsonString = writeMessageJSON(TEST_USERID_OWNER, TEST_SESSION_ID, null, "Make me visible!");
+        ObjectMapper objMapper = new ObjectMapper();
+        String responseString;
+
+        // Post the first message
+        MvcResult result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.MessageID", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+        TestObj messageInfo = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        // Toggle the visibility
+
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeObjectField("id", String.valueOf(messageInfo.MessageID));
+        jsonGenerator.writeObjectFieldStart("poster");
+        jsonGenerator.writeObjectField("id", String.valueOf(TEST_USERID_OWNER));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeObjectFieldStart("session");
+        jsonGenerator.writeObjectField("id", String.valueOf(TEST_SESSION_ID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        jsonString = writer.toString();
+
+        result = this.mockMvc.perform(put("/message/updateVisibility").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        Optional<Message> m = messageRepository.findById(messageInfo.MessageID);
+        Message myMessage = m.orElse(null);
+
+        assertNotNull(myMessage);
+
+        assertTrue(myMessage.getVisible());
+
+    }
+
+    /**
+     * Tests @DeleteMapping("deleteMessage")
+     * @NOTE All delete stuff isn't working do to socket troubles!
+     */
+    @Test
+    @Transactional
+    public void testDeletingMessage() throws Exception {
+        // TODO
+
+
+        // TODO Simple example w/ no replies
+
+        String jsonString = writeMessageJSON(TEST_USERID_OWNER, TEST_SESSION_ID, null, "Hello class");
+        ObjectMapper objMapper = new ObjectMapper();
+        String responseString;
+
+        // Post the first message
+
+        MvcResult result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+        TestObj messageInfo1 = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        // Post second message
+
+        jsonString = writeMessageJSON(TEST_USERID_2, TEST_SESSION_ID, null, "Hello everybody");
+
+        result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+        TestObj messageInfo2 = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        // Check to make sure there are TWO messages in session.
+
+        jsonString = writeGetMessagesJSON(TEST_SESSION_ID);
+
+        result = this.mockMvc.perform(post("/message/getMessages").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Messages", aMapWithSize(2)))
+                .andReturn();
+
+        // Delete one of the messages.
+
+        jsonString = writeMessagePosterSessionJSON(messageInfo1.MessageID, TEST_USERID_OWNER, TEST_SESSION_ID);
+
+        result = this.mockMvc.perform(delete("/message/deleteMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andReturn();
+
+        // Recheck size. Should be 1 now
+
+        result = this.mockMvc.perform(post("/message/getMessages").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Messages", aMapWithSize(1)))
+                .andReturn();
+
+        // TODO simple example with standard reply change
+
+        // TODO delete in middle of reply chain
+
+        // TODO Real Complex Example
+        assert(false);
+    }
+
+    /**
+     * Tests error code for sending messages with bad parameters for all other functions
+     */
+    @Test
+    @Transactional
+    public void testBadMessageRequests() throws Exception {
+        // TODO ONCE ERROR CHECKING IS FINISHED!
+
+        ObjectMapper objMapper = new ObjectMapper();
+        String responseString;
+
+        // TODO- BAD INSERT
+        String jsonString;
+        jsonString = writeMessageJSON(TEST_USERID_OWNER, 1L, null, "Bad message"); // Bad session ID
+
+        MvcResult result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andReturn();
+
+        jsonString = writeMessageJSON(0L, TEST_SESSION_ID, null, "Another bad one");
+
+        result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andReturn();
+
+        // BAD REPLY
+
+        // Insert a legit message
+
+        jsonString = writeMessageJSON(TEST_USERID_OWNER, TEST_SESSION_ID, null, "Legit message.");
+
+        result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+        TestObj legitMessage = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        jsonString = writeMessageJSON(TEST_USERID_2, TEST_SESSION_ID, 0L, "Bad reply"); // Bad reply since MessageID is 0.
+
+        result = this.mockMvc.perform(post("/message/postReply").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andReturn();
+
+        // TODO- BAD GET
+
+        jsonString = writeGetMessagesJSON(0L); // Bad session
+
+        result = this.mockMvc.perform(post("/message/getMessages").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Messages", aMapWithSize(0)))
+                .andReturn();
+
+        // TODO- BAD EDIT
+
+        jsonString = writeMessagePosterSessionJSON(0L, TEST_USERID_OWNER, TEST_SESSION_ID); // Bad MessageID, Good Poster, Good Session
+
+        result = this.mockMvc.perform(put("/message/updateMessageContent").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andReturn();
+
+        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, TEST_USERID_OWNER, 0L); // Good MessageID, Good Poster, Bad Session
+
+        result = this.mockMvc.perform(put("/message/updateMessageContent").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andReturn();
+
+        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, TEST_USERID_2, TEST_SESSION_ID); // Good MessageID, BAd Poster, Good Session
+
+        result = this.mockMvc.perform(put("/message/updateMessageContent").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andReturn();
+
+        // TODO- BAD VISIBILITY CHANGE
+
+        jsonString = writeMessagePosterSessionJSON(0L, TEST_USERID_OWNER, TEST_SESSION_ID); // Bad MessageID, Good Poster, Good Session
+
+        result = this.mockMvc.perform(put("/message/updateVisibility").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andReturn();
+
+        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, TEST_USERID_OWNER, 0L); // Good MessageID, Good Poster, Bad Session
+
+        result = this.mockMvc.perform(put("/message/updateVisibility").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andReturn();
+
+        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, TEST_USERID_2, TEST_SESSION_ID); // Good MessageID, Bad Poster, Good Session
+
+        result = this.mockMvc.perform(put("/message/updateVisibility").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andReturn();
+
+        // TODO- BAD DELETE
+
+        assert(false);
+    }
 
     /**
      * This helper function writes JSON strings for the messages.
@@ -474,6 +802,35 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
         jsonGenerator.close();
         return writer.toString();
     }
+
+    private String writeGetMessagesJSON(Long sessionID) throws IOException {
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeStringField("id", String.valueOf(sessionID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        return writer.toString();
+    }
+
+    private String writeMessagePosterSessionJSON(Long messageID, Long posterID, Long sessionID) throws IOException {
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeObjectFieldStart("poster");
+        jsonGenerator.writeObjectField("id", String.valueOf(posterID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeObjectFieldStart("session");
+        jsonGenerator.writeObjectField("id", String.valueOf(sessionID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeStringField("id", String.valueOf(messageID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        return writer.toString();
+    }
+
+
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class TestObj {

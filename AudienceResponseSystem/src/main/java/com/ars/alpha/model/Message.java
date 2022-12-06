@@ -21,7 +21,6 @@ import java.util.UUID;
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "MsgContent", type = String.class),
         @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "MessageID", type = Long.class)
 })
-
 @NamedStoredProcedureQuery(name = "INSERT_REPLY", procedureName = "INSERT_REPLY", parameters = {
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "posterID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class),
@@ -41,6 +40,11 @@ import java.util.UUID;
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "messageID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "posterID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class)})
+@NamedStoredProcedureQuery(name = "DELETE_MESSAGE", procedureName = "DELETE_MESSAGE", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "PosterID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "SessionID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "MessageID", type = Long.class)
+})
 //@SqlResultSetMapping(name = "Mapping.Message", // I THINK THIS IS UNNEEDED. I HOPE TO GOD IT IS NOT NEEDED
 //                     classes = @ConstructorResult(targetClass = Message.class,
 //                               columns = {@ColumnResult(name = "ID"),
@@ -54,8 +58,9 @@ import java.util.UUID;
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Message {
     @Id
+    @JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class,property="id", scope = Message.class)
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID", nullable = false)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "MsgContent", nullable = false)
