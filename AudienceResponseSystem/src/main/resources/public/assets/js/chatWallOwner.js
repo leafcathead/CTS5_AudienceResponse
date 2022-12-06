@@ -64,7 +64,8 @@ function postComment() {
 
 
 let comments =[];
-
+let replies=[];
+let singleReply ="";
 //get posts from DB(Recommended way)
 function getPosts() {
     let body = $("#cardDiv").html();
@@ -83,22 +84,28 @@ function getPosts() {
         .then((receivedJson) => {
 
 
-
+            // let bodyForm = "";
 
             console.log(receivedJson);
+
             for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
 //pushing the comment inside js array[]
-                if(receivedJson.Messages[i].poster.id){
-                comments.push({
-                    posterID: receivedJson.Messages[i].poster.id,
-                    displayName: receivedJson.Messages[i].poster.displayName,
-                    sessionID: receivedJson.Messages[i].session,
-                    msgID: receivedJson.Messages[i].id,
-                    timestamp: receivedJson.Messages[i].timestamp,
-                    msgContents: receivedJson.Messages[i].messageContents,
-                    likes: receivedJson.Messages[i].likes
+
+
+
+                if (receivedJson.Messages[i].poster.id) {
+                    comments.push({
+                        posterID: receivedJson.Messages[i].poster.id,
+                        displayName: receivedJson.Messages[i].poster.displayName,
+                        sessionID: receivedJson.Messages[i].session,
+                        msgID: receivedJson.Messages[i].id,
+                        timestamp: receivedJson.Messages[i].timestamp,
+                        msgContents: receivedJson.Messages[i].messageContents,
+                        replyTo: receivedJson.Messages[i].replyTo,
+                        visible: receivedJson.Messages[i].visible,
+                        likes: receivedJson.Messages[i].likes
                     });
-                }else{
+                } else {
 
                     comments.push({
 
@@ -106,48 +113,71 @@ function getPosts() {
                         displayName: receivedJson.Messages[i].poster.displayName,
                         sessionID: receivedJson.Messages[i].session,
                         msgID: receivedJson.Messages[i].id,
+                        msgContents: receivedJson.Messages[i].messageContents,
                         timestamp: receivedJson.Messages[i].timestamp,
+                        replyTo: receivedJson.Messages[i].replyTo,
+                        visible: receivedJson.Messages[i].visible,
                         likes: receivedJson.Messages[i].likes,
-                        msgContents: receivedJson.Messages[i].messageContents});
+                    });
                 }
                 JSON.stringify(comments);
                 let timeStamp = comments[i].timestamp;
                 let dateFormat = new Date(timeStamp);
 
 //hide controllers "never give body any js executing codes variables & []  only"
-let editBtn = "";
-let deleteBtn = "";
-if(ownerID == comments[i].posterID){
-    editBtn = "edit";
-    deleteBtn = "delete";
-}else{
+                let editBtn = "";
+                let deleteBtn = "";
+                if (ownerID == comments[i].posterID) {
+                    editBtn = "edit";
+                    deleteBtn = "delete";
+                } else {
 
-    editBtn = "";
-    deleteBtn = "";
-}
-                    body += `
+                    editBtn = "";
+                    deleteBtn = "";
+                }
+//  let cReplies="";
+//  for (let k = 0; k < replies.length; k++){
+//
+//     if(replies[k].msgID == comments[i].msgID){
+//             console.log(replies[k].msgID  +  replies[k].form)
+//     }else{
+//         replies="";
+//     }
+// }
+                // let rep =[];
+                // for (let j = 0; j < Object.keys(receivedJson.Messages).length; j++) {
+                //   //  console.log( receivedJson.Messages[i].id + "i");
+                //   // console.log(receivedJson.Messages[j].replyTo +  "j");
+                //     if (receivedJson.Messages[j].replyTo ==  receivedJson.Messages[i].id) {
+                //             rep += receivedJson.Messages[j].messageContents;
+                //         console.log(rep);
+                //     }
+                //  }
 
-            <div class="card" id="row-${comments[i].msgID}">
+                body += `
+
+                        <div class="card" id="row-${comments[i].msgID}">
+
               <div class="card-body">
                 <div class="d-flex flex-start align-items-center">
 
                   <div>
                   <div style="  position: absolute;top: 8px;right: 16px; color: #005cbf ;font-size: 14px;">
                   <p>
-                  
-                   
+
+
 <!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">edit</button>-->
                    <a data-toggle="modal" href="" onclick=" showUpdateModal(${comments[i].posterID},${comments[i].sessionID},${comments[i].msgID},'${comments[i].msgContents}');">${editBtn}</a>
                   <a href="">${deleteBtn}</a>
-              
-                
+
+
                    </p>
                    </div>
-                    <h6 class="fw-bold text-primary mb-1">Written by:  ${comments[i].posterID} user</h6>
+                    <h6 class="fw-bold text-primary mb-1"> ${comments[i].posterID} user</h6>
                     <p class="text-muted small mb-0">
                         Shared publicly ${dateFormat}
                     </p>
-                 
+
                   </div>
                 </div>
 
@@ -168,15 +198,32 @@ if(ownerID == comments[i].posterID){
                 </div>
               </div>
               <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
-                <div class="d-flex flex-start w-100">
+                    <div id="replyDiv" style="width: 80%; margin-left: 10%">
+                    <script>
+                    for(let i =0; i<comments.length; i++ ){
+                         for(let j =0; j<replies.length; j++ ){
+                             if(comments[i].replyTo == replies[j].msgID){
+                                 singleReply = replies[j].form;
+                             }else{
+                                 singleReply = "";
+                             }
+                         }
+
+                    }
+</script>
+                  Replies here ${singleReply}
+
+                    </div>
+                <div  class="d-flex flex-start w-100">
                   <div class="form-outline w-100">
-                <textarea class="form-control" id="textAreaExample" placeholder="Your comment must be less than 1024 letter..." rows="4"
+
+                <textarea class="form-control" style="width: 80%; margin-left: 10%; font-size: small;" id="textAreaExample" placeholder="Your comment must be less than 1024 letter..." rows="2"
                           style="background: #fff;"></textarea>
-                    <label class="form-label" for="textAreaExample">Message</label>
                   </div>
                 </div>
-                <div class="float-end mt-2 pt-1">
-                  <button type="button" class="btn btn-primary btn-sm" onclick="">Post comment</button>
+
+                <div style="width: 80%; margin-left: 10%" class="float-end mt-2 pt-1">
+                  <button type="button" class="btn btn-primary btn-sm" onclick="">Comment</button>
                   <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
                 </div>
               </div>
@@ -187,9 +234,139 @@ if(ownerID == comments[i].posterID){
                 $("#cardDiv").html(body);
 
 
-            }
+                let rep = $("commentDiv").html();
+
+                for (let j = 0; j < Object.keys(receivedJson.Messages).length; j++) {
+
+                    if (receivedJson.Messages[j].replyTo == receivedJson.Messages[i].id) {
+                        // singleReply = receivedJson.Messages[j].messageContents;
+                        //  cReplies += receivedJson.Messages[j].messageContents;
+                        // bodyForm = `<div><span>${receivedJson.Messages[j].messageContents}</span></div>`;
+                        rep = receivedJson.Messages[j].messageContents;
+                        console.log(rep);
+                        if (receivedJson.Messages[i].poster.id) {
+
+                            replies.push({
+                                msgID: receivedJson.Messages[j].replyTo,
+                                form: receivedJson.Messages[j].messageContents
+                                // displayName: receivedJson.Messages[j].poster.displayName,
+                                // sessionID: receivedJson.Messages[j].session,
+                                // msgID: receivedJson.Messages[j].id,
+                                // timestamp: receivedJson.Messages[j].timestamp,
+                                // msgContents: receivedJson.Messages[j].messageContents,
+                                // replyTo: receivedJson.Messages[j].replyTo,
+                                // visible: receivedJson.Messages[j].visible,
+                                //likes: receivedJson.Messages[j].likes
+                            });
+                        } else {
+                            replies.push({
+                                msgID: receivedJson.Messages[j].replyTo,
+                                form: receivedJson.Messages[j].messageContents
+                                // displayName: receivedJson.Messages[j].poster.displayName,
+                                // sessionID: receivedJson.Messages[j].session,
+                                // msgID: receivedJson.Messages[j].id,
+                                // timestamp: receivedJson.Messages[j].timestamp,
+                                // msgContents: receivedJson.Messages[j].messageContents,
+                                // replyTo: receivedJson.Messages[j].replyTo,
+                                // visible: receivedJson.Messages[j].visible,
+                                //likes: receivedJson.Messages[j].likes
+                            });
+                        }
+
+
+//                         replyBody += `
+//
+//
+//
+//               <div class="card-body">
+//                 <div class="d-flex flex-start align-items-center">
+//
+//                   <div>
+//                   <div style="  position: absolute;top: 8px;right: 16px; color: #005cbf ;font-size: 14px;">
+//                   <p>
+//
+//
+// <!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">edit</button>-->
+//                    <a data-toggle="modal" href="" onclick=" showUpdateModal(${comments[i].posterID},${comments[i].sessionID},${comments[i].msgID},'${comments[i].msgContents}');">${editBtn}</a>
+//                   <a href="">${deleteBtn}</a>
+//
+//
+//                    </p>
+//                    </div>
+//                     <h6 class="fw-bold text-primary mb-1"> ${comments[i].posterID} user</h6>
+//                     <p class="text-muted small mb-0">
+//                         Shared publicly ${dateFormat}
+//                     </p>
+//
+//                   </div>
+//                 </div>
+//
+//                 <p class="mt-3 mb-4 pb-2">
+//                    ${comments[i].msgContents}
+//                 </p>
+//
+//                 <div class="small d-flex justify-content-start">
+//
+//                   <a href="#!" class="d-flex align-items-center me-3">
+//                     <i class="far fa-comment-dots me-2"></i>
+//                     <p class="mb-0">reply&nbsp;&nbsp;&nbsp;&nbsp;</p>
+//                   </a>                <a href="#!" class="d-flex align-items-center me-3">
+//                     <i class="far fa-comment-dots me-2"></i>
+//                     <p class="mb-0">${comments[i].likes}  likes</p>
+//                   </a>
+//
+//                 </div>
+//               </div>
+//               <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+//                     <div id="replyDiv" style="width: 80%; margin-left: 10%">
+//
+//                     ${cReplies}
+//
+//                     </div>
+//                 <div  class="d-flex flex-start w-100">
+//                   <div class="form-outline w-100">
+//
+//                 <textarea class="form-control" style="width: 80%; margin-left: 10%; font-size: small;" id="textAreaExample" placeholder="Your comment must be less than 1024 letter..." rows="2"
+//                           style="background: #fff;"></textarea>
+//                   </div>
+//                 </div>
+//
+//                 <div style="width: 80%; margin-left: 10%" class="float-end mt-2 pt-1">
+//                   <button type="button" class="btn btn-primary btn-sm" onclick="">Comment</button>
+//                   <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+//                 </div>
+//               </div>
+//             </div>
+//             <br/><br/>
+//
+// `;
+
+
+                    } else {
+                        // singleReply = "";
+                    }
+
+                    //    $("commentDiv").html(replyBody);
+
+                    // for (let k = 0; k < replies.length; k++) {
+                    //     if (comments[i].replyTo == replies[k].msgID) {
+                    //                 cReplies += replies[k].form;
+                    //     } else {
+                    //         cReplies = "no replies";
+                    //     }
+                    // }
+
+                }
+
+                  }
+
+
+
             console.log(comments);
-        })
+            console.log(replies);
+//console.log(cReplies);
+        }
+            )
 
 
 
