@@ -164,7 +164,7 @@ public class UserTests extends AbstractTransactionalJUnit4SpringContextTests {
 
         assertNotNull(user);
         assertEquals("MY_NEW_NAME", user.getDisplayName());
-        
+
     }
 
 }
