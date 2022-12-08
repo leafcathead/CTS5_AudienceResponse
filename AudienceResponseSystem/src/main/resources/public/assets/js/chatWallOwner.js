@@ -121,7 +121,8 @@ function getPosts() {
 //browsing the comments[] array and control it in several aspects
             for (let i = 0; i <  comments.length; i++) {
 
-                if (comments[i].replyTo == null){
+
+
 
 
 //hide comment's owner controllers "never give body any js executing codes (variables & []  only)"
@@ -143,16 +144,87 @@ function getPosts() {
                 //fill repliesTmp
                 for(let j =0; j < comments.length; j++){
 
+
+
                     //this condition for filling a string/Html replies array for specific comment and introduce them ordered in UI
                     if(comments[j].replyTo == comments[i].msgID){
+                        let editBtnRep = "";
+                        let deleteBtnRep = "";
+                        if (ownerID == comments[j].posterID) {
+                            editBtnRep = "edit";
+                            deleteBtnRep = "delete";
+                        } else {
+
+                            editBtnRep = "";
+                            deleteBtnRep = "";
+                        }
+
+
+
                         // repliesTmp will be repliesTmp += ``; will be inserted inside body the static one
-                        repliesTmp += "PosterID " +  comments[j].posterID + " ReplyContents: " + comments[j].msgContents + "<br/>" ;
-                    }
+                        repliesTmp += `
+ <div id="replyDiv" style="width: 80%; margin-left: 10%">
 
-                }
+    <div class="card-body">
+                <div class="d-flex flex-start align-items-center">
 
-                //this condition for popping a string/Html replies from being shown as a comment
+                  <div>
+                  <div style="  position: absolute;top: 8px;right: 16px; color: #005cbf ;font-size: 14px;">
+                  <p>
 
+
+<!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">edit</button>-->
+
+
+                   </p>
+                   </div>
+                                   <div style="font-size: 12px; margin-left: 82%">
+                   <a data-toggle="modal" href="" onclick=" showUpdateModal(${comments[j].posterID},${comments[j].sessionID},${comments[j].msgID},'${comments[j].msgContents}');">${editBtnRep}</a>
+                  <a href="">${deleteBtnRep}</a>
+</div>
+                    <h6 class="fw-bold text-primary mb-1"> ${comments[j].posterID} user</h6>
+                    <p class="text-muted small mb-0">
+                        Shared publicly ${dateFormat}
+                    </p>
+
+                  </div>
+                </div>
+
+                <p class="mt-3 mb-4 pb-2">
+                   ${comments[j].msgContents}
+                </p>
+
+                <div class="small d-flex justify-content-start">
+
+                  <a href="#!" class="d-flex align-items-center me-3">
+                    <i class="far fa-comment-dots me-2"></i>
+                    <p class="mb-0">reply&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                  </a>                <a href="#!" class="d-flex align-items-center me-3">
+                    <i class="far fa-comment-dots me-2"></i>
+                    <p class="mb-0">${comments[j].likes}  likes</p>
+                  </a>
+
+                </div>
+              </div>
+
+
+       
+
+
+
+</div><br/>
+
+
+` ;
+
+
+
+                    } //end of nested j loop's condition
+
+                }//end of nested j loop
+
+                //this condition for popping an element of "string/Html replies" being shown as a comment
+                if (comments[i].replyTo == null){
 
                     body += `
 
@@ -198,7 +270,7 @@ function getPosts() {
                 </div>
               </div>
               <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
-                    <div id="replyDiv" style="width: 80%; margin-left: 10%">
+                    <div style="width: 80%; margin-left: 10%">
 
                   Replies here <br/>  ${repliesTmp}
 
@@ -223,7 +295,7 @@ function getPosts() {
                     //console.log("comment");
                 }else{
 
-                     comments.pop();
+                   //  comments.pop();
                     console.log("reply is removed from comments' body");
 
                 }
