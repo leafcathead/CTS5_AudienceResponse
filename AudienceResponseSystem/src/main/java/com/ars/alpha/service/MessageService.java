@@ -9,6 +9,7 @@ import com.ars.alpha.other.Status;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -113,8 +114,8 @@ public class MessageService implements MessageServiceInterface {
      */
 
     @Override
-    @Transactional
-    public Map<String, Object> getMessages(java.lang.Long sessionID) {
+    @Transactional(noRollbackFor = {IllegalStateException.class, PersistenceException.class, Exception.class})
+    public Map<String, Object> getMessages(java.lang.Long sessionID) throws UnexpectedRollbackException {
         System.out.println(sessionID);
 
         Map<String, Object> returnerMap = new HashMap<String, Object>();
