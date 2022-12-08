@@ -12,8 +12,7 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.isNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.testng.AssertJUnit.assertNotNull;
@@ -23,6 +22,7 @@ import static org.testng.AssertJUnit.assertTrue;
 import com.ars.alpha.controller.SessionUserController;
 import com.ars.alpha.dao.MessageRepository;
 import com.ars.alpha.dao.SessionRepository;
+import com.ars.alpha.dao.UserRepository;
 import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.model.SessionUser;
 import com.ars.alpha.other.Password;
@@ -64,6 +64,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.persistence.PersistenceException;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Optional;
 
 
 @RunWith(SpringRunner.class)
@@ -77,6 +78,10 @@ public class UserTests extends AbstractTransactionalJUnit4SpringContextTests {
 
     @InjectMocks
     SessionUserController userController;
+
+    @InjectMocks
+    @Autowired
+    UserRepository userRepository;
 
     @Autowired
     private MockMvc mockMvc;
@@ -126,9 +131,40 @@ public class UserTests extends AbstractTransactionalJUnit4SpringContextTests {
      */
     @Test
     @Transactional
-    void testUpdateDisplayName() {
+    void testUpdateDisplayName() throws Exception {
 
-        assert(false);
+        String jsonString;
+        String responseString;
+
+        // Change username
+
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeObjectField("id", String.valueOf(TEST_USER_ID));
+        jsonGenerator.writeObjectFieldStart("session");
+        jsonGenerator.writeObjectField("id", String.valueOf(TEST_SESSION_ID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeStringField("displayName", "MY_NEW_NAME");
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        jsonString = writer.toString();
+
+        MvcResult result = this.mockMvc.perform(put("/user/updateDisplayName").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code",  Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        Optional<SessionUser> su = userRepository.findById(TEST_USER_ID);
+        SessionUser user = su.orElse(null);
+
+        assertNotNull(user);
+        assertEquals("MY_NEW_NAME", user.getDisplayName());
+
     }
 
 }
