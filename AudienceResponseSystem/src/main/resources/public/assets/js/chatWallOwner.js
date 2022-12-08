@@ -121,7 +121,7 @@ function getPosts() {
 //browsing the comments[] array and control it in several aspects
             for (let i = 0; i <  comments.length; i++) {
 
-
+                if (comments[i].replyTo == null){
 
 
 //hide comment's owner controllers "never give body any js executing codes (variables & []  only)"
@@ -146,13 +146,14 @@ function getPosts() {
                     //this condition for filling a string/Html replies array for specific comment and introduce them ordered in UI
                     if(comments[j].replyTo == comments[i].msgID){
                         // repliesTmp will be repliesTmp += ``; will be inserted inside body the static one
-                        repliesTmp += "PosteID " +  comments[j].posterID + " ReplyContents: " + comments[j].msgContents + "<br/>" ;
+                        repliesTmp += "PosterID " +  comments[j].posterID + " ReplyContents: " + comments[j].msgContents + "<br/>" ;
                     }
 
                 }
 
                 //this condition for popping a string/Html replies from being shown as a comment
-                if (comments[i].replyTo == null){
+
+
                     body += `
 
                         <div class="card">
@@ -199,7 +200,7 @@ function getPosts() {
               <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
                     <div id="replyDiv" style="width: 80%; margin-left: 10%">
 
-                  Replies here  ${repliesTmp}
+                  Replies here <br/>  ${repliesTmp}
 
                     </div>
                 <div  class="d-flex flex-start w-100">
@@ -227,7 +228,9 @@ function getPosts() {
 
                 }
 
-                repliesTmp = "";
+
+
+              // repliesTmp = "";
                 $("#cardDiv").html(body);
 
 
