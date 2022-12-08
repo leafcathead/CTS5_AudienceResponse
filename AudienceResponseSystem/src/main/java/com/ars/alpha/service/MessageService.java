@@ -113,6 +113,7 @@ public class MessageService implements MessageServiceInterface {
      */
 
     @Override
+    @Transactional
     public Map<String, Object> getMessages(java.lang.Long sessionID) {
         System.out.println(sessionID);
 
