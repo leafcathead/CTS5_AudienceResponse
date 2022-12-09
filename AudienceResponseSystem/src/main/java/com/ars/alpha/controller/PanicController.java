@@ -15,15 +15,17 @@ public class PanicController {
     @Autowired
     PanicService panicService;
 
-    @PostMapping("/postPanic")
-    Map<String, Object> postPanic (@RequestBody PanicResponse newPanic) throws Exception{
+//    @PostMapping("/postPanic")
+//    Map<String, Object> postPanic (@RequestBody PanicResponse newPanic) throws Exception{
+//
+//        if(newComment.checkOverSize()){
+//            throw new IllegalArgumentException("Panic type not accepted");
+//        }
+//
+//        //  System.out.println(newComment.toString());
+//
+//        return panicService.postPanic(newPanic.getID(), newPanic.getPanicker(), newPanic.getMessageContents(), null);
+//    }
 
-        if(newComment.checkOverSize()){
-            throw new IllegalArgumentException("Panic type not accepted");
-        }
 
-        //  System.out.println(newComment.toString());
-
-        return panicService.postPanic(newPanic.getID(), newPanic.getPanicker(), newPanic.getMessageContents(), null);
-    }
 }

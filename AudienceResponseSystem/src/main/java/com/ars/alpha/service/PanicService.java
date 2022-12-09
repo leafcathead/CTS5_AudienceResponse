@@ -12,26 +12,26 @@ import java.util.Map;
 @Service
 public class PanicService implements PanicServiceInterface{
 
-    @Autowired
-    PanicRepository panicRepository;
-
-    Map<String, Object> postPanic(Long ID, Long PanicButtonPushed, Long Panicker, Long SessionRoom, String LogTime){
-        Map<String, Object> ret = new HashMap<String, Object>();
-        try {
-            Long Time = panicRepository.INSERT_PANIC(ID, Panicker, SessionRoom, LogTime);
-            ret.put("Status", Status.SUCCESS);
-            ret.put("Code", 0);
-            ret.put("PanicId", ID);
-            ret.put("LogTime", Time);
-        }catch (PersistenceException e){
-            SQLServerException ex = (SQLServerException) e.getCause();
-            System.out.println(ex.getSQLServerError().getErrorMessage());
-            System.out.println(ex.getSQLServerError().getErrorState());
-            ret.put("Status", Status.ERROR);
-            ret.put("Code", ex.getSQLServerError().getErrorState());
-            ret.put("PanicId", 0L);
-            ret.put("LogTime", "unknown");
-        }
-        return ret;
-    }
+//    @Autowired
+//    PanicRepository panicRepository;
+//
+//    Map<String, Object> postPanic(Long ID, Long PanicButtonPushed, Long Panicker, Long SessionRoom, String LogTime){
+//        Map<String, Object> ret = new HashMap<String, Object>();
+//        try {
+//            Long Time = panicRepository.INSERT_PANIC(ID, Panicker, SessionRoom, LogTime);
+//            ret.put("Status", Status.SUCCESS);
+//            ret.put("Code", 0);
+//            ret.put("PanicId", ID);
+//            ret.put("LogTime", Time);
+//        }catch (PersistenceException e){
+//            SQLServerException ex = (SQLServerException) e.getCause();
+//            System.out.println(ex.getSQLServerError().getErrorMessage());
+//            System.out.println(ex.getSQLServerError().getErrorState());
+//            ret.put("Status", Status.ERROR);
+//            ret.put("Code", ex.getSQLServerError().getErrorState());
+//            ret.put("PanicId", 0L);
+//            ret.put("LogTime", "unknown");
+//        }
+//        return ret;
+//    }
 }
