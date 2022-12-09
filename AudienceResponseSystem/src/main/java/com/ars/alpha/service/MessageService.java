@@ -44,7 +44,6 @@ public class MessageService implements MessageServiceInterface {
      * 3.  Message Id
      */
     public Map<String, Object> postComment(Long posterID, Long sessionID, String message, Long iD) {
-        Map<String, Object> ret = new HashMap<String, Object>();
         try {
             Long msgID = messageRepository.INSERT_MESSAGE(posterID, sessionID, message, iD);
             ret.put("Status", Status.SUCCESS);
