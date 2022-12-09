@@ -6,7 +6,8 @@ const sessionID = localStorage.getItem('sessionID');
 const sessionPassword = localStorage.getItem('sessionPassword');
 
 
-
+// function fetching(){
+//     setTimeout(getPosts, 1000);}
 
 //post comment
 function postComment() {
@@ -60,6 +61,65 @@ function postComment() {
         })
 
 }
+
+
+
+
+//post reply
+function postReply(posterID, sessionID, msgID, msgContent) {
+ // let answer = document.getElementById('');
+
+console.log(posterID, sessionID,msgID, msgContent);
+
+
+
+    fetch("http://localhost:8080/message/postReply", {
+        method: 'POST',
+        body: JSON.stringify({
+
+
+
+        poster: {
+        id: posterID
+    },
+        session: {
+        id: sessionID
+    },
+        replyTo: {
+        id: msgID
+    },
+        messageContent: msgContent
+
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+
+          //   const parg = `
+          //
+          //
+          // your comment has been successfully posted<br/>
+          //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+          //   `;
+          //
+          //  answer.innerHTML = parg;
+          //  answer = "";
+
+        })
+
+    showResult();
+
+}
+
+
+
+
 
 
 
@@ -278,13 +338,13 @@ function getPosts() {
                 <div  class="d-flex flex-start w-100">
                   <div class="form-outline w-100">
 
-                <textarea class="form-control" style="width: 80%; margin-left: 10%; font-size: small;" id="textAreaExample" placeholder="Your comment must be less than 1024 letter..." rows="2"
+                <textarea class="form-control" style="width: 80%; margin-left: 10%; font-size: small;" id="textAreaReplay-${comments[i].msgID}" placeholder="Your comment must be less than 1024 letter..." rows="2"
                           style="background: #fff;"></textarea>
                   </div>
                 </div>
-
+                    <div id="snackbar">Your reply has been added</div>
                 <div style="width: 80%; margin-left: 10%" class="float-end mt-2 pt-1">
-                  <button type="button" class="btn btn-primary btn-sm" onclick="">Comment</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="postReply(${comments[i].posterID}, ${comments[i].sessionID}, ${comments[i].msgID},$('#textAreaReplay-'+${comments[i].msgID}).val() );">reply</button>
                   <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
                 </div>
               </div>
@@ -327,6 +387,11 @@ function getPosts() {
 }
 
 
+
+
+
+
+
 //show data model first then call updateComment();
 function showUpdateModal(posterID,sessionID, msgID, msgContent){
     $("#exampleModal").modal('show');
@@ -343,7 +408,7 @@ function showUpdateModal(posterID,sessionID, msgID, msgContent){
 
 
 //update comment
-function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),sessionID=$("#sessionID").val(),msgContent=$("#msgContent").val(),){
+function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),sessionID=$("#sessionID").val(),msgContent=$("#msgContent").val()){
 //test
     console.log("i am update comment   " + posterID +"  " + msgID+"  " + sessionID+"  " + msgContent);
     //VPN is not working updateMessageContent type PUT is not yet tested
@@ -405,6 +470,33 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
 
 
 
+
+
+
+
+
+
+
+
+
+function postAgain(){
+    location.replace("chatWallOwner.html");
+}
+
+
+
+
+
+
+
+function logOutOwner(){
+
+    localStorage.removeItem('ownerID');
+    localStorage.removeItem('sessionID');
+    localStorage.removeItem('sessionPassword');
+
+    location.replace("index.html")
+}
 
 
 var data="";
@@ -508,33 +600,6 @@ var data="";
 //
 // }
 //setInterval(getPosts,1000);
-
-
-
-
-
-
-function postAgain(){
-    location.replace("chatWallOwner.html");
-}
-
-
-
-
-
-
-
-function logOutOwner(){
-
-    localStorage.removeItem('ownerID');
-    localStorage.removeItem('sessionID');
-    localStorage.removeItem('sessionPassword');
-
-    location.replace("index.html")
-}
-
-
-
 
 
 
