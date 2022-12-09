@@ -7,6 +7,14 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(appliesTo = "PanicResponse")
+
+@NamedStoredProcedureQuery(name = "INSERT_PANIC", procedureName = "INSERT_PANIC", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "ID", type = Long.class),
+        //@StoredProcedureParameter(mode = ParameterMode.IN, name = "PanicButtonPushed", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "Panicker", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "SessionRoom", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "LogTime", type = String.class)
+})
 public class PanicResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,5 +72,9 @@ public class PanicResponse {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    boolean checkOverSize(){
+        return panicType.getPanicType().length() > 4;
     }
 }

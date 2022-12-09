@@ -38,8 +38,6 @@ public class PanicButton {
         this.desc = desc;
     }
 
-
-
     public void setId(Long id) {
         this.id = id;
     }
