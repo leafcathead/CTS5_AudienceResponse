@@ -14,8 +14,8 @@
 
 
 
-<nav class="navbar sticky-top navbar-expand-md navbar-dark bg-dark">
-    <div class="container">
+<nav class="navbar navbar-expand-md navbar-dark" style="position: fixed; width: 100%;background: #131313;">
+    <div class="container ">
 
         <a class="navbar-brand" href="./index.html"><img src="./assets/images/logoW.png" /><span class="logo-text"> Audience Respone System</span></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,9 +41,9 @@
                 <div  class="d-flex">
                     <input class="form-control me-2" id="sessionIdInput" type="text" placeholder="Session-ID..."  aria-label="JoinField"/><element class="button-element">
 
-                    <button class="btn btn-secondary" onclick="joinSession()">join</button></element>
+                    <button id="but" class="btn btn-secondary" style="background: #3b3838; " onclick="joinSession()">join</button></element>
                     <!--      Create SESSION-->
-                    <button class="btn btn-secondary" onclick="createSession()" type="button">create </button>
+                    <button class="btn btn-secondary" style="background: #3b3838;" onclick="createSession()" type="button">create </button>
                 </div>
             </SECTION>
         </div>

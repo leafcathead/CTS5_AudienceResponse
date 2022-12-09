@@ -15,15 +15,7 @@ if(userID==null){
 
 
 
-// {
-//     "poster": {
-//     "id":  97
-// },
-//     "session": {
-//     "id":  54
-// },
-//     "messageContent": "I am the user of 97 attended to session 54 this is my comment"
-// }
+
 
 
 //get posts from DB
