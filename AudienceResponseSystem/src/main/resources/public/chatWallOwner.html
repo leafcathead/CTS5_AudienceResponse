@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
   <title>Audience chat wall</title>
   <meta charset="utf-8">
@@ -11,8 +11,6 @@
  <script src="assets/js/chatWallOwner.js"></script>
 </head>
 <body id="bodyDiv">
-
-
 <div class="wrapper d-flex align-items-stretch">
   <nav id="sidebar" >
     <div class="p-4 pt-5 position-fixed">
@@ -95,7 +93,7 @@
               <a class="nav-link" href="#">Chat wall</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="" onclick="updateDisplayname()">edit your name</a>
+              <a class="nav-link" href="" data-toggle="modal" onclick="updateDisplayname()">edit your name</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Statistics</a>
@@ -178,6 +176,33 @@
     </div>
   </div>
 </div>
+
+
+
+
+  <!-- Modal display name -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <div class="modal-content">
+        <div class="modal-header" style="text-align: center">
+          <h4 class="modal-title" style="color: goldenrod">Update your display name</h4>
+        </div>
+        <div class="modal-body" id="modalBody">
+          <label>New display name</label>
+          <input class="input-group" id="newDisNameField" placeholder="max 18 letters...">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary btn-sm"  data-dismiss="modal" onclick="newDisplyname();">update</button>
+          <button type="button" class="btn btn-primary btn-sm"  data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
 
 
 

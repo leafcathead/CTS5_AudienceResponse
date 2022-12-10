@@ -11,12 +11,12 @@
   <link rel="stylesheet" href="./assets/chatWallAssets/css/style.css">
   <script src="assets/js/chatWallUser.js"></script>
 </head>
-<body>
+<body id="bodyDiv">
 
 
 <div class="wrapper d-flex align-items-stretch">
   <nav id="sidebar">
-    <div class="p-4 pt-5">
+    <div class="p-4 pt-5 position-fixed">
       <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(./assets/chatWallAssets/images/user.png);"></a>
 
       <p id="userInfo">
@@ -72,10 +72,28 @@
     <h2 class="mb-4">Chat wall</h2>
 
 
-    <!--  comment code Sample 2 -->
     <h4> <p id="userName">  <script>document.getElementById("userName").innerHTML =  "Hi " + userID +" :)";
     </script>
     </p> </h4>
+
+    <!--    Write Posts   -->
+    <div id="answer">
+      <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;" >
+        <div class="d-flex flex-start w-100">
+          <div id="commentDiv" class="form-outline w-100"  >
+                <textarea class="form-control" id="textArea" placeholder="Your comment must be less than 1024 letter..." rows="4"
+                          style="background: #fff;"></textarea>
+            <label class="form-label" for="textArea">Message</label>
+          </div>
+        </div>
+
+        <div class="float-end mt-2 pt-1">
+          <button type="button" class="btn btn-primary btn-sm" onclick="postComment()">Post comment</button>
+          <button type="reset" class="btn btn-outline-primary btn-sm">Cancel</button>
+        </div>
+      </div>
+    </div>
+
     <button type="button" class="btn btn-primary btn-sm" onclick="getPosts()">Get posts</button>
 
     <section style="background-color: #eee;">
@@ -88,10 +106,110 @@
       </div>
     </section>
 
-    <!--  End of  Comment Box Example 2     -->
+
+
 
   </div>
 </div>
+
+
+
+
+
+
+<!--edit form-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input id="msgID" type="hidden"/>
+        <input id="sessionID" type="hidden"/>
+        <input id="posterID" type="hidden"/>
+        <textarea id="msgContent" style="width: 100%;" ></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+        <button onclick="updateComment()" type="button" class="btn btn-primary" data-dismiss="modal">update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Modal display name -->
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header" style="text-align: center">
+        <h4 class="modal-title" style="color: goldenrod">Update your display name</h4>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <label>New display name</label>
+        <input class="input-group" id="newDisNameField" placeholder="max 18 letters...">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-sm"  data-dismiss="modal" onclick="newDisplyname();">update</button>
+        <button type="button" class="btn btn-primary btn-sm"  data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- snackbar-->
+<style>
+  #snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+  }
+
+  #snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+
+  @-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+
+  @keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+
+  @-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }
+
+  @keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }
+</style>
 
 <script src="./assets/chatWallAssets/js/jquery.min.js"></script>
 <script src="./assets/chatWallAssets/js/popper.js"></script>

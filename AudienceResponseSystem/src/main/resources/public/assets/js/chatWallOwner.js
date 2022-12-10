@@ -467,63 +467,70 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
 
 
 
+
 //update comment
 function updateDisplayname(){
 //test
-    console.log("posterID: " + ownerID +"  sessionID: " + sessionID +"  displayname:  " + displayname);
+    $("#myModal").modal('show');
+    $("#newDisNameField").val(displayname);
+   // data-toggle="modal" data-target="#myModal"
+    console.log("posterID: " + ownerID +"  sessionID: " + sessionID +"  displayname:  " + $("#newDisNameField").val());
     //VPN is not working updateMessageContent type PUT is not yet tested
 
-
-     let answer = document.getElementById('answer');
-
-
-
-    fetch("http://localhost:8080/user/updateDisplayName", {
-        method: 'PUT',
-        body: JSON.stringify({
-
-
-    poster: {
-        id: ownerID
-    },
-    session: {
-        id: sessionID
-    },
-    displayName: displayname
-
-
-        }),
-        headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        }
-    })
-        .then((response) => {
-            return response.json()
-        })
-        .then((data) => {
-            console.log(data)
-                if(data.Status == "SUCCESS"){
-            const parg = `
-
-
-      your display name has been successfully updated<br/>
-       <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
-        `;
-
-            answer.innerHTML = parg;
-            answer = "";
-                }else{
-
-                    console.log("Error has been occurred");
-                }
-
-
-
-        })
-
-
+    //  let answer = document.getElementById('answer');
+    //
+    //
+    //
+    // fetch("http://localhost:8080/user/updateDisplayName", {
+    //     method: 'PUT',
+    //     body: JSON.stringify({
+    //
+    //
+    // poster: {
+    //     id: ownerID
+    // },
+    // session: {
+    //     id: sessionID
+    // },
+    // displayName: displayname //input field user value
+    //
+    //
+    //     }),
+    //     headers: {
+    //         "Content-Type": "application/json;charset=UTF-8"
+    //     }
+    // })
+    //     .then((response) => {
+    //         return response.json()
+    //     })
+    //     .then((data) => {
+    //         console.log(data)
+    //             if(data.Status == "SUCCESS"){
+    //         const parg = `
+    //
+    //
+    //   your display name has been successfully updated<br/>
+    //
+    //     `;
+    //
+    //         answer.innerHTML = parg;
+    //         localStorage.setItem(displayname, data)
+    //
+    //             }else{
+    //
+    //                 console.log("Error has been occurred");
+    //             }
+    //
+    //
+    //
+    //     })
 }
 
+
+
+function newDisplyname(){
+
+}
 
 
 function postAgain(){
