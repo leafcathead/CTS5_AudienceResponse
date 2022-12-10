@@ -77,9 +77,11 @@ function joinSession() {
 
         success: function (resp) {
            if(resp.newUserID != null) {
+               console.log(resp);
 //Setting the localstorages keys and values
               localStorage.setItem('userID', resp.newUserID);
               localStorage.setItem('sessionID', resp.newSessionID);
+              localStorage.setItem('displayname', resp.newUserID);
 
 
                console.log("password is exist");
@@ -118,10 +120,10 @@ function createSession() {
     console.log(data);
     if(data.newUserID !=null){
         localStorage.setItem('ownerID', data.newUserID);
-       // localStorage.setItem('displayName', data.);
-
         localStorage.setItem('sessionID', data.newSessionID);
        localStorage.setItem('sessionPassword', data.randomPassword);
+        localStorage.setItem('displayname', data.newUserID);
+
         console.log("it is stored!");
          location.replace("chatWallOwner.html");
     }

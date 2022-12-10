@@ -4,7 +4,7 @@
 const ownerID = localStorage.getItem('ownerID');
 const sessionID = localStorage.getItem('sessionID');
 const sessionPassword = localStorage.getItem('sessionPassword');
-
+let displayname =  localStorage.getItem('displayname');
 
 // function fetching(){
 //     setTimeout(getPosts, 1000);}
@@ -123,11 +123,12 @@ console.log(posterID, sessionID,msgID, msgContent);
 
 
 
-let comments =[];
-let replies=[];
+
 
 //get posts from DB(Recommended way)
 function getPosts() {
+    let comments =[];
+    let replies=[];
     let body = $("#cardDiv").html();
     fetch("http://localhost:8080/message/getMessages", {
         method: 'POST',
@@ -388,10 +389,6 @@ function getPosts() {
 
 
 
-
-
-
-
 //show data model first then call updateComment();
 function showUpdateModal(posterID,sessionID, msgID, msgContent){
     $("#exampleModal").modal('show');
@@ -470,12 +467,62 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
 
 
 
+//update comment
+function updateDisplayname(){
+//test
+    console.log("posterID: " + ownerID +"  sessionID: " + sessionID +"  displayname:  " + displayname);
+    //VPN is not working updateMessageContent type PUT is not yet tested
+
+
+     let answer = document.getElementById('answer');
 
 
 
+    fetch("http://localhost:8080/user/updateDisplayName", {
+        method: 'PUT',
+        body: JSON.stringify({
+
+
+    poster: {
+        id: ownerID
+    },
+    session: {
+        id: sessionID
+    },
+    displayName: displayname
+
+
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+                if(data.Status == "SUCCESS"){
+            const parg = `
+
+
+      your display name has been successfully updated<br/>
+       <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+        `;
+
+            answer.innerHTML = parg;
+            answer = "";
+                }else{
+
+                    console.log("Error has been occurred");
+                }
 
 
 
+        })
+
+
+}
 
 
 
