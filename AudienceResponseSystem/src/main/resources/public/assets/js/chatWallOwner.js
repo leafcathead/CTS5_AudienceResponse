@@ -289,9 +289,9 @@ function getPosts() {
 
                     body += `
 
-                        <div class="card">
+                        <div class="card" >
 
-              <div class="card-body">
+              <div class="card-body" >
                 <div class="d-flex flex-start align-items-center">
 
                   <div>

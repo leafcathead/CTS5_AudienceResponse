@@ -6,6 +6,7 @@
 //sessionStorage.setItem('password', '8D1F') .e.g
 const userID = localStorage.getItem('userID');
 const sessionID = localStorage.getItem('sessionID');
+let displayname =  localStorage.getItem('displayname');
 
 //check if user logged in
 if(userID==null){
@@ -566,7 +567,7 @@ function updateDisplayname(){
     $("#myModal").modal('show');
     $("#newDisNameField").val(displayname);
     // data-toggle="modal" data-target="#myModal"
-    console.log("posterID: " + ownerID +"  sessionID: " + sessionID +"  displayname:  " + $("#newDisNameField").val());
+    console.log("posterID: " + userID +"  sessionID: " + sessionID +"  displayname:  " + $("#newDisNameField").val());
     //VPN is not working updateMessageContent type PUT is not yet tested
 
     //  let answer = document.getElementById('answer');
