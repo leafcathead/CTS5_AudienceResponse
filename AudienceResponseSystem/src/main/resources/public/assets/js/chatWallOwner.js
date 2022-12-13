@@ -126,8 +126,10 @@ console.log(posterID, sessionID,msgID, msgContent);
 
 
 //get posts from DB(Recommended way)
+
 function getPosts() {
     let comments =[];
+    let allUsers = 0;
     let replies=[];
     let body = $("#cardDiv").html();
     fetch("http://localhost:8080/message/getMessages", {
@@ -148,6 +150,7 @@ function getPosts() {
                //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
             for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
                 if (receivedJson.Messages[i].poster.id ) {
+                    allUsers++;
                     comments.push({
                         posterID: receivedJson.Messages[i].poster.id,
                         displayName: receivedJson.Messages[i].poster.displayName,
@@ -177,7 +180,7 @@ function getPosts() {
                 }
             }
 
-            console.log(comments);
+
 
 //browsing the comments[] array and control it in several aspects
             for (let i = 0; i <  comments.length; i++) {
@@ -386,6 +389,82 @@ function getPosts() {
 
 
 }
+
+
+
+
+
+
+//statistics
+function statistics(){
+
+    //Statistics
+    let totalLikes = 0;
+    let totalComments = 0;
+    let totalReplies = 0;
+    let totalUsers = 0;
+    let tUsers  =[];
+
+    for (let i = 0; i <  comments.length; i++) {
+
+
+        //total likes
+        totalLikes += comments[i].likes;
+
+        //total comments
+        if(comments[i].replyTo==null){
+            totalComments++;
+        }
+
+        //total comments
+        if(comments[i].replyTo!=null){
+            totalReplies++;
+        }
+        //total users is defined through poster.id where is already unique
+        /*********
+         * Additional Function
+
+         // function countUnique(array){
+                //     if(array.length>0){
+                //         let i=0;
+                //         for(let j=1;j<array.length;j++){
+                //             if(array[i]!=array[j]){
+                //                 i++;
+                //                 array[i] = array[j];
+                //             }
+                //         }
+                //         return i+1;
+                //     }
+                //     else{
+                //         throw new Error("Array is Empty");
+                //     }
+                // }
+         // const result = uniqueCount([1,2,2,3,3,4,4,5,5,8,8]);
+         //counts[comments[i].posterID] = 1 + (counts[comments[i].posterID] || 0);
+         */
+
+    }
+
+     body = `
+
+    <div>
+    <p>Hi statistics</p>
+</div>
+
+   `;
+
+
+
+
+    console.log(comments);
+    console.log("total likes " + totalLikes);
+    console.log("total comments " + totalComments);
+    console.log("total replies " + totalReplies);
+    console.log("total users " + allUsers);
+
+
+}
+
 
 
 
