@@ -72,6 +72,13 @@ public class SessionRoomController {
         return sessionService.joinSession(password.getPassword());
     }
 
+    @DeleteMapping("/closeSession")
+    Map<String, Object> closeSession(@RequestBody SessionRoom session) {
+        System.out.println("Closing session: " + session.getID());
+
+        return sessionService.closeSession(session.getID(), session.getOwner().getId());
+    }
+
 
 
 
