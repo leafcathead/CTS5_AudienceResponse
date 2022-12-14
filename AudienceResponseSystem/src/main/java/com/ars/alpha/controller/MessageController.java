@@ -1,5 +1,6 @@
 package com.ars.alpha.controller;
 
+import com.ars.alpha.model.Liked;
 import com.ars.alpha.model.Message;
 import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.service.MessageService;
@@ -193,5 +194,11 @@ public class MessageController {
     Map<String, Object> deleteComment(@RequestBody Message delComment){
         //TODO
         return messageService.deleteComment(delComment.getPoster().getId(), delComment.getSession().getID(), delComment.getId());
+    }
+
+    @PutMapping("/likeMessage")
+    Map<String, Object> likeMessage(@RequestBody Liked like) {
+
+        return null;
     }
 }

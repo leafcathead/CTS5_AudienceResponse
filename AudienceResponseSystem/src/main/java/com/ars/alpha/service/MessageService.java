@@ -249,6 +249,11 @@ public class MessageService implements MessageServiceInterface {
         return returnerMap;
     }
 
+    @Override
+    public Map<String, Object> likeMessage(Long messageID, Long likerID) {
+        return null;
+    }
+
 
 }
 
