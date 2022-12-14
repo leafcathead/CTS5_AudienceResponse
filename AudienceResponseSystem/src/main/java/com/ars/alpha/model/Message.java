@@ -45,6 +45,11 @@ import java.util.UUID;
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "SessionID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "MessageID", type = Long.class)
 })
+@NamedStoredProcedureQuery(name = "LIKE_MESSAGE", procedureName = "LIKE_MESSAGE", parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "messageID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "likerID", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "numOfLikes", type = Integer.class)
+})
 //@SqlResultSetMapping(name = "Mapping.Message", // I THINK THIS IS UNNEEDED. I HOPE TO GOD IT IS NOT NEEDED
 //                     classes = @ConstructorResult(targetClass = Message.class,
 //                               columns = {@ColumnResult(name = "ID"),

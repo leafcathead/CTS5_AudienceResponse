@@ -9,6 +9,7 @@ import com.ars.alpha.other.Status;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -111,27 +112,45 @@ public class MessageService implements MessageServiceInterface {
      *
      * @return
      */
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+
     @Override
-    public Map<String, Object> getMessages(java.lang.Long sessionID) {
+    @Transactional(noRollbackFor = {IllegalStateException.class, PersistenceException.class, Exception.class})
+    public Map<String, Object> getMessages(java.lang.Long sessionID) throws UnexpectedRollbackException {
         System.out.println(sessionID);
 
         Map<String, Object> returnerMap = new HashMap<String, Object>();
-
-        List<Message> returnerList = messageRepository.RETRIEVE_MESSAGES(sessionID);
-
-        returnerMap.put("Status", Status.SUCCESS);
-        returnerMap.put("Code", 0);
-
         Map<Integer, Object> messageMap = new HashMap<Integer, Object>();
-        // Not sure how helpful this construction was. Experimenting with a different one.
-        for (int i = 0; i < returnerList.size(); i++) {
-            Message m = returnerList.get(i);
-            messageMap.put(i, m);
-           // messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo(), m.getTimestamp()));
-           // messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId(), m.getPoster().getDisplayName()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo() == null ? null : new Message(m.getReplyTo().getId()), m.getTimestamp()));
-        }
 
+        try {
+
+            List<Message> returnerList = messageRepository.RETRIEVE_MESSAGES(sessionID);
+
+            returnerMap.put("Status", Status.SUCCESS);
+            returnerMap.put("Code", 0);
+
+            // Not sure how helpful this construction was. Experimenting with a different one.
+            for (int i = 0; i < returnerList.size(); i++) {
+                Message m = returnerList.get(i);
+                messageMap.put(i, m);
+                // messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo(), m.getTimestamp()));
+                // messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId(), m.getPoster().getDisplayName()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo() == null ? null : new Message(m.getReplyTo().getId()), m.getTimestamp()));
+            }
+
+        } catch (PersistenceException e) {
+            System.out.println("Exception caught!");
+            if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
+                SQLServerException ex = (SQLServerException) e.getCause().getCause();
+                System.out.println(ex.getSQLServerError().getErrorMessage());
+                System.out.println(ex.getSQLServerError().getErrorState()); // This is the important one.
+                // Do further useful stuff
+                returnerMap.put("Status", Status.ERROR);
+                returnerMap.put("Code", ex.getSQLServerError().getErrorState());
+                returnerMap.put("messageID", 0L);
+
+            } else {
+                throw new IllegalStateException("How???");
+            }
+        }
 
         returnerMap.put("Messages", messageMap);
 
@@ -251,7 +270,30 @@ public class MessageService implements MessageServiceInterface {
 
     @Override
     public Map<String, Object> likeMessage(Long messageID, Long likerID) {
-        return null;
+
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
+
+        try {
+
+            int numOfLikes = messageRepository.LIKE_MESSAGE(messageID, likerID, 0);
+
+            returnerMap.put("Status", Status.SUCCESS);
+            returnerMap.put("Code", 0);
+            returnerMap.put("Likes", numOfLikes);
+
+        } catch (PersistenceException e) {
+            System.out.println("Exception caught!");
+            if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
+                SQLServerException ex = (SQLServerException) e.getCause().getCause();
+                returnerMap.put("Status", Status.ERROR);
+                returnerMap.put("Code", ex.getSQLServerError().getErrorState());
+                returnerMap.put("Likes", -1);
+            } else {
+                throw new IllegalStateException("How???");
+            }
+        }
+
+        return returnerMap;
     }
 
 
