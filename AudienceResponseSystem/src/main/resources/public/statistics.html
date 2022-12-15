@@ -1,0 +1,223 @@
+
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>ARS - Statistics</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./assets/chatWallAssets/css/style.css">
+    <script src="assets/js/chatWallOwner.js"></script>
+</head>
+<body id="bodyDiv">
+<div class="wrapper d-flex align-items-stretch">
+    <nav id="sidebar" >
+        <div class="p-4 pt-5 position-fixed">
+            <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(./assets/chatWallAssets/images/user.png);"></a>
+            <p id="userInfo">
+                <script>document.getElementById("userInfo").innerHTML = "OwnerID:   " + ownerID + "<br>" + "SessionID:   " + sessionID + "<br>" + "Session Password:  " + sessionPassword;
+
+
+                </script></p></br></br></br></br></br></br></br></br></br></br></br></br>
+            <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" onClick="logOutOwner()">signout</button>
+
+            <div class="footer">
+                <p>
+                    Designed<i class="icon-heart" aria-hidden="true"></i> by <a href="index.html" target="_blank">ARS TEAM   </a><script>document.write(new Date().getFullYear());</script>
+
+                </p>
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- Page Content  -->
+    <div id="content" class="p-4 p-md-5">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="chatWallOwner.html">Chat wall</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="" data-toggle="modal" onclick="updateDisplayname()">edit your name</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="statistics.html">Statistics</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Vote</a>
+                        </li>
+                        <li class="nav-item" >
+                            <a class="nav-link" href="#" style="color: red">Delete session</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+<!--        I will simulate the results later in chart -->
+
+        <div id="contentBody">
+            <p>Total users  <span id="users"> </span></p><br>
+            <p>Total comments  <span id="comments"> </span></p><br>
+            <p>Total replies  <span id="replies"> </span></p><br>
+            <p>Total likes  <span id="likes"> </span></p><br>
+
+
+            <script>
+                statistics();
+              function statistics() {
+                let comments =[];
+                let tUsers = 0;
+
+
+                fetch("http://localhost:8080/message/getMessages", {
+                  method: 'POST',
+                  body: JSON.stringify({
+                    id: sessionID
+                  }),
+                  headers: {
+                    "Content-Type": "application/json;charset=UTF-8"
+                  }
+                })
+                        .then((response) => {
+                          return response.json()
+                        })
+                        .then((receivedJson) => {
+
+                          console.log(receivedJson);
+                          //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
+                          for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
+                            if (receivedJson.Messages[i].poster.id ) {
+                              tUsers++;
+                              comments.push({
+                                posterID: receivedJson.Messages[i].poster.id,
+                                displayName: receivedJson.Messages[i].poster.displayName,
+                                sessionID: receivedJson.Messages[i].session,
+                                msgID: receivedJson.Messages[i].id,
+                                timestamp: receivedJson.Messages[i].timestamp,
+                                msgContents: receivedJson.Messages[i].messageContents,
+                                replyTo: receivedJson.Messages[i].replyTo,
+                                visible: receivedJson.Messages[i].visible,
+                                likes: receivedJson.Messages[i].likes
+                              });
+                            } else {
+
+                              comments.push({
+
+                                posterID: receivedJson.Messages[i].poster,
+                                displayName: receivedJson.Messages[i].poster.displayName,
+                                sessionID: receivedJson.Messages[i].session,
+                                msgID: receivedJson.Messages[i].id,
+                                msgContents: receivedJson.Messages[i].messageContents,
+                                timestamp: receivedJson.Messages[i].timestamp,
+                                replyTo: receivedJson.Messages[i].replyTo,
+                                visible: receivedJson.Messages[i].visible,
+                                likes: receivedJson.Messages[i].likes,
+                              });
+                              JSON.stringify(comments);
+                            }
+                          }
+
+                          //Statistics
+                          let totalLikes = 0;
+                          let totalComments = 0;
+                          let totalReplies = 0;
+                          //  let totalUsers = 0;
+                          // let tUsers  =[];
+                          //  let allUsers = 0;
+
+
+                          for (let i = 0; i <  comments.length; i++) {
+
+
+                            //total likes
+                            totalLikes += comments[i].likes;
+
+                            //total comments
+                            if(comments[i].replyTo==null){
+                              totalComments++;
+                            }
+
+                            //total comments
+                            if(comments[i].replyTo!=null){
+                              totalReplies++;
+                            }
+                          }
+
+                               console.log("tUsers: "+tUsers);
+                                 $("#users").html(tUsers)
+
+                              console.log("totalComments: "+totalComments);
+                               $("#comments").html(totalComments);
+
+                              console.log("totalReplies:  "+totalReplies);
+                              $("#replies").html(totalReplies);
+
+                              console.log("totalLikes: "+totalLikes);
+                              $("#likes").html(totalLikes);
+
+
+
+
+                        }) // end of .then(receivedJson)
+
+
+
+
+
+              }
+            </script>
+
+
+
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <script src="./assets/chatWallAssets/js/jquery.min.js"></script>
+            <script src="./assets/chatWallAssets/js/popper.js"></script>
+            <script src="./assets/chatWallAssets/js/bootstrap.min.js"></script>
+            <script src="./assets/chatWallAssets/js/main.js"></script>
+            </body>
+            </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
