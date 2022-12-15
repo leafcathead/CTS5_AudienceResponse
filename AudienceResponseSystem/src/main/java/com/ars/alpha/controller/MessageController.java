@@ -1,12 +1,16 @@
 package com.ars.alpha.controller;
 
+import com.ars.alpha.model.Liked;
 import com.ars.alpha.model.Message;
 import com.ars.alpha.model.SessionRoom;
+import com.ars.alpha.other.Status;
 import com.ars.alpha.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -116,7 +120,19 @@ public class MessageController {
         // LAME! -Connor
     @PostMapping("/getMessages")
     public @ResponseBody Map<String, Object> getMessages(@RequestBody SessionRoom session) {
-        return messageService.getMessages(session.getID());
+
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
+
+        try {
+            returnerMap = messageService.getMessages(session.getID());
+        } catch (UnexpectedRollbackException e) { // I don't like this. This is a bandage fix.
+            returnerMap.put("Status", Status.ERROR);
+            returnerMap.put("Code", 99);
+            returnerMap.put("Messages", new HashMap<Integer, Message>());
+        }
+
+        return returnerMap;
+
     }
 
     /**
@@ -193,5 +209,11 @@ public class MessageController {
     Map<String, Object> deleteComment(@RequestBody Message delComment){
         //TODO
         return messageService.deleteComment(delComment.getPoster().getId(), delComment.getSession().getID(), delComment.getId());
+    }
+
+    @PutMapping("/likeMessage")
+    Map<String, Object> likeMessage(@RequestBody Liked like) {
+
+        return messageService.likeMessage(like.getLikedMessage().getId(), like.getLiker().getId());
     }
 }

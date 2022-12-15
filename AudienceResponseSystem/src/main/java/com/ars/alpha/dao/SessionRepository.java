@@ -25,4 +25,7 @@ public interface SessionRepository extends JpaRepository<SessionRoom, Long> {
 
     @Procedure(name = "JOIN_SESSION")
     Long JOIN_SESSION (Long sessionID, Long newUserID);
+
+    @Procedure(name = "CLOSE_SESSION")
+    void CLOSE_SESSION (Long sessionID, Long ownerID) throws PersistenceException;
 }

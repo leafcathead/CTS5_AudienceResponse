@@ -1,6 +1,7 @@
 package com.ars.alpha.service;
 
 import com.ars.alpha.dao.SessionRepository;
+import com.ars.alpha.other.Status;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,7 +86,28 @@ public class SessionService implements SessionServiceInterface {
     }
 
     @Override
-    public int closeSession() {
-        return 0;
+    public Map<String, Object> closeSession(Long sessionID, Long ownerID) {
+
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
+
+        try {
+
+            sessionRepository.CLOSE_SESSION(sessionID, ownerID);
+
+            returnerMap.put("Status", Status.SUCCESS);
+            returnerMap.put("Code", 0);
+
+        } catch (PersistenceException e) {
+            System.out.println("Exception caught!");
+            if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
+                SQLServerException ex = (SQLServerException) e.getCause().getCause();
+                returnerMap.put("Status", Status.ERROR);
+                returnerMap.put("Code", ex.getSQLServerError().getErrorState());
+            } else {
+                throw new IllegalStateException("How???");
+            }
+        }
+
+        return returnerMap;
     }
 }

@@ -8,6 +8,6 @@ public interface SessionServiceInterface {
     public Map<String, Object> createSession();
 
     public Map<String, Long> joinSession(String password);
-    public int closeSession();
+    public Map<String, Object> closeSession(Long sessionID, Long ownerID);
 
 }
