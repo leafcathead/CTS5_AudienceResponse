@@ -48,7 +48,7 @@ function postComment() {
         })
         .then((data) => {
             console.log(data)
-
+getPosts();
             const parg = `
 
            
