@@ -79,7 +79,7 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 //    List<Message> RETRIEVE_MESSAGES(@Param("sessionID") Long sessionID);
 
     @Procedure(name = "LIKE_MESSAGE")
-    int LIKE_MESSAGE(Long messageID, Long likerID, int numberOfLikes) throws PersistenceException;
+    boolean LIKE_MESSAGE(Long messageID, Long likerID, boolean liked) throws PersistenceException;
 
 }
 

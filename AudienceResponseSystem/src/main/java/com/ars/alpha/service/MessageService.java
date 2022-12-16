@@ -7,6 +7,7 @@ import com.ars.alpha.model.Message;
 import com.ars.alpha.model.SessionUser;
 import com.ars.alpha.other.Status;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
+import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.UnexpectedRollbackException;
@@ -160,15 +161,19 @@ public class MessageService implements MessageServiceInterface {
     public Map<String, Object> deleteComment(Long posterID, Long sessionID, Long iD) {
         Map<String, Object> ret = new HashMap<String, Object>();
         try{
-            messageRepository.DELETE_MESSAGE(posterID, sessionID, iD);
+            messageRepository.DELETE_MESSAGE(iD, posterID, sessionID);
             ret.put("Status", Status.SUCCESS);
             ret.put("Code", 0);
         } catch (PersistenceException e){
-            SQLServerException ex = (SQLServerException) e.getCause();
-            System.out.println(ex.getSQLServerError().getErrorMessage());
-            System.out.println(ex.getSQLServerError().getErrorState());
-            ret.put("Status", Status.ERROR);
-            ret.put("Code", ex.getSQLServerError().getErrorState());
+            if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
+                SQLServerException ex = (SQLServerException) e.getCause().getCause();
+                System.out.println(ex.getSQLServerError().getErrorMessage());
+                System.out.println(ex.getSQLServerError().getErrorState());
+                ret.put("Status", Status.ERROR);
+                ret.put("Code", ex.getSQLServerError().getErrorState());
+            } else {
+                throw new IllegalStateException("Illegal state when deleting");
+            }
         }
         return ret;
     }
@@ -257,6 +262,7 @@ public class MessageService implements MessageServiceInterface {
         } catch (PersistenceException e) {
             System.out.println("Exception caught!");
             if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
+                System.out.println("Is Instance of SQL Server Exception");
                 SQLServerException ex = (SQLServerException) e.getCause().getCause();
                 returnerMap.put("Status", Status.ERROR);
                 returnerMap.put("Code", ex.getSQLServerError().getErrorState());
@@ -275,11 +281,11 @@ public class MessageService implements MessageServiceInterface {
 
         try {
 
-            int numOfLikes = messageRepository.LIKE_MESSAGE(messageID, likerID, 0);
+            boolean liked = messageRepository.LIKE_MESSAGE(messageID, likerID, true);
 
             returnerMap.put("Status", Status.SUCCESS);
             returnerMap.put("Code", 0);
-            returnerMap.put("Likes", numOfLikes);
+            returnerMap.put("Liked", liked);
 
         } catch (PersistenceException e) {
             System.out.println("Exception caught!");

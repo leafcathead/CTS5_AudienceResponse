@@ -211,6 +211,24 @@ public class MessageController {
         return messageService.deleteComment(delComment.getPoster().getId(), delComment.getSession().getID(), delComment.getId());
     }
 
+    /**
+     *
+     * @param like JSON Object of the form
+     *             {
+     *                  "liker": {
+     *                      "id": <Long>
+     *                  },
+     *                  "likedMessage": {
+     *                      "id": <Long>
+     *                  }
+     *             }
+     * @return a JSON Object of the form:
+     *          {
+     *              "Status": <SUCCESS, WARNING, ERROR>,
+     *              "Code": <int>,
+     *              "Liked": <boolean> // Likes are toggled just like visibility. This communicates the new status.
+     *          }
+     */
     @PutMapping("/likeMessage")
     Map<String, Object> likeMessage(@RequestBody Liked like) {
 

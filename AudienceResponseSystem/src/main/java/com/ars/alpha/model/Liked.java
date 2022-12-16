@@ -13,7 +13,7 @@ public class Liked {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "LikedMessage")
+    @JoinColumn(name = "MessageID")
     private Message likedMessage;
 
     @ManyToOne
