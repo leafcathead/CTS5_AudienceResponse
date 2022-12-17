@@ -300,32 +300,34 @@ function getPosts() {
                 if (comments[i].replyTo == null){
 
 
-if(comments[i].visible==false){
-    invisible = "invisible";
-    visible = "";
-    visibilityButtonUnchecked =
+// if(comments[i].visible==false){
+//     invisible = "invisible";
+//     visible = "";
+//     visibilityButtonUnchecked =
+//
+//         ` <label class="switch">
+//
+//   <input id="visibility" type="checkbox" unchecked value="false"  onclick="getVisibility(this.value);">
+//   <span class="slider round"></span>
+// </label>  `;
+//     visibilityButtonChecked = ` `;
+//
+//
+// }else {
+//     visible = "visible";
+//     invisible = "";
+//     visibilityButtonChecked =
+//
+//         ` <label class="switch">
+//
+//   <input id="visibility" type="checkbox" checked value="true" onclick="getVisibility(this.value);">
+//   <span class="slider round"></span>
+// </label>  `;
+//     visibilityButtonUnchecked = ``;
+//
+// }
 
-        ` <label class="switch"> 
 
-  <input id="visibility" type="checkbox" unchecked value="false"  onclick="getVisibility(this.value);">
-  <span class="slider round"></span>
-</label>  `;
-    visibilityButtonChecked = ` `;
-
-
-}else {
-    visible = "visible";
-    invisible = "";
-    visibilityButtonChecked =
-
-        ` <label class="switch"> 
-
-  <input id="visibility" type="checkbox" checked value="true" onclick="getVisibility(this.value);">
-  <span class="slider round"></span>
-</label>  `;
-    visibilityButtonUnchecked = ``;
-
-}
 
 
 //togBtn
@@ -446,71 +448,82 @@ if(comments[i].visible==false){
 
 
 <!--toggle switch button-->
+
+
+
+
+
+
 <style>
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 45px;
-  height: 20px;
-}
 
-.switch input { 
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
+   
+    .ergebnis {
+        font-size: 2rem;
+        font-family: sans-serif;
+        padding: 2rem 0 2rem 2rem;
+        color: white;
+    }
 
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #be1b1b;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
+    .toggle {
+        margin:0 0 0 2rem;
+        position: relative;
+        display: inline-block;
+        width: 6rem;
+        height: 3.4rem;
+    }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  left: 0px;
-  bottom: 2px;
-  background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
-}
+    .toggle input {
+        display: none;
+    }
 
-input:checked + .slider {
-  background-color: #25a407;
-}
+    .roundbutton {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        background-color: #33455e;
+        display: block;
+        transition: all 0.3s;
+        border-radius: 3.4rem;
+        cursor: pointer;
+    }
 
-input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
-}
+    .roundbutton:before {
+        position: absolute;
+        content: "";
+        height: 2.4rem;
+        width: 2.5rem;
+        border-radius: 100%;
+        display: block;
+        left: 0.5rem;
+        bottom: 0.5rem;
+        background-color: white;
+        transition: all 0.3s;
+    }
 
-input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
-}
+    input:checked + .roundbutton {
+        background-color: #FF6E48;
+    }
 
-/* Rounded sliders */
-.slider.round {
-  border-radius: 24px;
-}
+    input:checked + .roundbutton:before  {
+        transform: translate(2.6rem, 0);
+    }
 
-.slider.round:before {
-  border-radius: 50%;
-}
 </style>
-<span style="color: red">${invisible}</span>
-<span style="color: green">${visible}</span>
-${visibilityButtonChecked}
-${visibilityButtonUnchecked}
+
+<div id="ergebnis" class="ergebnis">
+    Der Switch ist <span id="status">inaktiv</span>.
+</div>
+
+<label class="toggle">
+    <input id="toggleswitch"  type="checkbox">
+    <span class="roundbutton"></span>
+</label>
+
+
+
 <!--end of toggle switch button-->
 
                    <a data-toggle="modal" href="" onclick=" showUpdateModal(${comments[i].posterID},${comments[i].sessionID},${comments[i].msgID},'${comments[i].msgContents}');">${editBtn}</a>
@@ -582,7 +595,19 @@ ${visibilityButtonUnchecked}
 
 
 
+                var input = document.getElementById('toggleswitch');
+             //   var outputtext = document.getElementById('status');
 
+                input.addEventListener('change',function(){
+                    if(this.checked) {
+                     //   outputtext.innerHTML = "aktiv";
+                        console.log(this.value);
+                        console.log("1")
+                    } else {
+                     //   outputtext.innerHTML = "inaktiv";
+                        console.log("0")
+                    }
+                });
 
 
 
@@ -629,6 +654,53 @@ ${visibilityButtonUnchecked}
 
 
 
+}
+
+//visibility
+function getVisibility(data){
+    console.log(data);
+
+
+    // var x = document.getElementById("invisible");
+    // if (x.innerHTML === "visible") {
+    //     console.log("visible");
+    // } else {
+    //     console.log("invisible");
+    // }
+
+
+
+
+
+
+
+
+//     if(data = true){
+//
+//
+// //
+// //
+// //         visible="";
+// //         invisible = "invisible";
+// //         visibilityButtonChecked =
+// //
+// //             ` <label class="switch">
+// //
+// //   <input id="visibility" type="checkbox" checked value="true" onclick="getVisibility(this.value);">
+// //   <span class="slider round"></span>
+// // </label>  `;
+// //         visibilityButtonUnchecked = ``;
+// // console.log("done")
+//     }
+
+    // if () {
+    //     $(this).val('true');
+    //     console.log("true");
+    // }
+    // else {
+    //     console.log("false");
+    //     $(this).val('false');
+    // }
 }
 
 
@@ -710,38 +782,6 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
     //     })
 
 
-}
-
-//visibility
-function getVisibility(data){
-    console.log(data);
-
-    if(data = true){
-
-
-//
-//
-//         visible="";
-//         invisible = "invisible";
-//         visibilityButtonChecked =
-//
-//             ` <label class="switch">
-//
-//   <input id="visibility" type="checkbox" checked value="true" onclick="getVisibility(this.value);">
-//   <span class="slider round"></span>
-// </label>  `;
-//         visibilityButtonUnchecked = ``;
-// console.log("done")
-    }
-
-        // if () {
-        //     $(this).val('true');
-        //     console.log("true");
-        // }
-        // else {
-        //     console.log("false");
-        //     $(this).val('false');
-        // }
 }
 
 
@@ -1102,3 +1142,168 @@ var data="";
 //
 // <!--                    }-->
 // <!--</script>-->
+
+
+
+// <style>
+//     .switch {
+//     position: relative;
+//     display: inline-block;
+//     width: 45px;
+//     height: 20px;
+// }
+//
+//     .switch input {
+//     opacity: 0;
+//     width: 0;
+//     height: 0;
+// }
+//
+//     .slider {
+//     position: absolute;
+//     cursor: pointer;
+//     top: 0;
+//     left: 0;
+//     right: 0;
+//     bottom: 0;
+//     background-color: #be1b1b;
+//     -webkit-transition: .4s;
+//     transition: .4s;
+// }
+//
+//     .slider:before {
+//     position: absolute;
+//     content: "";
+//     height: 16px;
+//     width: 16px;
+//     left: 0px;
+//     bottom: 2px;
+//     background-color: white;
+//     -webkit-transition: .4s;
+//     transition: .4s;
+// }
+//
+//     input:checked + .slider {
+//     background-color: #25a407;
+// }
+//
+//     input:focus + .slider {
+//     box-shadow: 0 0 1px #2196F3;
+// }
+//
+//     input:checked + .slider:before {
+//     -webkit-transform: translateX(26px);
+//     -ms-transform: translateX(26px);
+//     transform: translateX(26px);
+// }
+//
+//     /* Rounded sliders */
+//     .slider.round {
+//     border-radius: 24px;
+// }
+//
+//     .slider.round:before {
+//     border-radius: 50%;
+// }
+// </style>
+// <span style="color: red">${invisible}</span>
+// <span style="color: green">${visible}</span>
+// ${visibilityButtonChecked}
+// ${visibilityButtonUnchecked}
+
+//last modification
+// <div>
+//     <style>
+//
+//         .switch {
+//         position: relative;
+//         display: inline-block;
+//         width: 80px;
+//         height: 16px;
+//     }
+//
+//         .switch input {display:none;}
+//
+//         .slider {
+//         position: absolute;
+//         cursor: pointer;
+//         top: 0;
+//         left: 0;
+//         right: 0;
+//         bottom: 0;
+//         background-color: #ca2222;
+//         -webkit-transition: .4s;
+//         transition: .4s;
+//     }
+//
+//         .slider:before {
+//         position: absolute;
+//         content: "";
+//         height: 10px;
+//         width: 10px;
+//         left: 4px;
+//         bottom: 4px;
+//         background-color: white;
+//         -webkit-transition: .4s;
+//         transition: .4s;
+//     }
+//
+//         input:checked + .slider {
+//         background - color: #2ab934;
+//     }
+//
+//         input:focus + .slider {
+//         box - shadow: 0 0 1px #2196F3;
+//     }
+//
+//         input:checked + .slider:before {
+//         -webkit - transform: translateX(55px);
+//         -ms-transform: translateX(55px);
+//         transform: translateX(55px);
+//     }
+//
+//         /*------ ADDED CSS ---------*/
+//         .on
+//         {
+//             display: none;
+//         }
+//
+//         .on, .off
+//         {
+//             color: white;
+//             position: absolute;
+//             transform: translate(-50%,-50%);
+//             top: 50%;
+//             left: 50%;
+//             font-size: 9px;
+//             font-family: Verdana, sans-serif;
+//         }
+//
+//         input:checked+ .slider .on
+//         {display: block;}
+//
+//         input:checked + .slider .off
+//         {display: none;}
+//
+//         /*--------- END --------*/
+//
+//         /* Rounded sliders */
+//         .slider.round {
+//         border - radius: 34px;
+//     }
+//
+//         .slider.round:before {
+//         border - radius: 50%;}
+//
+//     </style>
+//     <label className="switch">
+//         <input type="checkbox" id="togBtn-${comments[i].msgID}" onClick="getVisibility(${comments[i].msgID})">
+//             <div className="slider round">
+//                 <!--ADDED HTML -->
+//                 <span className="on" id="visible">visible</span>
+//                 <span className="off" id="invisible">invisible</span>
+//                 <!--END-->
+//             </div>
+//     </label>
+// </div>
+//

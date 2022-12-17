@@ -239,7 +239,10 @@ function getPosts() {
             console.log(receivedJson);
             //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
             for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
+                console.log(receivedJson);
+                if(receivedJson.Messages[i].visible===true){
                 if (receivedJson.Messages[i].poster.id ) {
+
                     comments.push({
                         posterID: receivedJson.Messages[i].poster.id,
                         displayName: receivedJson.Messages[i].poster.displayName,
@@ -268,7 +271,7 @@ function getPosts() {
                     JSON.stringify(comments);
                 }
             }
-
+            }
             console.log(comments);
 
 //browsing the comments[] array and control it in several aspects
