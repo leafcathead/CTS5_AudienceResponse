@@ -448,28 +448,19 @@ function getPosts() {
 
 
 <!--toggle switch button-->
-
-
-
-
-
-
 <style>
 
    
-    .ergebnis {
-        font-size: 2rem;
-        font-family: sans-serif;
-        padding: 2rem 0 2rem 2rem;
-        color: white;
-    }
+ 
 
     .toggle {
-        margin:0 0 0 2rem;
+        margin:0 0 0 0rem;
         position: relative;
         display: inline-block;
-        width: 4rem;
-        height: 1.4rem;
+        width: 4.5rem;
+        height: 1rem;
+      
+        
     }
 
     .toggle input {
@@ -479,26 +470,26 @@ function getPosts() {
     .roundbutton {
         position: absolute;
         top: 0;
-        left: 0;
-        bottom: 0rem;
+        left: -0.5rem;
+        bottom: -0.4rem;
         right: 0;
-        width: 100%;
+        width: 94%;
         background-color: #db0e21;
         display: block;
         transition: all 0.3s;
-        border-radius: 2.4rem;
+        border-radius: 4rem;
         cursor: pointer;
     }
 
     .roundbutton:before {
         position: absolute;
         content: "";
-        height: 1.0rem;
-        width: 1.1rem;
+        height: 1rem;
+        width: 1rem;
         border-radius: 100%;
         display: block;
-        left: 0.5rem;
-        bottom: 0.5rem;
+        left: 0.1rem;
+        bottom: 0.2rem;
         background-color: white;
         transition: all 0.3s;
     }
@@ -508,25 +499,23 @@ function getPosts() {
     }
 
     input:checked + .roundbutton:before  {
-        transform: translate(2.6rem, 0);
+        transform: translate(3rem, 0);
     }
 
 </style>
 
-<div id="ergebnis" class="ergebnis">
- 
-</div>
 
+<!--toggle for each comment[i]-->
 <label class="toggle">
  
     <input id="toggleswitch${comments[i].msgID}"  type="checkbox" value="${comments[i].msgID}" onclick="getVisibility(value)">
-    <span class="roundbutton"><span id="status">inactive</span></span>
+    <span class="roundbutton"><span id="status${comments[i].msgID}" style="color: whitesmoke; font-size: 10px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invisible</span></span>
    
 </label>
 
-
-
 <!--end of toggle switch button-->
+
+
 
                    <a data-toggle="modal" href="" onclick=" showUpdateModal(${comments[i].posterID},${comments[i].sessionID},${comments[i].msgID},'${comments[i].msgContents}');">${editBtn}</a>
                   <a href="">${deleteBtn}</a>
@@ -647,20 +636,20 @@ function getPosts() {
 
 //visibility
 function getVisibility(data){
-    console.log(data);
 
 
     var input = document.getElementById('toggleswitch'+data);
-      var outputtext = document.getElementById('status');
+      var outputtext = document.getElementById('status'+data);
 
     input.addEventListener('change',function(){
         if(this.checked) {
-               outputtext.innerHTML = "aktiv";
+               outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;visible";
             console.log(this.value);
-            console.log("1")
+            console.log("1");
+
 
         } else {
-              outputtext.innerHTML = "inaktiv";
+              outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invisible";
             console.log("0")
         }
     });
