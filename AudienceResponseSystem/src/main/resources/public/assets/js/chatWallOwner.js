@@ -126,7 +126,10 @@ console.log(posterID, sessionID,msgID, msgContent);
 
 
 //get posts from DB(Recommended way)
-
+let invisible = "";
+let visible = "";
+let visibilityButtonChecked = ` `;
+let visibilityButtonUnchecked = ``;
 function getPosts() {
     let comments =[];
     let allUsers = 0;
@@ -190,7 +193,7 @@ function getPosts() {
             for (let i = 0; i <  comments.length; i++) {
 
 
-
+                let countReplies = 0;
 
 
 //hide comment's owner controllers "never give body any js executing codes (variables & []  only)"
@@ -228,7 +231,7 @@ function getPosts() {
                         }
 
 
-
+                            countReplies++;
                         // repliesTmp will be repliesTmp += ``; will be inserted inside body the static one
                         repliesTmp += `
  <div id="replyDiv" style="width: 80%; margin-left: 10%">
@@ -264,9 +267,11 @@ function getPosts() {
 
                 <div class="small d-flex justify-content-start">
 
-                  <a href="#!" class="d-flex align-items-center me-3">
+
+                  
+                  <a href="form-control" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
-                    <p class="mb-0">reply&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                 
                   </a>                <a href="#!" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
                     <p class="mb-0">${comments[j].likes}  likes</p>
@@ -294,6 +299,36 @@ function getPosts() {
                 //this condition for popping an element of "string/Html replies" being shown as a comment
                 if (comments[i].replyTo == null){
 
+
+if(comments[i].visible==false){
+    invisible = "invisible";
+    visible = "";
+    visibilityButtonUnchecked =
+
+        ` <label class="switch"> 
+
+  <input id="visibility" type="checkbox" unchecked value="false"  onclick="getVisibility(this.value);">
+  <span class="slider round"></span>
+</label>  `;
+    visibilityButtonChecked = ` `;
+
+
+}else {
+    visible = "visible";
+    invisible = "";
+    visibilityButtonChecked =
+
+        ` <label class="switch"> 
+
+  <input id="visibility" type="checkbox" checked value="true" onclick="getVisibility(this.value);">
+  <span class="slider round"></span>
+</label>  `;
+    visibilityButtonUnchecked = ``;
+
+}
+
+
+
                     body += `
 
                         <div class="card" >
@@ -307,6 +342,76 @@ function getPosts() {
 
 
 <!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">edit</button>-->
+
+
+<!--toggle switch button-->
+<style>
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 20px;
+}
+
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #be1b1b;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 0px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #25a407;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 24px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+</style>
+<span style="color: red">${invisible}</span>
+<span style="color: green">${visible}</span>
+${visibilityButtonChecked}
+${visibilityButtonUnchecked}
+<!--end of toggle switch button-->
+
                    <a data-toggle="modal" href="" onclick=" showUpdateModal(${comments[i].posterID},${comments[i].sessionID},${comments[i].msgID},'${comments[i].msgContents}');">${editBtn}</a>
                   <a href="">${deleteBtn}</a>
 
@@ -327,9 +432,9 @@ function getPosts() {
 
                 <div class="small d-flex justify-content-start">
 
-                  <a href="#!" class="d-flex align-items-center me-3">
+                  <a href="#textAreaReplay-${comments[i].msgID}" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
-                    <p class="mb-0">reply&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                    <p class="mb-0">${countReplies}  reply&nbsp;&nbsp;&nbsp;&nbsp;</p>
                   </a>                <a href="#!" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
                     <p class="mb-0">${comments[i].likes}  likes</p>
@@ -506,7 +611,37 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
 
 }
 
+//visibility
+function getVisibility(data){
+    console.log(data);
 
+    if(data = true){
+
+
+//
+//
+//         visible="";
+//         invisible = "invisible";
+//         visibilityButtonChecked =
+//
+//             ` <label class="switch">
+//
+//   <input id="visibility" type="checkbox" checked value="true" onclick="getVisibility(this.value);">
+//   <span class="slider round"></span>
+// </label>  `;
+//         visibilityButtonUnchecked = ``;
+// console.log("done")
+    }
+
+        // if () {
+        //     $(this).val('true');
+        //     console.log("true");
+        // }
+        // else {
+        //     console.log("false");
+        //     $(this).val('false');
+        // }
+}
 
 
 //update comment
