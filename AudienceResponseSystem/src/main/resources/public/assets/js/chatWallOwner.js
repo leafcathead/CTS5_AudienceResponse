@@ -468,8 +468,8 @@ function getPosts() {
         margin:0 0 0 2rem;
         position: relative;
         display: inline-block;
-        width: 6rem;
-        height: 3.4rem;
+        width: 4rem;
+        height: 1.4rem;
     }
 
     .toggle input {
@@ -480,21 +480,21 @@ function getPosts() {
         position: absolute;
         top: 0;
         left: 0;
-        bottom: 0;
+        bottom: 0rem;
         right: 0;
         width: 100%;
-        background-color: #33455e;
+        background-color: #db0e21;
         display: block;
         transition: all 0.3s;
-        border-radius: 3.4rem;
+        border-radius: 2.4rem;
         cursor: pointer;
     }
 
     .roundbutton:before {
         position: absolute;
         content: "";
-        height: 2.4rem;
-        width: 2.5rem;
+        height: 1.0rem;
+        width: 1.1rem;
         border-radius: 100%;
         display: block;
         left: 0.5rem;
@@ -504,7 +504,7 @@ function getPosts() {
     }
 
     input:checked + .roundbutton {
-        background-color: #FF6E48;
+        background-color: #3fe009;
     }
 
     input:checked + .roundbutton:before  {
@@ -514,12 +514,14 @@ function getPosts() {
 </style>
 
 <div id="ergebnis" class="ergebnis">
-    Der Switch ist <span id="status">inaktiv</span>.
+ 
 </div>
 
 <label class="toggle">
-    <input id="toggleswitch"  type="checkbox">
-    <span class="roundbutton"></span>
+ 
+    <input id="toggleswitch${comments[i].msgID}"  type="checkbox" value="${comments[i].msgID}" onclick="getVisibility(value)">
+    <span class="roundbutton"><span id="status">inactive</span></span>
+   
 </label>
 
 
@@ -595,19 +597,6 @@ function getPosts() {
 
 
 
-                var input = document.getElementById('toggleswitch');
-             //   var outputtext = document.getElementById('status');
-
-                input.addEventListener('change',function(){
-                    if(this.checked) {
-                     //   outputtext.innerHTML = "aktiv";
-                        console.log(this.value);
-                        console.log("1")
-                    } else {
-                     //   outputtext.innerHTML = "inaktiv";
-                        console.log("0")
-                    }
-                });
 
 
 
@@ -661,6 +650,20 @@ function getVisibility(data){
     console.log(data);
 
 
+    var input = document.getElementById('toggleswitch'+data);
+      var outputtext = document.getElementById('status');
+
+    input.addEventListener('change',function(){
+        if(this.checked) {
+               outputtext.innerHTML = "aktiv";
+            console.log(this.value);
+            console.log("1")
+
+        } else {
+              outputtext.innerHTML = "inaktiv";
+            console.log("0")
+        }
+    });
     // var x = document.getElementById("invisible");
     // if (x.innerHTML === "visible") {
     //     console.log("visible");
