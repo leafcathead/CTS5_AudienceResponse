@@ -741,7 +741,7 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
     fetch("http://localhost:8080/message/updateMessageContent", {
         method: 'PUT',
         body: JSON.stringify({
-
+//
             id: msgID,
             poster: {
                 id: posterID
