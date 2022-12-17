@@ -722,8 +722,8 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
     //VPN is not working updateMessageContent type PUT is not yet tested
 
 
-    // let answer = document.getElementById('answer');
-    //
+    let answer = document.getElementById('answer');
+
     // const data = {
     //
     //     id: msgID,
@@ -736,42 +736,42 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
     //     messageContent: $("#updateTextArea").val()
     //
     // };
-    // console.log(data);
-    // fetch("http://localhost:8080/message/updateMessageContent", {
-    //     method: 'PUT',
-    //     body: JSON.stringify({
-    //
-    //         id: msgID,
-    //         poster: {
-    //             id: posterID
-    //         },
-    //         session: {
-    //             id: sessionID
-    //         },
-    //         messageContent: $("#updateTextArea").val()
-    //
-    //
-    //     }),
-    //     headers: {
-    //         "Content-Type": "application/json;charset=UTF-8"
-    //     }
-    // })
-    //     .then((response) => {
-    //         return response.json()
-    //     })
-    //     .then((data) => {
-    //         console.log(data)
-    //
-    //         const parg = `
-    //
-    //
-    //   your comment has been successfully posted<br/>
-    //    <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
-    //     `;
-    //
-    //         answer.innerHTML = parg;
-    //         answer = "";
-    //     })
+
+    console.log(data);
+    fetch("http://localhost:8080/message/updateMessageContent", {
+        method: 'PUT',
+        body: JSON.stringify({
+
+            id: msgID,
+            poster: {
+                id: posterID
+            },
+            session: {
+                id: sessionID
+            },
+            messageContent: msgContent
+
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+
+      //       const parg = `
+      //
+      //
+      // your comment has been successfully posted<br/>
+      //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+      //   `;
+      //
+      //       answer.innerHTML = parg;
+      //       answer = "";
+        });
 
 
 }
