@@ -514,7 +514,7 @@ function getPosts() {
 </style>
 
 
-<!--toggle for each comment[i]-->
+<!--toggle for each comment[i] in specific-->
 ${visibilityButton}
 
 <!--end of toggle switch button-->
