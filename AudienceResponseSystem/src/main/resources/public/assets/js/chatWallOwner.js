@@ -745,7 +745,7 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
     //     messageContent: $("#updateTextArea").val()
     //
     // };
-
+//last version
     console.log(data);
     fetch("http://localhost:8080/message/updateMessageContent", {
         method: 'PUT',
