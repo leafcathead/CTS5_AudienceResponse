@@ -124,7 +124,7 @@ function postReply(posterID, sessionID, msgID, msgContent) {
 
 
 
-
+//111
 //get posts from DB user
 // function getPosts() {
 //        const posts = document.getElementById('cardDiv');
