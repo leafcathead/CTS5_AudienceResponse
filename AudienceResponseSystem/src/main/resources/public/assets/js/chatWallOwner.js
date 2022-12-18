@@ -422,7 +422,7 @@ function getPosts() {
 
 
 
-
+//initializing visibility toggle button
                    let visibilityButton = ``;
                     if(comments[i].visible === true){
                         visibilityButton = `
