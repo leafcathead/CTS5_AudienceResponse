@@ -126,14 +126,9 @@ console.log(posterID, sessionID,msgID, msgContent);
 
 
 //get posts from DB(Recommended way)
-let invisible = "";
-let visible = "";
-let visibilityButtonChecked = ` `;
-let visibilityButtonUnchecked = ``;
 function getPosts() {
     let comments =[];
     let allUsers = 0;
-    let replies=[];
     let body = $("#cardDiv").html();
     fetch("http://localhost:8080/message/getMessages", {
         method: 'POST',
@@ -428,8 +423,22 @@ function getPosts() {
 
 
 
-
-
+                   let visibilityButton = ``;
+                    if(comments[i].visible === true){
+                        visibilityButton = `
+<label class="toggle">
+    <input checked id="toggleswitch${comments[i].msgID}"  type="checkbox" value="${comments[i].msgID}" onclick="getVisibility(value)">
+    <span class="roundbutton"><span id="status${comments[i].msgID}" style="color: whitesmoke; font-size: 11px">&nbsp;&nbsp;&nbsp;visible</span></span>
+</label>
+`;
+                    }else{
+                        visibilityButton = `
+          <label class="toggle">
+             <input id="toggleswitch${comments[i].msgID}"  type="checkbox" value="${comments[i].msgID}" onclick="getVisibility(value)">
+             <span class="roundbutton"><span id="status${comments[i].msgID}" style="color: whitesmoke; font-size: 11px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invisible</span></span>
+   
+</label>`;
+                    }
 
 
                     body += `
@@ -506,12 +515,7 @@ function getPosts() {
 
 
 <!--toggle for each comment[i]-->
-<label class="toggle">
- 
-    <input id="toggleswitch${comments[i].msgID}"  type="checkbox" value="${comments[i].msgID}" onclick="getVisibility(value)">
-    <span class="roundbutton"><span id="status${comments[i].msgID}" style="color: whitesmoke; font-size: 10px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invisible</span></span>
-   
-</label>
+${visibilityButton}
 
 <!--end of toggle switch button-->
 
@@ -629,21 +633,26 @@ function getPosts() {
         }) // end of .then(receivedJson)
 
 
-
+comments= [];
+    body= 0;
 
 
 }
 
+
+//setInterval(getPosts,1000);
+
+
 //visibility
 function getVisibility(data){
 
-
-    var input = document.getElementById('toggleswitch'+data);
-      var outputtext = document.getElementById('status'+data);
+//if(document.getElementById('status'+data == true){}
+    let input = document.getElementById('toggleswitch'+data);
+      let outputtext = document.getElementById('status'+data);
 
     input.addEventListener('change',function(){
         if(this.checked) {
-               outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;visible";
+               outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;visible";
             console.log(this.value);
             console.log("1");
 
