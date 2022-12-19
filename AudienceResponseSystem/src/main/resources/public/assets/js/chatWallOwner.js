@@ -427,14 +427,14 @@ function getPosts() {
                     if(comments[i].visible === true){
                         visibilityButton = `
 <label class="toggle">
-    <input checked id="toggleswitch${comments[i].msgID}"  type="checkbox" value="${comments[i].msgID}" onclick="getVisibility(value)">
+    <input checked id="toggleswitch${comments[i].msgID}"  type="checkbox" onclick="getVisibility(${comments[i].msgID},${comments[i].posterID},${comments[i].visible})">
     <span class="roundbutton"><span id="status${comments[i].msgID}" style="color: whitesmoke; font-size: 11px">&nbsp;&nbsp;&nbsp;visible</span></span>
 </label>
 `;
                     }else{
                         visibilityButton = `
           <label class="toggle">
-             <input id="toggleswitch${comments[i].msgID}"  type="checkbox" value="${comments[i].msgID}" onclick="getVisibility(value)">
+             <input id="toggleswitch${comments[i].msgID}"  type="checkbox" value="${comments[i].msgID}" onclick="getVisibility(${comments[i].msgID},${comments[i].posterID},${comments[i].visible})">
              <span class="roundbutton"><span id="status${comments[i].msgID}" style="color: whitesmoke; font-size: 11px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invisible</span></span>
    
 </label>`;
@@ -644,22 +644,66 @@ comments= [];
 
 
 //visibility
-function getVisibility(data){
+function getVisibility(msgID,posterID,visible){
 
 //if(document.getElementById('status'+data == true){}
     let input = document.getElementById('toggleswitch'+data);
       let outputtext = document.getElementById('status'+data);
 
+    if(visible === true){
+
+        console.log(data);
+        fetch("http://localhost:8080/message/updateMessageContent", {
+            method: 'PUT',
+            body: JSON.stringify({
+
+                id: msgID,
+                                  poster: {
+                                          id: posterID
+                                      },
+                                      session: {
+                                          id: sessionID
+                                      }
+
+            }),
+            headers: {
+                "Content-Type": "application/json;charset=UTF-8"
+            }
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log(data)
+
+                //       const parg = `
+                //
+                //
+                // your comment has been successfully posted<br/>
+                //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+                //   `;
+                //
+                //       answer.innerHTML = parg;
+                //       answer = "";
+            });
+
+        console.log("is visible" + visible);
+    }else{
+        console.log("is visible" + visible);
+    }
+
+
+
     input.addEventListener('change',function(){
         if(this.checked) {
                outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;visible";
-            console.log(this.value);
-            console.log("1");
+         //   console.log(this.value);
+        //    console.log("1");
 
 
         } else {
               outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invisible";
-            console.log("0")
+          //  console.log("0")
         }
     });
     // var x = document.getElementById("invisible");

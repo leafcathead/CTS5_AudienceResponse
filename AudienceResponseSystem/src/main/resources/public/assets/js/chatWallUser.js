@@ -238,10 +238,10 @@ function getPosts() {
 
             console.log(receivedJson);
             //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
-            for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
+            for (let i = 0; i < Object.keys(receivedJson.Messages).length; i++) {
                 console.log(receivedJson);
-                if(receivedJson.Messages[i].visible===true){
-                if (receivedJson.Messages[i].poster.id ) {
+
+                if (receivedJson.Messages[i].poster.id) {
 
                     comments.push({
                         posterID: receivedJson.Messages[i].poster.id,
@@ -270,16 +270,14 @@ function getPosts() {
                     });
                     JSON.stringify(comments);
                 }
-            }
+
             }
             console.log(comments);
 
 //browsing the comments[] array and control it in several aspects
-            for (let i = 0; i <  comments.length; i++) {
+            for (let i = 0; i < comments.length; i++) {
 
-
-
-
+                if(comments[i].visible===false && comments[i].posterID== userID || comments[i].visible===true){
 
 //hide comment's owner controllers "never give body any js executing codes (variables & []  only)"
                 let editBtn = "";
@@ -298,12 +296,11 @@ function getPosts() {
                 let dateFormat = new Date(timeStamp);
 
                 //fill repliesTmp
-                for(let j =0; j < comments.length; j++){
-
+                for (let j = 0; j < comments.length; j++) {
 
 
                     //this condition for filling a string/Html replies array for specific comment and introduce them ordered in UI
-                    if(comments[j].replyTo == comments[i].msgID){
+                    if (comments[j].replyTo == comments[i].msgID) {
                         let editBtnRep = "";
                         let deleteBtnRep = "";
                         if (userID == comments[j].posterID) {
@@ -314,7 +311,6 @@ function getPosts() {
                             editBtnRep = "";
                             deleteBtnRep = "";
                         }
-
 
 
                         // repliesTmp will be repliesTmp += ``; will be inserted inside body the static one
@@ -371,8 +367,7 @@ function getPosts() {
 </div><br/>
 
 
-` ;
-
+`;
 
 
                     } //end of nested j loop's condition
@@ -380,7 +375,7 @@ function getPosts() {
                 }//end of nested j loop
 
                 //this condition for popping an element of "string/Html replies" being shown as a comment
-                if (comments[i].replyTo == null){
+                if (comments[i].replyTo == null) {
 
                     body += `
 
@@ -449,7 +444,7 @@ function getPosts() {
 
 `;
                     //console.log("comment");
-                }else{
+                } else {
 
                     //  comments.pop();
                     console.log("reply is removed from comments' body");
@@ -457,21 +452,13 @@ function getPosts() {
                 }
 
 
-
                 // repliesTmp = "";
                 $("#cardDiv").html(body);
 
 
-
-
-
-
-
-
-
                 //end of Main for loop
             }
-
+        }
 
             console.log(comments);
 
