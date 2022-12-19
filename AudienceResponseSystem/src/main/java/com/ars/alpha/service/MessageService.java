@@ -53,12 +53,19 @@ public class MessageService implements MessageServiceInterface {
             ret.put("Code", 0);
             ret.put("MessageID", msgID);
         }catch (PersistenceException e){
-            SQLServerException ex = (SQLServerException) e.getCause();
-            System.out.println(ex.getSQLServerError().getErrorMessage());
-            System.out.println(ex.getSQLServerError().getErrorState());
-            ret.put("Status", Status.ERROR);
-            ret.put("Code", ex.getSQLServerError().getErrorState());
-            ret.put("messageID", 0L);
+            if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
+                SQLServerException ex = (SQLServerException) e.getCause().getCause();
+                System.out.println(ex.getSQLServerError().getErrorMessage());
+                System.out.println(ex.getSQLServerError().getErrorState()); // This is the important one.
+                // Do further useful stuff
+                ret.put("Status", Status.ERROR);
+                ret.put("Code", ex.getSQLServerError().getErrorState());
+                ret.put("MessageID", 0L);
+
+            } else {
+                throw new IllegalStateException("How???");
+            }
+
         }
         return ret;
     }

@@ -640,6 +640,14 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
 
     }
 
+
+    @Test
+    @Transactional
+    public void testLikingMessage() {
+
+        assert(false);
+    }
+
     /**
      * Tests error code for sending messages with bad parameters for all other functions
      */
@@ -712,7 +720,20 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
 
         // TODO- BAD EDIT
 
-        jsonString = writeMessagePosterSessionJSON(0L, TEST_USERID_OWNER, TEST_SESSION_ID); // Bad MessageID, Good Poster, Good Session
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeObjectFieldStart("poster");
+        jsonGenerator.writeObjectField("id", TEST_USERID_OWNER);
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeObjectFieldStart("session");
+        jsonGenerator.writeObjectField("id", TEST_SESSION_ID);
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeStringField("id", String.valueOf(legitMessage.MessageID));
+        jsonGenerator.writeStringField("messageContent", null); // Null message change
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        jsonString = writer.toString();
 
         result = this.mockMvc.perform(put("/message/updateMessageContent").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -720,21 +741,23 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
                 .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
                 .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
                 .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
-                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("WARNING")))
                 .andReturn();
 
-        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, TEST_USERID_OWNER, 0L); // Good MessageID, Good Poster, Bad Session
-
-        result = this.mockMvc.perform(put("/message/updateMessageContent").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
-                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
-                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
-                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
-                .andReturn();
-
-        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, TEST_USERID_2, TEST_SESSION_ID); // Good MessageID, BAd Poster, Good Session
+        writer = new StringWriter();
+        jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeObjectFieldStart("poster");
+        jsonGenerator.writeObjectField("id", 0L); // Bad poster ID
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeObjectFieldStart("session");
+        jsonGenerator.writeObjectField("id", 0L); // Bad session ID
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeStringField("id", String.valueOf(legitMessage.MessageID));
+        jsonGenerator.writeStringField("messageContent", "HAHA I CHANGED YOU!"); // Legit message
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        jsonString = writer.toString();
 
         result = this.mockMvc.perform(put("/message/updateMessageContent").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -769,7 +792,7 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
                 .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
                 .andReturn();
 
-        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, TEST_USERID_2, TEST_SESSION_ID); // Good MessageID, Bad Poster, Good Session
+        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, 0L, TEST_SESSION_ID); // Good MessageID, Bad Poster, Good Session
 
         result = this.mockMvc.perform(put("/message/updateVisibility").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -781,6 +804,41 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
                 .andReturn();
 
         // TODO- BAD DELETE
+
+        jsonString = writeMessagePosterSessionJSON(0L, TEST_USERID_OWNER, TEST_SESSION_ID); // Bad MessageID, Good Poster, Good Session
+
+        result = this.mockMvc.perform(delete("/message/deleteMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andReturn();
+
+        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, TEST_USERID_OWNER, 0L); // Good MessageID, Good Poster, Bad Session
+
+        result = this.mockMvc.perform(delete("/message/deleteMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andReturn();
+
+        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, 0L, TEST_SESSION_ID); // Good MessageID, Bad Poster, Good Session
+
+        result = this.mockMvc.perform(delete("/message/deleteMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andReturn();
+
+        // TODO- BAD LIKE
 
         assert(false);
     }

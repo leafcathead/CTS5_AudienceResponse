@@ -198,6 +198,13 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
 
     }
 
+    @Test
+    @Transactional
+    public void closeSessionTest() {
+
+        assert(false);
+    }
+
     static class TestObj {
         public Long newUserID;
         public Long newSessionID;
