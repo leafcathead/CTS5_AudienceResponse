@@ -640,7 +640,7 @@ comments= [];
 }
 
 
-//setInterval(getPosts,1000);
+// setInterval(getPosts,1000);
 
 
 //visibility
@@ -652,8 +652,8 @@ function getVisibility(msgID,posterID,visible){
 
     if(visible === true){
 
-        console.log(data);
-        fetch("http://localhost:8080/message/updateMessageContent", {
+       // console.log(data);
+        fetch("http://localhost:8080/message/updateVisibility", {
             method: 'PUT',
             body: JSON.stringify({
 
@@ -689,6 +689,42 @@ function getVisibility(msgID,posterID,visible){
 
         console.log("is visible" + visible);
     }else{
+        fetch("http://localhost:8080/message/updateVisibility", {
+            method: 'PUT',
+            body: JSON.stringify({
+
+                id: msgID,
+                poster: {
+                    id: posterID
+                },
+                session: {
+                    id: sessionID
+                }
+
+            }),
+            headers: {
+                "Content-Type": "application/json;charset=UTF-8"
+            }
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log(data)
+
+                //       const parg = `
+                //
+                //
+                // your comment has been successfully posted<br/>
+                //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+                //   `;
+                //
+                //       answer.innerHTML = parg;
+                //       answer = "";
+            });
+
+
+
         console.log("is visible" + visible);
     }
 
