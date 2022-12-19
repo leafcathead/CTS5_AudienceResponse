@@ -10,6 +10,7 @@ import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.isEnum
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.isNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -140,6 +141,8 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
                 .andExpect(content().contentType("application/json"))
                 .andReturn();
 
+        responseString = result.getResponse().getContentAsString();
+
         testObj = objMapper.readValue(responseString, MessageTests.TestObj.class);
 
         TEST_USERID_2 = testObj.newUserID;
@@ -150,6 +153,8 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
 
         testObj = objMapper.readValue(responseString, MessageTests.TestObj.class);
 
@@ -640,6 +645,131 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
 
     }
 
+
+    @Test
+    @Transactional
+    public void testLikingMessage() throws Exception {
+
+        // Post a message
+
+        String jsonString = writeMessageJSON(TEST_USERID_OWNER, TEST_SESSION_ID, null, "Plz like :)");
+        ObjectMapper objMapper = new ObjectMapper();
+        String responseString;
+
+        // Post the first message
+        MvcResult result = this.mockMvc.perform(post("/message/postComment").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+        TestObj messageInfo = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        // Make sure likes are zero.
+
+
+        // Owner/Poster likes it
+
+        jsonString = writeLikeJSON(messageInfo.MessageID, TEST_USERID_OWNER);
+
+        result = this.mockMvc.perform(put("/message/likeMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", Matchers.is(true)))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+
+        // First user likes it
+
+        System.out.println("OWNER: " + TEST_USERID_OWNER);
+        System.out.println("USER 1: " + TEST_USERID_2);
+        System.out.println("USER 2: " + TEST_USERID_3);
+        jsonString = writeLikeJSON(messageInfo.MessageID, TEST_USERID_2);
+
+        result = this.mockMvc.perform(put("/message/likeMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", Matchers.is(true)))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+
+        // Second user likes it
+
+        jsonString = writeLikeJSON(messageInfo.MessageID, TEST_USERID_3);
+
+        result = this.mockMvc.perform(put("/message/likeMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", Matchers.is(true)))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+
+        // Check the number of message likes
+        Message m2 = (messageRepository.findById(messageInfo.MessageID)).orElse(null);
+
+
+        assertEquals(3, m2.getLikes(), "Message likes should be three.");
+
+        // Owner/Poster unlikes it
+
+        jsonString = writeLikeJSON(messageInfo.MessageID, TEST_USERID_OWNER);
+
+        result = this.mockMvc.perform(put("/message/likeMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", Matchers.is(false)))
+                .andReturn();
+
+        // First user unlikes it
+
+        jsonString = writeLikeJSON(messageInfo.MessageID, TEST_USERID_2);
+
+        result = this.mockMvc.perform(put("/message/likeMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", Matchers.is(false)))
+                .andReturn();
+
+        // Second user unlikes it
+
+        jsonString = writeLikeJSON(messageInfo.MessageID, TEST_USERID_3);
+
+        result = this.mockMvc.perform(put("/message/likeMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", Matchers.is(false)))
+                .andReturn();
+
+    }
+
     /**
      * Tests error code for sending messages with bad parameters for all other functions
      */
@@ -712,7 +842,20 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
 
         // TODO- BAD EDIT
 
-        jsonString = writeMessagePosterSessionJSON(0L, TEST_USERID_OWNER, TEST_SESSION_ID); // Bad MessageID, Good Poster, Good Session
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeObjectFieldStart("poster");
+        jsonGenerator.writeObjectField("id", TEST_USERID_OWNER);
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeObjectFieldStart("session");
+        jsonGenerator.writeObjectField("id", TEST_SESSION_ID);
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeStringField("id", String.valueOf(legitMessage.MessageID));
+        jsonGenerator.writeStringField("messageContent", null); // Null message change
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        jsonString = writer.toString();
 
         result = this.mockMvc.perform(put("/message/updateMessageContent").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -720,21 +863,23 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
                 .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
                 .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
                 .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
-                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("WARNING")))
                 .andReturn();
 
-        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, TEST_USERID_OWNER, 0L); // Good MessageID, Good Poster, Bad Session
-
-        result = this.mockMvc.perform(put("/message/updateMessageContent").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
-                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
-                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
-                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
-                .andReturn();
-
-        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, TEST_USERID_2, TEST_SESSION_ID); // Good MessageID, BAd Poster, Good Session
+        writer = new StringWriter();
+        jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeObjectFieldStart("poster");
+        jsonGenerator.writeObjectField("id", 0L); // Bad poster ID
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeObjectFieldStart("session");
+        jsonGenerator.writeObjectField("id", 0L); // Bad session ID
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeStringField("id", String.valueOf(legitMessage.MessageID));
+        jsonGenerator.writeStringField("messageContent", "HAHA I CHANGED YOU!"); // Legit message
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        jsonString = writer.toString();
 
         result = this.mockMvc.perform(put("/message/updateMessageContent").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -769,7 +914,7 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
                 .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
                 .andReturn();
 
-        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, TEST_USERID_2, TEST_SESSION_ID); // Good MessageID, Bad Poster, Good Session
+        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, 0L, TEST_SESSION_ID); // Good MessageID, Bad Poster, Good Session
 
         result = this.mockMvc.perform(put("/message/updateVisibility").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -782,7 +927,53 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
 
         // TODO- BAD DELETE
 
-        assert(false);
+        jsonString = writeMessagePosterSessionJSON(0L, TEST_USERID_OWNER, TEST_SESSION_ID); // Bad MessageID, Good Poster, Good Session
+
+        result = this.mockMvc.perform(delete("/message/deleteMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andReturn();
+
+        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, TEST_USERID_OWNER, 0L); // Good MessageID, Good Poster, Bad Session
+
+        result = this.mockMvc.perform(delete("/message/deleteMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andReturn();
+
+        jsonString = writeMessagePosterSessionJSON(legitMessage.MessageID, 0L, TEST_SESSION_ID); // Good MessageID, Bad Poster, Good Session
+
+        result = this.mockMvc.perform(delete("/message/deleteMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andReturn();
+
+        // TODO- BAD LIKE
+
+        jsonString = writeLikeJSON(0L, TEST_USERID_OWNER);
+
+        result = this.mockMvc.perform(put("/message/likeMessage").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("ERROR")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", greaterThan(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Liked", Matchers.is(false)))
+                .andReturn();
+
     }
 
     /**
@@ -838,6 +1029,21 @@ public class MessageTests extends AbstractTransactionalJUnit4SpringContextTests 
         jsonGenerator.writeObjectField("id", String.valueOf(sessionID));
         jsonGenerator.writeEndObject();
         jsonGenerator.writeStringField("id", String.valueOf(messageID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        return writer.toString();
+    }
+
+    private String writeLikeJSON(Long messageID, Long posterID) throws IOException {
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeObjectFieldStart("liker");
+        jsonGenerator.writeStringField("id", String.valueOf(posterID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeObjectFieldStart("likedMessage");
+        jsonGenerator.writeStringField("id", String.valueOf(messageID));
+        jsonGenerator.writeEndObject();
         jsonGenerator.writeEndObject();
         jsonGenerator.close();
         return writer.toString();

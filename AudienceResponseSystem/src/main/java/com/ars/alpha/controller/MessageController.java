@@ -5,6 +5,7 @@ import com.ars.alpha.model.Message;
 import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.other.Status;
 import com.ars.alpha.service.MessageService;
+import org.assertj.core.error.future.Warning;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.transaction.UnexpectedRollbackException;
@@ -157,6 +158,14 @@ public class MessageController {
     @PutMapping("/updateMessageContent")
     Map<String, Object> updateMessageContent(@RequestBody Message m) {
         System.out.println("Updating message...");
+
+        if (m.getMessageContents() == null) {
+            Map<String, Object> returnerMap = new HashMap<String, Object>();
+            returnerMap.put("Status", Status.WARNING);
+            returnerMap.put("Code", 99);
+            return returnerMap;
+        };
+
         return messageService.updateMessageContent(m.getId(), m.getPoster().getId(), m.getSession().getID(), m.getMessageContents());
     }
 
@@ -232,6 +241,7 @@ public class MessageController {
     @PutMapping("/likeMessage")
     Map<String, Object> likeMessage(@RequestBody Liked like) {
 
+        System.out.println(like.toString());
         return messageService.likeMessage(like.getLikedMessage().getId(), like.getLiker().getId());
     }
 }
