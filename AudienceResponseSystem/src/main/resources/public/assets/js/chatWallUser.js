@@ -465,11 +465,12 @@ function getPosts() {
 
         }) // end of .then(receivedJson)
 
-
+    comments= [];
+    body= 0;
 
 }
 
-
+// setInterval(getPosts,1000);
 
 
 //show data model first then call updateComment();
