@@ -44,4 +44,13 @@ public class Liked {
     public void setId(Long id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Liked{" +
+                "id=" + id +
+                ", likedMessage=" + likedMessage +
+                ", liker=" + liker +
+                '}';
+    }
 }

@@ -241,6 +241,7 @@ public class MessageController {
     @PutMapping("/likeMessage")
     Map<String, Object> likeMessage(@RequestBody Liked like) {
 
+        System.out.println(like.toString());
         return messageService.likeMessage(like.getLikedMessage().getId(), like.getLiker().getId());
     }
 }

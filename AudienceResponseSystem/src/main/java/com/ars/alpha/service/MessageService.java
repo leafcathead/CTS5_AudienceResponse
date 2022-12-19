@@ -282,6 +282,7 @@ public class MessageService implements MessageServiceInterface {
     }
 
     @Override
+    @Transactional
     public Map<String, Object> likeMessage(Long messageID, Long likerID) {
 
         Map<String, Object> returnerMap = new HashMap<String, Object>();
@@ -300,7 +301,7 @@ public class MessageService implements MessageServiceInterface {
                 SQLServerException ex = (SQLServerException) e.getCause().getCause();
                 returnerMap.put("Status", Status.ERROR);
                 returnerMap.put("Code", ex.getSQLServerError().getErrorState());
-                returnerMap.put("Likes", -1);
+                returnerMap.put("Liked", false);
             } else {
                 throw new IllegalStateException("How???");
             }
