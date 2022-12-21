@@ -417,18 +417,11 @@ function getPosts() {
                    <br/>  ${repliesTmp}
 
                     </div>
-                <div  class="d-flex flex-start w-100">
-                  <div class="form-outline w-100">
 
-                <textarea class="form-control" style="width: 80%; margin-left: 10%; font-size: small;" id="textAreaReplay-${comments[i].msgID}" placeholder="Your comment must be less than 1024 letter..." rows="2"
-                          style="background: #fff;"></textarea>
-                  </div>
-                </div>
-               
+         
                     <div id="snackbar">Your reply has been added</div>
                 <div style="width: 80%; margin-left: 10%" class="float-end mt-2 pt-1">
-                  <button type="button" class="btn btn-primary btn-sm" onclick="postReply(${comments[i].posterID}, ${comments[i].sessionID}, ${comments[i].msgID},$('#textAreaReplay-'+${comments[i].msgID}).val() );">reply</button>
-                  <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="showReplyModal(userID,${comments[i].sessionID},${comments[i].msgID},'${comments[i].msgContents}')">reply</button>
                 </div>
               </div>
             </div>
@@ -725,7 +718,7 @@ function getPosts() {
 
 }
 
-// setInterval(getPosts,1000);
+
 
 
 //show data model first then call updateComment();
@@ -815,7 +808,7 @@ function showReplyModal(posterID,sessionID, msgID, msgContent){
     $("#RmsgID").val(msgID);
     $("#RposterID").val(posterID);
     $("#RsessionID").val(sessionID);
-    $("#RmsgContent").val();
+    $("#RmsgContent").val("");
 
 
     console.log(posterID,sessionID, msgID, msgContent);
@@ -949,6 +942,46 @@ function newDisplyname(){
 
 
 
+function deleteMessage(msgID, posterID, sessionID){
+
+    console.log(msgID, posterID, sessionID);
+    fetch("http://localhost:8080/message/deleteMessage", {
+        method: 'DELETE',
+        body: JSON.stringify({
+
+            id: msgID,
+            poster: {
+                id: posterID
+            },
+            session: {
+                id: sessionID
+            }
+
+
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+
+            //       const parg = `
+            //
+            //
+            // your comment has been successfully posted<br/>
+            //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+            //   `;
+            //
+            //       answer.innerHTML = parg;
+            //       answer = "";
+        });
+
+}
+
 
 
 
@@ -963,13 +996,14 @@ function logOutUser(){
 
     localStorage.removeItem('userID');
     localStorage.removeItem('sessionID');
+    localStorage.removeItem('displayname')
     location.replace("index.html")
 }
 
 
 
 
-
+// setInterval(getPosts,1000);
 
 
 

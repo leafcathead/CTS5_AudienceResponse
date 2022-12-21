@@ -463,18 +463,12 @@ ${visibilityButton}
                    <br/>  ${repliesTmp}
 
                     </div>
-                <div  class="d-flex flex-start w-100">
-                  <div class="form-outline w-100">
-
-                <textarea class="form-control" style="width: 80%; margin-left: 10%; font-size: small;" id="textAreaReplay-${comments[i].msgID}" placeholder="Your comment must be less than 1024 letter..." rows="2"
-                          style="background: #fff;"></textarea>
-                  </div>
-                </div>
+ 
                
                     <div id="snackbar">Your reply has been added</div>
                 <div style="width: 80%; margin-left: 10%" class="float-end mt-2 pt-1">
-                  <button type="button" class="btn btn-primary btn-sm" onclick="postReply(${comments[i].posterID}, ${comments[i].sessionID}, ${comments[i].msgID},$('#textAreaReplay-'+${comments[i].msgID}).val() );">reply</button>
-                  <button type="button" class="btn btn-outline-primary btn-sm">Cancel</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="showReplyModal(ownerID,${comments[i].sessionID},${comments[i].msgID},'${comments[i].msgContents}')">reply</button>
+     
                 </div>
               </div>
             </div>
@@ -518,7 +512,6 @@ comments= [];
 }
 
 
-// setInterval(getPosts,1000);
 
 
 
@@ -725,16 +718,16 @@ function showUpdateModal(posterID,sessionID, msgID, msgContent){
 
 }
 
-function showReplyModal(posterID,sessionID, msgID, msgContent){
+function showReplyModal(posterID,sessionID, msgID){
     $("#replyModal").modal('show');
 
     $("#RmsgID").val(msgID);
     $("#RposterID").val(posterID);
     $("#RsessionID").val(sessionID);
-   $("#RmsgContent").val();
+   $("#RmsgContent").val("");
 
 
-    console.log(posterID,sessionID, msgID, msgContent);
+    console.log(posterID,sessionID, msgID);
 
 }
 
@@ -899,7 +892,8 @@ function logOutOwner(){
 }
 
 
-var data="";
+// setInterval(getPosts,1000);
+
 
 //get posts from DB basic version
 // function getPost() {

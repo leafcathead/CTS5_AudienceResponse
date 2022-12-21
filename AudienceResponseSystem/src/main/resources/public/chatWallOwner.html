@@ -124,7 +124,7 @@
 
 
 
-                <textarea maxlength="1024" class="form-control" id="textArea" placeholder="Your comment must be less than 1024 letter..." rows="4"
+                <textarea maxlength="1024" class="form-control" id="textArea" placeholder="Your comment must be less than 1024 letter..." rows="3"
                           style="background: #fff;"></textarea>
           <p class="notice"></p>
           <p id="error">Type at least 5 characters</p>
@@ -157,7 +157,7 @@
 
       <div class="float-end mt-2 pt-1">
         <button type="button" class="btn btn-primary btn-sm" onclick="postComment()">Post comment</button>
-        <button type="reset" class="btn btn-outline-primary btn-sm">Cancel</button>
+        <button  class="btn btn-outline-primary btn-sm" onclick="clearTextbox()">clear</button><script>function clearTextbox(){$("#textArea").val("");location.reload();}</script>
       </div>
     </div>
     </div>
@@ -221,7 +221,7 @@
         <input id="RmsgID" type="hidden"/>
         <input id="RsessionID" type="hidden"/>
         <input id="RposterID" type="hidden"/>
-        <textarea id="RmsgContent" style="width: 100%;" ></textarea>
+        <textarea id="RmsgContent" style="width: 100%;" placeholder="less than 1024 letters"></textarea>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
