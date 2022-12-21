@@ -84,9 +84,31 @@
       <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;" >
         <div class="d-flex flex-start w-100">
           <div id="commentDiv" class="form-outline w-100"  >
-                <textarea class="form-control" id="textArea" placeholder="Your comment must be less than 1024 letter..." rows="4"
+                <textarea maxlength="1024" required class="form-control" id="textArea" placeholder="Your comment must be less than 1024 letter..." rows="4"
                           style="background: #fff;"></textarea>
-            <label class="form-label" for="textArea">Message</label>
+            <p class="notice"></p>
+            <p id="error">Type at least 5 characters</p>
+            <div id="showNullResult">your comment can't be empty</div>
+            <label class="form-label" for="textArea"></label>
+            <script>
+              document.getElementById('textArea').onkeyup = characterCount;
+
+              function characterCount() {
+                var container = this.nextSibling;
+                if (!container || container.className !== 'counter') {
+                  container = document.createElement('div');
+                  container.className = 'counter';
+                  this.parentNode.insertBefore(container, this.nextSibling);
+                }
+                container.innerHTML = "Message length:  "+this.value.length;
+              }
+              const textarea = document.querySelector('#textArea');
+
+              textarea.addEventListener('keydown', event => {
+                const error = document.querySelector('#error');
+                error.style.display = event.target.value.length >= 4 ? "none" : "block";
+              });
+            </script>
           </div>
         </div>
 
@@ -144,6 +166,30 @@
   </div>
 </div>
 
+<!--post reply form-->
+<div class="modal fade" id="replyModal" tabindex="-1" role="dialog" aria-labelledby="replyModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="replyModalLabel">Post Reply</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input id="RmsgID" type="hidden"/>
+        <input id="RsessionID" type="hidden"/>
+        <input id="RposterID" type="hidden"/>
+        <textarea id="RmsgContent" style="width: 100%;" ></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+        <button onclick="postReply()" type="button" class="btn btn-primary" data-dismiss="modal">Reply</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 
@@ -188,6 +234,27 @@
   }
 
   #snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+  #showNullResult {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+  }
+
+  #showNullResult.show {
     visibility: visible;
     -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
     animation: fadein 0.5s, fadeout 0.5s 2.5s;

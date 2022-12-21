@@ -10,7 +10,20 @@
 
 
 
+<textarea id="comments"></textarea>
+<script>
+    document.getElementById('comments').onkeyup = characterCount;
 
+    function characterCount() {
+        var container = this.nextSibling;
+        if (!container || container.className !== 'counter') {
+            container = document.createElement('div');
+            container.className = 'counter';
+            this.parentNode.insertBefore(container, this.nextSibling);
+        }
+        container.innerHTML = this.value.length;
+    }
+</script>
 
 
 

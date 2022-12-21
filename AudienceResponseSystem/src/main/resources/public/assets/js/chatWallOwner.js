@@ -11,8 +11,9 @@ let displayname =  localStorage.getItem('displayname');
 
 //post comment
 function postComment() {
-    let answer = document.getElementById('answer');
 
+if($("#textArea").val() != ""){
+    let answer = document.getElementById('answer');
     const data = {
 
         poster: {
@@ -59,6 +60,9 @@ getPosts();
             answer.innerHTML = parg;
             answer = "";
         })
+}else{
+    showResultTextArea();
+}
 
 }
 
@@ -66,7 +70,7 @@ getPosts();
 
 
 //post reply
-function postReply(posterID, sessionID, msgID, msgContent) {
+function postReply(posterID=$("#RposterID").val(),sessionID=$("#RsessionID").val(),msgID=$("#RmsgID").val(),msgContent=$("#RmsgContent").val()) {
  // let answer = document.getElementById('');
 
 console.log(posterID, sessionID,msgID, msgContent);
@@ -146,9 +150,31 @@ function getPosts() {
 
             console.log(receivedJson);
                //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
+
             for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
-                if (receivedJson.Messages[i].poster.id ) {
-                    allUsers++;
+
+
+                        for(let k = 0; k <  Object.keys(receivedJson.Messages).length; k++){
+
+                            if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster){
+
+                                comments.push({
+                                    posterID: receivedJson.Messages[k].poster,
+                                    displayName: receivedJson.Messages[i].poster.displayName,
+                                    sessionID: receivedJson.Messages[k].session,
+                                    msgID: receivedJson.Messages[k].id,
+                                    timestamp: receivedJson.Messages[k].timestamp,
+                                    msgContents: receivedJson.Messages[k].messageContents,
+                                    replyTo: receivedJson.Messages[k].replyTo,
+                                    visible: receivedJson.Messages[k].visible,
+                                    likes: receivedJson.Messages[k].likes
+                                });
+
+                            }
+                        } //end of k loop
+                if (receivedJson.Messages[i].poster.id) {
+
+
                     comments.push({
                         posterID: receivedJson.Messages[i].poster.id,
                         displayName: receivedJson.Messages[i].poster.displayName,
@@ -160,23 +186,26 @@ function getPosts() {
                         visible: receivedJson.Messages[i].visible,
                         likes: receivedJson.Messages[i].likes
                     });
-                } else {
+                 }
 
-                    comments.push({
+                // else {
 
-                        posterID: receivedJson.Messages[i].poster,
-                        displayName: receivedJson.Messages[i].poster.displayName,
-                        sessionID: receivedJson.Messages[i].session,
-                        msgID: receivedJson.Messages[i].id,
-                        msgContents: receivedJson.Messages[i].messageContents,
-                        timestamp: receivedJson.Messages[i].timestamp,
-                        replyTo: receivedJson.Messages[i].replyTo,
-                        visible: receivedJson.Messages[i].visible,
-                        likes: receivedJson.Messages[i].likes,
-                    });
-                    JSON.stringify(comments);
-                }
-            }
+                //     comments.push({
+                //
+                //         posterID: receivedJson.Messages[i].poster,
+                //         displayName: posterTep,
+                //         sessionID: receivedJson.Messages[i].session,
+                //         msgID: receivedJson.Messages[i].id,
+                //         msgContents: receivedJson.Messages[i].messageContents,
+                //         timestamp: receivedJson.Messages[i].timestamp,
+                //         replyTo: receivedJson.Messages[i].replyTo,
+                //         visible: receivedJson.Messages[i].visible,
+                //         likes: receivedJson.Messages[i].likes,
+                //     });
+                //     JSON.stringify(comments);
+                //
+                // }
+            } console.log(comments);
 
 
 
@@ -195,6 +224,7 @@ function getPosts() {
                 let editBtn = "";
                 let deleteBtn = "";
                 if (ownerID == comments[i].posterID) {
+
                     editBtn = "edit";
                     deleteBtn = "delete";
                 } else {
@@ -246,9 +276,9 @@ function getPosts() {
                    </div>
                                    <div style="font-size: 12px; margin-left: 82%">
                    <a data-toggle="modal" href="" onclick=" showUpdateModal(${comments[j].posterID},${comments[j].sessionID},${comments[j].msgID},'${comments[j].msgContents}');">${editBtnRep}</a>
-                  <a href="">${deleteBtnRep}</a>
+                  <a href="" onclick="deleteMessage(${comments[j].msgID}, ${comments[j].posterID},${comments[j].sessionID})">${deleteBtnRep}</a>
 </div>
-                    <h6 class="fw-bold text-primary mb-1"> ${comments[j].posterID} user</h6>
+                    <h6 class="fw-bold text-primary mb-1"> ${comments[j].displayName}</h6>
                     <p class="text-muted small mb-0">
                         Shared publicly ${dateFormat}
                     </p>
@@ -295,131 +325,6 @@ function getPosts() {
                 if (comments[i].replyTo == null){
 
 
-// if(comments[i].visible==false){
-//     invisible = "invisible";
-//     visible = "";
-//     visibilityButtonUnchecked =
-//
-//         ` <label class="switch">
-//
-//   <input id="visibility" type="checkbox" unchecked value="false"  onclick="getVisibility(this.value);">
-//   <span class="slider round"></span>
-// </label>  `;
-//     visibilityButtonChecked = ` `;
-//
-//
-// }else {
-//     visible = "visible";
-//     invisible = "";
-//     visibilityButtonChecked =
-//
-//         ` <label class="switch">
-//
-//   <input id="visibility" type="checkbox" checked value="true" onclick="getVisibility(this.value);">
-//   <span class="slider round"></span>
-// </label>  `;
-//     visibilityButtonUnchecked = ``;
-//
-// }
-
-
-
-
-//togBtn
-//                 .switch {
-//                         position: relative;
-//                         display: inline-block;
-//                         width: 90px;
-//                         height: 34px;
-//                     }
-//
-//                 .switch input {display:none;}
-//
-//                 .slider {
-//                         position: absolute;
-//                         cursor: pointer;
-//                         top: 0;
-//                         left: 0;
-//                         right: 0;
-//                         bottom: 0;
-//                         background-color: #ca2222;
-//                         -webkit-transition: .4s;
-//                         transition: .4s;
-//                     }
-//
-//                 .slider:before {
-//                         position: absolute;
-//                         content: "";
-//                         height: 26px;
-//                         width: 26px;
-//                         left: 4px;
-//                         bottom: 4px;
-//                         background-color: white;
-//                         -webkit-transition: .4s;
-//                         transition: .4s;
-//                     }
-//
-//                     input:checked + .slider {
-//                         background-color: #2ab934;
-//                     }
-//
-//                     input:focus + .slider {
-//                         box-shadow: 0 0 1px #2196F3;
-//                     }
-//
-//                     input:checked + .slider:before {
-//                         -webkit-transform: translateX(55px);
-//                         -ms-transform: translateX(55px);
-//                         transform: translateX(55px);
-//                     }
-//
-//                     /*------ ADDED CSS ---------*/
-//                 .on
-//                     {
-//                         display: none;
-//                     }
-//
-//                 .on, .off
-//                     {
-//                         color: white;
-//                         position: absolute;
-//                         transform: translate(-50%,-50%);
-//                         top: 50%;
-//                         left: 50%;
-//                         font-size: 10px;
-//                         font-family: Verdana, sans-serif;
-//                     }
-//
-//                     input:checked+ .slider .on
-//                     {display: block;}
-//
-//                     input:checked + .slider .off
-//                     {display: none;}
-//
-//                     /*--------- END --------*/
-//
-//                     /* Rounded sliders */
-//                 .slider.round {
-//                         border-radius: 34px;
-//                     }
-//
-//                 .slider.round:before {
-//                         border-radius: 50%;}
-//
-//                     <label className="switch">
-//                         <input type="checkbox" id="togBtn">
-//                             <div className="slider round">
-//                                 <!--ADDED HTML -->
-//                                 <span className="on">ON</span>
-//                                 <span className="off">OFF</span>
-//                                 <!--END-->
-//                             </div>
-//                     </label>
-
-
-
-
-
 
 
 //initializing visibility toggle button
@@ -429,8 +334,7 @@ function getPosts() {
 <label class="toggle">
     <input checked id="toggleswitch${comments[i].msgID}"  type="checkbox" onclick="getVisibility(${comments[i].msgID},${comments[i].posterID},${comments[i].visible})">
     <span class="roundbutton"><span id="status${comments[i].msgID}" style="color: whitesmoke; font-size: 11px">&nbsp;&nbsp;&nbsp;visible</span></span>
-</label>
-`;
+</label>`;
                     }else{
                         visibilityButton = `
           <label class="toggle">
@@ -522,12 +426,12 @@ ${visibilityButton}
 
 
                    <a data-toggle="modal" href="" onclick=" showUpdateModal(${comments[i].posterID},${comments[i].sessionID},${comments[i].msgID},'${comments[i].msgContents}');">${editBtn}</a>
-                  <a href="">${deleteBtn}</a>
+                  <a href="" onclick="deleteMessage(${comments[i].msgID}, ${comments[i].posterID},${comments[i].sessionID})">${deleteBtn}</a>
 
 
                    </p>
                    </div>
-                    <h6 class="fw-bold text-primary mb-1"> ${comments[i].posterID} user</h6>
+                    <h6 class="fw-bold text-primary mb-1"> ${comments[i].displayName}</h6>
                     <p class="text-muted small mb-0">
                         Shared publicly ${dateFormat}
                     </p>
@@ -541,10 +445,12 @@ ${visibilityButton}
 
                 <div class="small d-flex justify-content-start">
 
-                  <a href="#textAreaReplay-${comments[i].msgID}" class="d-flex align-items-center me-3">
+                  <a data-toggle="modal" href="" onclick="showReplyModal(ownerID,${comments[i].sessionID},${comments[i].msgID},'${comments[i].msgContents}')" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
                     <p class="mb-0">${countReplies}  reply&nbsp;&nbsp;&nbsp;&nbsp;</p>
-                  </a>                <a href="#!" class="d-flex align-items-center me-3">
+                  </a>                
+                  
+                  <a href="#!" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
                     <p class="mb-0">${comments[i].likes}  likes</p>
                   </a>
@@ -554,7 +460,7 @@ ${visibilityButton}
               <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
                     <div style="width: 80%; margin-left: 10%">
 
-                  Replies here <br/>  ${repliesTmp}
+                   <br/>  ${repliesTmp}
 
                     </div>
                 <div  class="d-flex flex-start w-100">
@@ -564,6 +470,7 @@ ${visibilityButton}
                           style="background: #fff;"></textarea>
                   </div>
                 </div>
+               
                     <div id="snackbar">Your reply has been added</div>
                 <div style="width: 80%; margin-left: 10%" class="float-end mt-2 pt-1">
                   <button type="button" class="btn btn-primary btn-sm" onclick="postReply(${comments[i].posterID}, ${comments[i].sessionID}, ${comments[i].msgID},$('#textAreaReplay-'+${comments[i].msgID}).val() );">reply</button>
@@ -576,10 +483,7 @@ ${visibilityButton}
 `;
                     //console.log("comment");
                 }else{
-
                    //  comments.pop();
-                    console.log("reply is removed from comments' body");
-
                 }
 
 
@@ -599,34 +503,8 @@ ${visibilityButton}
 
 
             console.log(comments);
-            //Statistics
-            let totalLikes = 0;
-            let totalComments = 0;
-            let totalReplies = 0;
-            //  let totalUsers = 0;
-            // let tUsers  =[];
-            //  let allUsers = 0;
 
 
-            for (let i = 0; i <  comments.length; i++) {
-
-
-                //total likes
-                totalLikes += comments[i].likes;
-
-                //total comments
-                if(comments[i].replyTo==null){
-                    totalComments++;
-                }
-
-                //total comments
-                if(comments[i].replyTo!=null){
-                    totalReplies++;
-                }
-            }
-            console.log(totalReplies);
-            console.log(totalLikes);
-            console.log(totalComments);
 
 
 
@@ -634,13 +512,57 @@ ${visibilityButton}
 
 
 comments= [];
-    body= 0;
+    body= "";
 
 
 }
 
 
 // setInterval(getPosts,1000);
+
+
+
+function deleteMessage(msgID, posterID, sessionID){
+
+    console.log(msgID, posterID, sessionID);
+    fetch("http://localhost:8080/message/deleteMessage", {
+        method: 'DELETE',
+        body: JSON.stringify({
+
+            id: msgID,
+            poster: {
+                id: posterID
+            },
+            session: {
+                id: sessionID
+            }
+
+
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+
+            //       const parg = `
+            //
+            //
+            // your comment has been successfully posted<br/>
+            //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+            //   `;
+            //
+            //       answer.innerHTML = parg;
+            //       answer = "";
+        });
+
+}
+
+
 
 
 //visibility
@@ -803,6 +725,21 @@ function showUpdateModal(posterID,sessionID, msgID, msgContent){
 
 }
 
+function showReplyModal(posterID,sessionID, msgID, msgContent){
+    $("#replyModal").modal('show');
+
+    $("#RmsgID").val(msgID);
+    $("#RposterID").val(posterID);
+    $("#RsessionID").val(sessionID);
+   $("#RmsgContent").val();
+
+
+    console.log(posterID,sessionID, msgID, msgContent);
+
+}
+
+
+
 
 //update comment
 function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),sessionID=$("#sessionID").val(),msgContent=$("#msgContent").val()){
@@ -876,57 +813,68 @@ function updateDisplayname(){
     //VPN is not working updateMessageContent type PUT is not yet tested
 
     //  let answer = document.getElementById('answer');
-    //
-    //
-    //
-    // fetch("http://localhost:8080/user/updateDisplayName", {
-    //     method: 'PUT',
-    //     body: JSON.stringify({
-    //
-    //
-    // poster: {
-    //     id: ownerID
-    // },
-    // session: {
-    //     id: sessionID
-    // },
-    // displayName: displayname //input field user value
-    //
-    //
-    //     }),
-    //     headers: {
-    //         "Content-Type": "application/json;charset=UTF-8"
-    //     }
-    // })
-    //     .then((response) => {
-    //         return response.json()
-    //     })
-    //     .then((data) => {
-    //         console.log(data)
-    //             if(data.Status == "SUCCESS"){
-    //         const parg = `
-    //
-    //
-    //   your display name has been successfully updated<br/>
-    //
-    //     `;
-    //
-    //         answer.innerHTML = parg;
-    //         localStorage.setItem(displayname, data)
-    //
-    //             }else{
-    //
-    //                 console.log("Error has been occurred");
-    //             }
-    //
-    //
-    //
-    //     })
+
+
+
+
 }
 
 
 
 function newDisplyname(){
+
+    console.log(ownerID, sessionID, $("#newDisNameField").val() )
+
+
+    fetch("http://localhost:8080/user/updateDisplayName", {
+        method: 'PUT',
+        body: JSON.stringify({
+
+
+
+                id: ownerID
+            ,
+            displayName:  $("#newDisNameField").val(),
+            session: {
+                id: sessionID
+
+            }
+
+
+
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+            localStorage.setItem('displayname', $("#newDisNameField").val());
+
+
+            if(data.Status == "SUCCESS"){
+                const parg = `
+
+
+      your display name has been successfully updated<br/>
+
+        `;
+
+                answer.innerHTML = parg;
+
+
+            }else{
+
+                console.log("Error has been occurred");
+            }
+
+
+
+        })
+
 
 }
 
@@ -946,7 +894,7 @@ function logOutOwner(){
     localStorage.removeItem('ownerID');
     localStorage.removeItem('sessionID');
     localStorage.removeItem('sessionPassword');
-
+    localStorage.removeItem('displyname');
     location.replace("index.html")
 }
 
@@ -1388,3 +1336,155 @@ var data="";
 //     </label>
 // </div>
 //
+
+
+
+// if(comments[i].visible==false){
+//     invisible = "invisible";
+//     visible = "";
+//     visibilityButtonUnchecked =
+//
+//         ` <label class="switch">
+//
+//   <input id="visibility" type="checkbox" unchecked value="false"  onclick="getVisibility(this.value);">
+//   <span class="slider round"></span>
+// </label>  `;
+//     visibilityButtonChecked = ` `;
+//
+//
+// }else {
+//     visible = "visible";
+//     invisible = "";
+//     visibilityButtonChecked =
+//
+//         ` <label class="switch">
+//
+//   <input id="visibility" type="checkbox" checked value="true" onclick="getVisibility(this.value);">
+//   <span class="slider round"></span>
+// </label>  `;
+//     visibilityButtonUnchecked = ``;
+//
+// }
+
+
+
+
+//togBtn
+//                 .switch {
+//                         position: relative;
+//                         display: inline-block;
+//                         width: 90px;
+//                         height: 34px;
+//                     }
+//
+//                 .switch input {display:none;}
+//
+//                 .slider {
+//                         position: absolute;
+//                         cursor: pointer;
+//                         top: 0;
+//                         left: 0;
+//                         right: 0;
+//                         bottom: 0;
+//                         background-color: #ca2222;
+//                         -webkit-transition: .4s;
+//                         transition: .4s;
+//                     }
+//
+//                 .slider:before {
+//                         position: absolute;
+//                         content: "";
+//                         height: 26px;
+//                         width: 26px;
+//                         left: 4px;
+//                         bottom: 4px;
+//                         background-color: white;
+//                         -webkit-transition: .4s;
+//                         transition: .4s;
+//                     }
+//
+//                     input:checked + .slider {
+//                         background-color: #2ab934;
+//                     }
+//
+//                     input:focus + .slider {
+//                         box-shadow: 0 0 1px #2196F3;
+//                     }
+//
+//                     input:checked + .slider:before {
+//                         -webkit-transform: translateX(55px);
+//                         -ms-transform: translateX(55px);
+//                         transform: translateX(55px);
+//                     }
+//
+//                     /*------ ADDED CSS ---------*/
+//                 .on
+//                     {
+//                         display: none;
+//                     }
+//
+//                 .on, .off
+//                     {
+//                         color: white;
+//                         position: absolute;
+//                         transform: translate(-50%,-50%);
+//                         top: 50%;
+//                         left: 50%;
+//                         font-size: 10px;
+//                         font-family: Verdana, sans-serif;
+//                     }
+//
+//                     input:checked+ .slider .on
+//                     {display: block;}
+//
+//                     input:checked + .slider .off
+//                     {display: none;}
+//
+//                     /*--------- END --------*/
+//
+//                     /* Rounded sliders */
+//                 .slider.round {
+//                         border-radius: 34px;
+//                     }
+//
+//                 .slider.round:before {
+//                         border-radius: 50%;}
+//
+//                     <label className="switch">
+//                         <input type="checkbox" id="togBtn">
+//                             <div className="slider round">
+//                                 <!--ADDED HTML -->
+//                                 <span className="on">ON</span>
+//                                 <span className="off">OFF</span>
+//                                 <!--END-->
+//                             </div>
+//                     </label>
+
+
+
+//STATISTICS
+//Statistics
+let totalLikes = 0;
+let totalComments = 0;
+let totalReplies = 0;
+//  let totalUsers = 0;
+// let tUsers  =[];
+//  let allUsers = 0;
+
+
+// for (let i = 0; i <  comments.length; i++) {
+//
+//
+//     //total likes
+//     totalLikes += comments[i].likes;
+//
+//     //total comments
+//     if(comments[i].replyTo==null){
+//         totalComments++;
+//     }
+//
+//     //total comments
+//     if(comments[i].replyTo!=null){
+//         totalReplies++;
+//     }
+// }
