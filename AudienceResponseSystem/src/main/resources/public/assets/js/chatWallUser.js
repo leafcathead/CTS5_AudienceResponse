@@ -710,44 +710,44 @@ function getPosts() {
             console.log(receivedJson);
             //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
 
-            for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
+            for (let i = 0; i < Object.keys(receivedJson.Messages).length; i++) {
 
 
-               // if(receivedJson.Messages[i].visible == true) {
-                    for (let k = 0; k < Object.keys(receivedJson.Messages).length; k++) {
+                // if(receivedJson.Messages[i].visible == true) {
+                for (let k = 0; k < Object.keys(receivedJson.Messages).length; k++) {
 
-                        if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster) {
-
-                            comments.push({
-                                posterID: receivedJson.Messages[k].poster,
-                                displayName: receivedJson.Messages[i].poster.displayName,
-                                sessionID: receivedJson.Messages[k].session,
-                                msgID: receivedJson.Messages[k].id,
-                                timestamp: receivedJson.Messages[k].timestamp,
-                                msgContents: receivedJson.Messages[k].messageContents,
-                                replyTo: receivedJson.Messages[k].replyTo,
-                                visible: receivedJson.Messages[k].visible,
-                                likes: receivedJson.Messages[k].likes
-                            });
-
-                        }
-                    } //end of k loop
-                    if (receivedJson.Messages[i].poster.id) {
-
+                    if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster) {
 
                         comments.push({
-                            posterID: receivedJson.Messages[i].poster.id,
+                            posterID: receivedJson.Messages[k].poster,
                             displayName: receivedJson.Messages[i].poster.displayName,
-                            sessionID: receivedJson.Messages[i].session,
-                            msgID: receivedJson.Messages[i].id,
-                            timestamp: receivedJson.Messages[i].timestamp,
-                            msgContents: receivedJson.Messages[i].messageContents,
-                            replyTo: receivedJson.Messages[i].replyTo,
-                            visible: receivedJson.Messages[i].visible,
-                            likes: receivedJson.Messages[i].likes
+                            sessionID: receivedJson.Messages[k].session,
+                            msgID: receivedJson.Messages[k].id,
+                            timestamp: receivedJson.Messages[k].timestamp,
+                            msgContents: receivedJson.Messages[k].messageContents,
+                            replyTo: receivedJson.Messages[k].replyTo,
+                            visible: receivedJson.Messages[k].visible,
+                            likes: receivedJson.Messages[k].likes
                         });
+
                     }
-              //  }
+                } //end of k loop
+                if (receivedJson.Messages[i].poster.id) {
+
+
+                    comments.push({
+                        posterID: receivedJson.Messages[i].poster.id,
+                        displayName: receivedJson.Messages[i].poster.displayName,
+                        sessionID: receivedJson.Messages[i].session,
+                        msgID: receivedJson.Messages[i].id,
+                        timestamp: receivedJson.Messages[i].timestamp,
+                        msgContents: receivedJson.Messages[i].messageContents,
+                        replyTo: receivedJson.Messages[i].replyTo,
+                        visible: receivedJson.Messages[i].visible,
+                        likes: receivedJson.Messages[i].likes
+                    });
+                }
+                //  }
                 // else {
 
                 //     comments.push({
@@ -765,61 +765,61 @@ function getPosts() {
                 //     JSON.stringify(comments);
                 //
                 // }
-            } console.log(comments);
+
+            }
+
+            console.log(comments);
 
 
-
-comments.sort((a, b) => a.msgID - b.msgID);
-
+            comments.sort((a, b) => a.msgID - b.msgID);
 
 
 //browsing the comments[] array and control it in several aspects
-            for (let i = 0; i <  comments.length; i++) {
+            for (let i = 0; i < comments.length; i++) {
+                if (comments[i].visible === false && comments[i].posterID == userID || comments[i].visible === true) {
 
-
-                let countReplies = 0;
+                    let countReplies = 0;
 
 
 //hide comment's owner controllers "never give body any js executing codes (variables & []  only)"
-                let editBtn = "";
-                let deleteBtn = "";
-                if (userID == comments[i].posterID) {
+                    let editBtn = "";
+                    let deleteBtn = "";
+                    if (userID == comments[i].posterID) {
 
-                    editBtn = "edit";
-                    deleteBtn = "delete";
-                } else {
+                        editBtn = "edit";
+                        deleteBtn = "delete";
+                    } else {
 
-                    editBtn = "";
-                    deleteBtn = "";
-                }
+                        editBtn = "";
+                        deleteBtn = "";
+                    }
 
-                let repliesTmp = "";
-                let timeStamp = comments[i].timestamp;
-                let dateFormat = new Date(timeStamp);
+                    let repliesTmp = "";
+                    let timeStamp = comments[i].timestamp;
+                    let dateFormat = new Date(timeStamp);
 
-                //fill repliesTmp
-                for(let j =0; j < comments.length; j++){
-
-
-
-                    //this condition for filling a string/Html replies array for specific comment and introduce them ordered in UI
-                    if(comments[j].replyTo == comments[i].msgID){
-                        let editBtnRep = "";
-                        let deleteBtnRep = "";
-                        if (userID == comments[j].posterID) {
-                            editBtnRep = "edit";
-                            deleteBtnRep = "delete";
-                        } else {
-
-                            editBtnRep = "";
-                            deleteBtnRep = "";
-                        }
+                    //fill repliesTmp
+                    for (let j = 0; j < comments.length; j++) {
 
 
-                        countReplies++;
+                        //this condition for filling a string/Html replies array for specific comment and introduce them ordered in UI
+                        if (comments[j].replyTo == comments[i].msgID) {
+                            let editBtnRep = "";
+                            let deleteBtnRep = "";
+                            if (userID == comments[j].posterID) {
+                                editBtnRep = "edit";
+                                deleteBtnRep = "delete";
+                            } else {
 
-                        // repliesTmp will be repliesTmp += ``; will be inserted inside body the static one
-                        repliesTmp += `
+                                editBtnRep = "";
+                                deleteBtnRep = "";
+                            }
+
+
+                            countReplies++;
+
+                            // repliesTmp will be repliesTmp += ``; will be inserted inside body the static one
+                            repliesTmp += `
  <div id="replyDiv" style="width: 80%; margin-left: 10%">
 
     <div class="card-body">
@@ -874,18 +874,15 @@ comments.sort((a, b) => a.msgID - b.msgID);
 </div><br/>
 
 
-` ;
+`;
 
 
+                        } //end of nested j loop's condition
 
-                    } //end of nested j loop's condition
+                    }//end of nested j loop
 
-                }//end of nested j loop
-
-                //this condition for popping an element of "string/Html replies" being shown as a comment
-                if (comments[i].replyTo == null){
-
-
+                    //this condition for popping an element of "string/Html replies" being shown as a comment
+                    if (comments[i].replyTo == null) {
 
 
 //initializing visibility toggle button
@@ -906,7 +903,7 @@ comments.sort((a, b) => a.msgID - b.msgID);
 //                     }
 
 
-                    body += `
+                        body += `
 
                        <div class="card" >
 
@@ -1038,47 +1035,36 @@ comments.sort((a, b) => a.msgID - b.msgID);
 `;
 
 
-                    //console.log("comment");
-                }else{
-                    //  comments.pop();
+                        //console.log("comment");
+                    } else {
+                        //  comments.pop();
+                    }
+
+
+                    // repliesTmp = "";
+                    $("#cardDiv").html(body);
+
+
+                    //end of Main for loop
+                }
+
+
+                if (comments.length == 0) {
+                    let span = `
+                <span style="text-align: center; font-size: 20px;">no comments posted or not visible yet &nbsp;&nbsp;  :_(</span>
+                `;
+                    $("#noCommentsYet").html(span);
+
                 }
 
 
 
-                // repliesTmp = "";
-                $("#cardDiv").html(body);
 
-
-
-
-
-
-
-
-                //end of Main for loop
-            }
-
-
-
-
-            if(comments.length == 0){
-                let span = `
-                <span style="text-align: center; font-size: 20px;">no comments posted or not visible yet &nbsp;&nbsp;  :_(</span>
-                `;
-                $("#noCommentsYet").html(span);
 
             }
-
-
-            console.log(comments);
-
-
-
-
-
         }) // end of .then(receivedJson)
 
-
+    console.log(comments);
     comments= [];
     body= "";
 

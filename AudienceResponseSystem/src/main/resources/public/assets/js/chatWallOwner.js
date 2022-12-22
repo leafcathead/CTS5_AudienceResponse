@@ -324,7 +324,7 @@ function getPosts() {
                 //this condition for popping an element of "string/Html replies" being shown as a comment
 
                 if (comments[i].replyTo == null){
-                    commentsArr.push(comments[i]);
+                  //  commentsArr.push(comments[i]);
 
 
 
@@ -498,10 +498,10 @@ ${visibilityButton}
 
 
 
-            console.log(comments);
-            console.log("ordered before", commentsArr);
-            commentsArr.sort((a, b) => a.msgID - b.msgID);
-            console.log("ordered after", commentsArr);
+             console.log(comments);
+            // console.log("ordered before", commentsArr);
+            // commentsArr.sort((a, b) => a.msgID - b.msgID);
+            // console.log("ordered after", commentsArr);
 
 
 
