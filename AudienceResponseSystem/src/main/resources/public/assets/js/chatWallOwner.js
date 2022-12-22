@@ -12,23 +12,9 @@ let displayname =  localStorage.getItem('displayname');
 //post comment
 function postComment() {
 
-if($("#textArea").val() != ""){
-    let answer = document.getElementById('answer');
-    const data = {
-
-        poster: {
-            id:  ownerID
-        },
-        session: {
-            id: sessionID
-        },
-        messageContent:$("#textArea").val()
-
-    };
-    console.log(data);
-    fetch("http://localhost:8080/message/postComment", {
-        method: 'POST',
-        body: JSON.stringify({
+    if($("#textArea").val() != ""){
+        let answer = document.getElementById('answer');
+        const data = {
 
             poster: {
                 id:  ownerID
@@ -38,31 +24,45 @@ if($("#textArea").val() != ""){
             },
             messageContent:$("#textArea").val()
 
+        };
+        console.log(data);
+        fetch("http://localhost:8080/message/postComment", {
+            method: 'POST',
+            body: JSON.stringify({
 
-        }),
-        headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        }
-    })
-        .then((response) => {
-            return response.json()
+                poster: {
+                    id:  ownerID
+                },
+                session: {
+                    id: sessionID
+                },
+                messageContent:$("#textArea").val()
+
+
+            }),
+            headers: {
+                "Content-Type": "application/json;charset=UTF-8"
+            }
         })
-        .then((data) => {
-            console.log(data)
-getPosts();
-            const parg = `
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log(data)
+                getPosts();
+                const parg = `
 
            
           your comment has been successfully posted<br/>
            <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
             `;
 
-            answer.innerHTML = parg;
-            answer = "";
-        })
-}else{
-    showResultTextArea();
-}
+                answer.innerHTML = parg;
+                answer = "";
+            })
+    }else{
+        showResultTextArea();
+    }
 
 }
 
@@ -71,9 +71,9 @@ getPosts();
 
 //post reply
 function postReply(posterID=$("#RposterID").val(),sessionID=$("#RsessionID").val(),msgID=$("#RmsgID").val(),msgContent=$("#RmsgContent").val()) {
- // let answer = document.getElementById('');
+    // let answer = document.getElementById('');
 
-console.log(posterID, sessionID,msgID, msgContent);
+    console.log(posterID, sessionID,msgID, msgContent);
 
 
 
@@ -83,16 +83,16 @@ console.log(posterID, sessionID,msgID, msgContent);
 
 
 
-        poster: {
-        id: posterID
-    },
-        session: {
-        id: sessionID
-    },
-        replyTo: {
-        id: msgID
-    },
-        messageContent: msgContent
+            poster: {
+                id: posterID
+            },
+            session: {
+                id: sessionID
+            },
+            replyTo: {
+                id: msgID
+            },
+            messageContent: msgContent
 
         }),
         headers: {
@@ -105,15 +105,15 @@ console.log(posterID, sessionID,msgID, msgContent);
         .then((data) => {
             console.log(data)
 
-          //   const parg = `
-          //
-          //
-          // your comment has been successfully posted<br/>
-          //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
-          //   `;
-          //
-          //  answer.innerHTML = parg;
-          //  answer = "";
+            //   const parg = `
+            //
+            //
+            // your comment has been successfully posted<br/>
+            //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+            //   `;
+            //
+            //  answer.innerHTML = parg;
+            //  answer = "";
 
         })
 
@@ -149,29 +149,29 @@ function getPosts() {
         .then((receivedJson) => {
 
             console.log(receivedJson);
-               //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
 
+            //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
             for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
 
 
-                        for(let k = 0; k <  Object.keys(receivedJson.Messages).length; k++){
+                for(let k = 0; k <  Object.keys(receivedJson.Messages).length; k++){
 
-                            if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster){
+                    if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster){
 
-                                comments.push({
-                                    posterID: receivedJson.Messages[k].poster,
-                                    displayName: receivedJson.Messages[i].poster.displayName,
-                                    sessionID: receivedJson.Messages[k].session,
-                                    msgID: receivedJson.Messages[k].id,
-                                    timestamp: receivedJson.Messages[k].timestamp,
-                                    msgContents: receivedJson.Messages[k].messageContents,
-                                    replyTo: receivedJson.Messages[k].replyTo,
-                                    visible: receivedJson.Messages[k].visible,
-                                    likes: receivedJson.Messages[k].likes
-                                });
+                        comments.push({
+                            posterID: receivedJson.Messages[k].poster,
+                            displayName: receivedJson.Messages[i].poster.displayName,
+                            sessionID: receivedJson.Messages[k].session,
+                            msgID: receivedJson.Messages[k].id,
+                            timestamp: receivedJson.Messages[k].timestamp,
+                            msgContents: receivedJson.Messages[k].messageContents,
+                            replyTo: receivedJson.Messages[k].replyTo,
+                            visible: receivedJson.Messages[k].visible,
+                            likes: receivedJson.Messages[k].likes
+                        });
 
-                            }
-                        } //end of k loop
+                    }
+                } //end of k loop
                 if (receivedJson.Messages[i].poster.id) {
 
 
@@ -186,28 +186,12 @@ function getPosts() {
                         visible: receivedJson.Messages[i].visible,
                         likes: receivedJson.Messages[i].likes
                     });
-                 }
+                }
 
-                // else {
-
-                //     comments.push({
-                //
-                //         posterID: receivedJson.Messages[i].poster,
-                //         displayName: posterTep,
-                //         sessionID: receivedJson.Messages[i].session,
-                //         msgID: receivedJson.Messages[i].id,
-                //         msgContents: receivedJson.Messages[i].messageContents,
-                //         timestamp: receivedJson.Messages[i].timestamp,
-                //         replyTo: receivedJson.Messages[i].replyTo,
-                //         visible: receivedJson.Messages[i].visible,
-                //         likes: receivedJson.Messages[i].likes,
-                //     });
-                //     JSON.stringify(comments);
-                //
-                // }
-            } console.log(comments);
+            }
 
 
+            comments.sort((a, b) => a.msgID - b.msgID);
 
 
 
@@ -234,33 +218,52 @@ function getPosts() {
                 }
 
                 let repliesTmp = "";
+                let repliesArr = [];
+
                 let timeStamp = comments[i].timestamp;
                 let dateFormat = new Date(timeStamp);
 
                 //fill repliesTmp
                 for(let j =0; j < comments.length; j++){
 
-
-
                     //this condition for filling a string/Html replies array for specific comment and introduce them ordered in UI
                     if(comments[j].replyTo == comments[i].msgID){
-                        let editBtnRep = "";
-                        let deleteBtnRep = "";
-                        if (ownerID == comments[j].posterID) {
-                            editBtnRep = "edit";
-                            deleteBtnRep = "delete";
-                        } else {
 
-                            editBtnRep = "";
-                            deleteBtnRep = "";
-                        }
+                        repliesArr.push(comments[j]);
+                        countReplies++;
+
+                    } //end of  j loop's condition
+
+                }//end of nested j loop
+
+                //SORTING REPLIES
+                repliesArr.sort((a, b) => a.msgID - b.msgID);
+
+                //repliesTmp for r loop
+                for(let r =0; r < repliesArr.length; r++){
+
+                    let timeStampR = comments[r].timestamp;
+                    let dateFormatR = new Date(timeStampR);
+
+                    // show hide controls
+                    let editBtnRep = "";
+                    let deleteBtnRep = "";
+                    if (ownerID == comments[r].posterID) {
+                        editBtnRep = "edit";
+                        deleteBtnRep = "delete";
+                    } else {
+
+                        editBtnRep = "";
+                        deleteBtnRep = "";
+                    }
 
 
-                            countReplies++;
-                        // repliesTmp will be repliesTmp += ``; will be inserted inside body the static one
-                        repliesTmp += `
- <div id="replyDiv" style="width: 80%; margin-left: 10%">
-
+                    repliesTmp += `
+ <div id="replyDiv" style="width: 100%; margin-left: 10%">
+  <div style="padding-left: 85% ">                
+                    <a data-toggle="modal" href="" onclick=" showUpdateModal(${repliesArr[r].posterID},${repliesArr[r].sessionID},${repliesArr[r].msgID},'${repliesArr[r].msgContents}');">${editBtnRep}</a>
+                  <a href="" onclick="deleteMessage(${repliesArr[r].msgID}, ${repliesArr[r].posterID},${repliesArr[r].sessionID})">${deleteBtnRep}</a>
+ </div> 
     <div class="card-body">
                 <div class="d-flex flex-start align-items-center">
 
@@ -273,62 +276,60 @@ function getPosts() {
 
 
                    </p>
-                   </div>
-                                   <div style="font-size: 12px; margin-left: 82%">
-                   <a data-toggle="modal" href="" onclick=" showUpdateModal(${comments[j].posterID},${comments[j].sessionID},${comments[j].msgID},'${comments[j].msgContents}');">${editBtnRep}</a>
-                  <a href="" onclick="deleteMessage(${comments[j].msgID}, ${comments[j].posterID},${comments[j].sessionID})">${deleteBtnRep}</a>
-</div>
-                    <h6 class="fw-bold text-primary mb-1"> ${comments[j].displayName}</h6>
-                    <p class="text-muted small mb-0">
-                        Shared publicly ${dateFormat}
+                                   </div>
+
+                   </div>    
+                    <h6 class="fw-bold text-primary mb-1"> ${repliesArr[r].displayName}</h6>
+                  </div>
+
+                  <p class="text-muted small mb-0">
+                        Shared publicly ${dateFormatR}
                     </p>
 
-                  </div>
-                </div>
-
                 <p class="mt-3 mb-4 pb-2">
-                   ${comments[j].msgContents}
+                   ${repliesArr[r].msgContents}
                 </p>
 
                 <div class="small d-flex justify-content-start">
 
 
-                  
+
                   <a href="form-control" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
-                 
+
                   </a>                <a href="#!" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
-                    <p class="mb-0">${comments[j].likes}  likes</p>
+                    <p class="mb-0">${repliesArr[r].likes}  likes</p>
                   </a>
 
                 </div>
               </div>
 
 
-       
+
 
 
 
 </div><br/>
 
 
-` ;
+`;
+                }
 
 
 
-                    } //end of nested j loop's condition
 
-                }//end of nested j loop
-
+                // console.log(repliesArr);
+                // repliesArr = [];
                 //this condition for popping an element of "string/Html replies" being shown as a comment
-                if (comments[i].replyTo == null){
 
+                if (comments[i].replyTo == null){
+                    commentsArr.push(comments[i]);
 
 
 
 //initializing visibility toggle button
-                   let visibilityButton = ``;
+                    let visibilityButton = ``;
                     if(comments[i].visible === true){
                         visibilityButton = `
 <label class="toggle">
@@ -467,7 +468,7 @@ ${visibilityButton}
                
                     <div id="snackbar">Your reply has been added</div>
                 <div style="width: 80%; margin-left: 10%" class="float-end mt-2 pt-1">
-                  <button type="button" class="btn btn-primary btn-sm" onclick="showReplyModal(ownerID,${comments[i].sessionID},${comments[i].msgID},'${comments[i].msgContents}')">reply</button>
+                  <button type="button" class="btn btn-primary btn-sm" onclick="showReplyModal(ownerID,${comments[i].sessionID},${comments[i].msgID})">reply</button>
      
                 </div>
               </div>
@@ -477,12 +478,12 @@ ${visibilityButton}
 `;
                     //console.log("comment");
                 }else{
-                   //  comments.pop();
+                    //  comments.pop();
                 }
 
 
 
-              // repliesTmp = "";
+                // repliesTmp = "";
                 $("#cardDiv").html(body);
 
 
@@ -492,20 +493,32 @@ ${visibilityButton}
 
 
 
-    //end of Main for loop
+                //end of Main for loop
             }
 
 
+
             console.log(comments);
+            console.log("ordered before", commentsArr);
+            commentsArr.sort((a, b) => a.msgID - b.msgID);
+            console.log("ordered after", commentsArr);
 
 
+
+            if(comments.length == 0){
+                let span = `
+                <span style="text-align: center; font-size: 20px;">no comments posted or not visible yet &nbsp;&nbsp;  :_(</span>
+                `;
+                $("#noCommentsYet").html(span);
+
+            }
 
 
 
         }) // end of .then(receivedJson)
 
 
-comments= [];
+    comments= [];
     body= "";
 
 
@@ -562,23 +575,23 @@ function deleteMessage(msgID, posterID, sessionID){
 function getVisibility(msgID,posterID,visible){
 
 //if(document.getElementById('status'+data == true){}
-    let input = document.getElementById('toggleswitch'+data);
-      let outputtext = document.getElementById('status'+data);
+    let input = document.getElementById('toggleswitch'+msgID);
+    let outputtext = document.getElementById('status'+msgID);
 
     if(visible === true){
 
-       // console.log(data);
+        // console.log(data);
         fetch("http://localhost:8080/message/updateVisibility", {
             method: 'PUT',
             body: JSON.stringify({
 
                 id: msgID,
-                                  poster: {
-                                          id: posterID
-                                      },
-                                      session: {
-                                          id: sessionID
-                                      }
+                poster: {
+                    id: posterID
+                },
+                session: {
+                    id: sessionID
+                }
 
             }),
             headers: {
@@ -647,14 +660,14 @@ function getVisibility(msgID,posterID,visible){
 
     input.addEventListener('change',function(){
         if(this.checked) {
-               outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;visible";
-         //   console.log(this.value);
-        //    console.log("1");
+            outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;visible";
+            //   console.log(this.value);
+            //    console.log("1");
 
 
         } else {
-              outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invisible";
-          //  console.log("0")
+            outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invisible";
+            //  console.log("0")
         }
     });
     // var x = document.getElementById("invisible");
@@ -724,7 +737,7 @@ function showReplyModal(posterID,sessionID, msgID){
     $("#RmsgID").val(msgID);
     $("#RposterID").val(posterID);
     $("#RsessionID").val(sessionID);
-   $("#RmsgContent").val("");
+    $("#RmsgContent").val("");
 
 
     console.log(posterID,sessionID, msgID);
@@ -756,7 +769,7 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
     //
     // };
 //last version
-    console.log(data);
+    //  console.log(data);
     fetch("http://localhost:8080/message/updateMessageContent", {
         method: 'PUT',
         body: JSON.stringify({
@@ -781,15 +794,15 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
         .then((data) => {
             console.log(data)
 
-      //       const parg = `
-      //
-      //
-      // your comment has been successfully posted<br/>
-      //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
-      //   `;
-      //
-      //       answer.innerHTML = parg;
-      //       answer = "";
+            //       const parg = `
+            //
+            //
+            // your comment has been successfully posted<br/>
+            //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+            //   `;
+            //
+            //       answer.innerHTML = parg;
+            //       answer = "";
         });
 
 
@@ -801,7 +814,7 @@ function updateDisplayname(){
 //test
     $("#myModal").modal('show');
     $("#newDisNameField").val(displayname);
-   // data-toggle="modal" data-target="#myModal"
+    // data-toggle="modal" data-target="#myModal"
     console.log("posterID: " + ownerID +"  sessionID: " + sessionID +"  displayname:  " + $("#newDisNameField").val());
     //VPN is not working updateMessageContent type PUT is not yet tested
 
@@ -825,7 +838,7 @@ function newDisplyname(){
 
 
 
-                id: ownerID
+            id: ownerID
             ,
             displayName:  $("#newDisNameField").val(),
             session: {
@@ -1482,3 +1495,83 @@ let totalReplies = 0;
 //         totalReplies++;
 //     }
 // }
+
+
+// else {
+
+//     comments.push({
+//
+//         posterID: receivedJson.Messages[i].poster,
+//         displayName: posterTep,
+//         sessionID: receivedJson.Messages[i].session,
+//         msgID: receivedJson.Messages[i].id,
+//         msgContents: receivedJson.Messages[i].messageContents,
+//         timestamp: receivedJson.Messages[i].timestamp,
+//         replyTo: receivedJson.Messages[i].replyTo,
+//         visible: receivedJson.Messages[i].visible,
+//         likes: receivedJson.Messages[i].likes,
+//     });
+//     JSON.stringify(comments);
+//
+// }
+// }
+
+
+//repliesTmp for j loop
+// repliesTmp will be repliesTmp += ``; will be inserted inside body the static one
+//                                 repliesTmp += `
+//  <div id="replyDiv" style="width: 80%; margin-left: 10%">
+//
+//     <div class="card-body">
+//                 <div class="d-flex flex-start align-items-center">
+//
+//                   <div>
+//                   <div style="  position: absolute;top: 8px;right: 16px; color: #005cbf ;font-size: 14px;">
+//                   <p>
+//
+//
+// <!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">edit</button>-->
+//
+//
+//                    </p>
+//                    </div>
+//                                    <div style="font-size: 12px; margin-left: 82%">
+//                    <a data-toggle="modal" href="" onclick=" showUpdateModal(${comments[j].posterID},${comments[j].sessionID},${comments[j].msgID},'${comments[j].msgContents}');">${editBtnRep}</a>
+//                   <a href="" onclick="deleteMessage(${comments[j].msgID}, ${comments[j].posterID},${comments[j].sessionID})">${deleteBtnRep}</a>
+// </div>
+//                     <h6 class="fw-bold text-primary mb-1"> ${comments[j].displayName}</h6>
+//                     <p class="text-muted small mb-0">
+//                         Shared publicly ${dateFormat}
+//                     </p>
+//
+//                   </div>
+//                 </div>
+//
+//                 <p class="mt-3 mb-4 pb-2">
+//                    ${comments[j].msgContents}
+//                 </p>
+//
+//                 <div class="small d-flex justify-content-start">
+//
+//
+//
+//                   <a href="form-control" class="d-flex align-items-center me-3">
+//                     <i class="far fa-comment-dots me-2"></i>
+//
+//                   </a>                <a href="#!" class="d-flex align-items-center me-3">
+//                     <i class="far fa-comment-dots me-2"></i>
+//                     <p class="mb-0">${comments[j].likes}  likes</p>
+//                   </a>
+//
+//                 </div>
+//               </div>
+//
+//
+//
+//
+//
+//
+// </div><br/>
+//
+//
+// `;
