@@ -15,7 +15,7 @@ public class PanicButton {
     @Column(name = "PanicType")
     private String panicType;
 
-    @Column(name = "Desc")
+    @Column(name = "ButtonDesc")
     private String desc;
 
     public Long getId() {

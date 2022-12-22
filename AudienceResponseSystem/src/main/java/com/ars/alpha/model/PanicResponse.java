@@ -1,5 +1,6 @@
 package com.ars.alpha.model;
 
+import com.ars.alpha.dao.PanicRepository;
 import org.hibernate.annotations.Table;
 
 import javax.persistence.*;
@@ -15,6 +16,8 @@ import java.sql.Timestamp;
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "SessionRoom", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "LogTime", type = String.class)
 })
+@NamedStoredProcedureQuery(name = "GET_PANIC_RESPONSES", procedureName = "GET_PANIC_RESPONSES", resultClasses = {PanicResponse.class}, parameters = {
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class)})
 public class PanicResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +25,7 @@ public class PanicResponse {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "PanicType")
+    @JoinColumn(name = "PanicButtonPushed")
     private PanicButton panicType;
     @ManyToOne
     @JoinColumn(name = "Panicker")
