@@ -1,0 +1,16 @@
+USE DB_ARS
+GO
+
+CREATE OR ALTER PROCEDURE GET_PANIC_RESPONSES (
+	@sessionID BIGINT
+)
+AS
+BEGIN
+
+	SELECT *
+	FROM PanicResponse pr
+	WHERE pr.SessionRoom = @sessionID
+
+
+	RETURN 0;
+END
