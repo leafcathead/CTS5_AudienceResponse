@@ -747,24 +747,8 @@ function getPosts() {
                         likes: receivedJson.Messages[i].likes
                     });
                 }
-                //  }
-                // else {
 
-                //     comments.push({
-                //
-                //         posterID: receivedJson.Messages[i].poster,
-                //         displayName: posterTep,
-                //         sessionID: receivedJson.Messages[i].session,
-                //         msgID: receivedJson.Messages[i].id,
-                //         msgContents: receivedJson.Messages[i].messageContents,
-                //         timestamp: receivedJson.Messages[i].timestamp,
-                //         replyTo: receivedJson.Messages[i].replyTo,
-                //         visible: receivedJson.Messages[i].visible,
-                //         likes: receivedJson.Messages[i].likes,
-                //     });
-                //     JSON.stringify(comments);
-                //
-                // }
+
 
             }
 
@@ -858,7 +842,8 @@ function getPosts() {
                   <a href="form-control" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
                  
-                  </a>                <a href="#!" class="d-flex align-items-center me-3">
+                  </a>                
+                  <a href="javascript:void(0)" class="d-flex align-items-center me-3" onclick="likeMessage(${comments[j].msgID})">
                     <i class="far fa-comment-dots me-2"></i>
                     <p class="mb-0">${comments[j].likes}  likes</p>
                   </a>
@@ -885,22 +870,6 @@ function getPosts() {
                     if (comments[i].replyTo == null) {
 
 
-//initializing visibility toggle button
-//                     let visibilityButton = ``;
-//                     if(comments[i].visible === true){
-//                         visibilityButton = `
-// <label class="toggle">
-//     <input checked id="toggleswitch${comments[i].msgID}"  type="checkbox" onclick="getVisibility(${comments[i].msgID},${comments[i].posterID},${comments[i].visible})">
-//     <span class="roundbutton"><span id="status${comments[i].msgID}" style="color: whitesmoke; font-size: 11px">&nbsp;&nbsp;&nbsp;visible</span></span>
-// </label>`;
-//                     }else{
-//                         visibilityButton = `
-//           <label class="toggle">
-//              <input id="toggleswitch${comments[i].msgID}"  type="checkbox" value="${comments[i].msgID}" onclick="getVisibility(${comments[i].msgID},${comments[i].posterID},${comments[i].visible})">
-//              <span class="roundbutton"><span id="status${comments[i].msgID}" style="color: whitesmoke; font-size: 11px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invisible</span></span>
-//
-// </label>`;
-//                     }
 
 
                         body += `
@@ -914,8 +883,6 @@ function getPosts() {
                   <div style="  position: absolute;top: 8px;right: 16px; color: #005cbf ;font-size: 14px;">
                   <p>
 
-
-<!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">edit</button>-->
 
 
 <!--toggle switch button-->
@@ -1008,7 +975,7 @@ function getPosts() {
                     <p class="mb-0">${countReplies}  reply&nbsp;&nbsp;&nbsp;&nbsp;</p>
                   </a>                
                   
-                  <a href="#!" class="d-flex align-items-center me-3">
+                  <a href="javascript:void(0)" class="d-flex align-items-center me-3" onclick="likeMessage(${comments[i].msgID})">
                     <i class="far fa-comment-dots me-2"></i>
                     <p class="mb-0">${comments[i].likes}  likes</p>
                   </a>
@@ -1070,6 +1037,54 @@ function getPosts() {
 
 
 }
+
+
+
+function likeMessage(msgID){
+
+
+    console.log(msgID);
+
+
+    fetch("http://localhost:8080/message/likeMessage", {
+        method: 'PUT',
+        body: JSON.stringify({
+
+            liker: {
+                id: userID
+            },
+            likedMessage: {
+                id: msgID
+            }
+
+
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+
+
+
+        })
+
+
+
+
+
+
+}
+
+
+
+
+
+
 
 
 

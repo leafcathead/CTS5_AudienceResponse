@@ -192,7 +192,7 @@ function getPosts() {
 
 
 
-console.log("comments" , comments)
+            console.log("comments" , comments)
             comments.sort((a, b) => a.msgID - b.msgID);
 
 
@@ -218,39 +218,12 @@ console.log("comments" , comments)
                 }
 
                 let repliesTmp = "";
-                let repliesArr = [];
+              //  let repliesArr = [];
 
                 let timeStamp = comments[i].timestamp;
                 let dateFormat = new Date(timeStamp);
 
-                //fill repliesTmp
-                // for(let j =0; j < comments.length; j++){
-                //
-                //
-                //
-                //     //this condition for filling a string/Html replies array for specific comment and introduce them ordered in UI
-                //     if(comments[j].replyTo == comments[i].msgID){
-                //
-                //               //  show hide controlls
-                //                 let editBtnRep = "";
-                //                 let deleteBtnRep = "";
-                //                 if (ownerID == comments[j].posterID) {
-                //                     editBtnRep = "edit";
-                //                     deleteBtnRep = "delete";
-                //                 } else {
-                //
-                //                     editBtnRep = "";
-                //                     deleteBtnRep = "";
-                //                 }
-                //
-                //
-                //                 repliesArr.push(comments[j]);
-                //                 countReplies++;
-                //
-                //
-                //     } //end of  j loop's condition
-                //
-                // }//end of nested j loop
+
 
 
                 //fill repliesTmp
@@ -313,7 +286,9 @@ console.log("comments" , comments)
                   <a href="form-control" class="d-flex align-items-center me-3">
                     <i class="far fa-comment-dots me-2"></i>
                  
-                  </a>                <a href="#!" class="d-flex align-items-center me-3">
+                  </a>                
+                  
+                  <a href="javascript:void(0)" class="d-flex align-items-center me-3" onclick="likeMessage(${comments[j].msgID})" >
                     <i class="far fa-comment-dots me-2"></i>
                     <p class="mb-0">${comments[j].likes}  likes</p>
                   </a>
@@ -337,89 +312,6 @@ console.log("comments" , comments)
                 }//end of nested j loop
 
 
-                repliesArr.sort((a, b) => a.msgID - b.msgID);
-
-                //repliesTmp for r loop
-
-//                for(let r =0; r < repliesArr.length; r++) {
-//
-//                     if(comments[r].replyTo == comments[i].msgID) {
-//
-//
-//                         let editBtnRep = "";
-//                         let deleteBtnRep = "";
-//                         if (ownerID == comments[r].posterID) {
-//                             editBtnRep = "edit";
-//                             deleteBtnRep = "delete";
-//                         } else {
-//
-//                             editBtnRep = "";
-//                             deleteBtnRep = "";
-//                         }
-//
-//                         repliesTmp += `
-//  <div id="replyDiv" style="width: 100%; margin-left: 10%">
-//   <div style="padding-left: 85% ">
-//                     <a data-toggle="modal" href="" onclick=" showUpdateModal(${repliesArr[r].posterID},${repliesArr[r].sessionID},${repliesArr[r].msgID},'${repliesArr[r].msgContents}');">${editBtnRep}</a>
-//                   <a href="" onclick="deleteMessage(${repliesArr[r].msgID}, ${repliesArr[r].posterID},${repliesArr[r].sessionID})">${deleteBtnRep}</a>
-//  </div>
-//     <div class="card-body">
-//                 <div class="d-flex flex-start align-items-center">
-//
-//                   <div>
-//                   <div style="  position: absolute;top: 8px;right: 16px; color: #005cbf ;font-size: 14px;">
-//                   <p>
-//
-//
-// <!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">edit</button>-->
-//
-//
-//                    </p>
-//                                    </div>
-//
-//                    </div>
-//                     <h6 class="fw-bold text-primary mb-1"> ${repliesArr[r].displayName}</h6>
-//
-//                   </div>
-//
-//                 <p class="mt-3 mb-4 pb-2">
-//
-//                    ${repliesArr[r].msgContents}
-//                 </p>
-//
-//                 <div class="small d-flex justify-content-start">
-//
-//
-//
-//                   <a href="form-control" class="d-flex align-items-center me-3">
-//                     <i class="far fa-comment-dots me-2"></i>
-//
-//                   </a>                <a href="#!" class="d-flex align-items-center me-3">
-//                     <i class="far fa-comment-dots me-2"></i>
-//                     <p class="mb-0">${repliesArr[r].likes}  likes</p>
-//                   </a>
-//
-//                 </div>
-//               </div>
-//
-//
-//
-//
-//
-//
-// </div><br/>
-//
-//
-// `;
-//
-//                     }
-//
-//
-//               }
-
-             //   console.log(repliesArr);
-                // repliesArr = [];
-                //this condition for popping an element of "string/Html replies" being shown as a comment
 
                 if (comments[i].replyTo == null){
 
@@ -549,7 +441,7 @@ ${visibilityButton}
                     <p class="mb-0">${countReplies}  reply&nbsp;&nbsp;&nbsp;&nbsp;</p>
                   </a>                
                   
-                  <a href="#!" class="d-flex align-items-center me-3">
+                  <a href="javascript:void(0)" class="d-flex align-items-center me-3" onclick="likeMessage(${comments[i].msgID})" >
                     <i class="far fa-comment-dots me-2"></i>
                     <p class="mb-0">${comments[i].likes}  likes</p>
                   </a>
@@ -574,6 +466,7 @@ ${visibilityButton}
             <br/><br/>
 
 `;
+
                     //console.log("comment");
                 }else{
                    //  comments.pop();
@@ -616,6 +509,53 @@ comments= [];
 
 
 }
+
+
+
+
+function likeMessage(msgID){
+
+
+     console.log(msgID);
+
+
+    fetch("http://localhost:8080/message/likeMessage", {
+        method: 'PUT',
+        body: JSON.stringify({
+
+            liker: {
+                id: ownerID
+            },
+            likedMessage: {
+                id: msgID
+            }
+
+
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+
+
+
+        })
+
+
+
+
+
+
+}
+
+javascript:void(0)
+
+
 
 
 
@@ -1668,3 +1608,118 @@ let totalReplies = 0;
 //
 //
 // `;
+
+// in case to give more sorting or eliminating to replies use this way
+
+//fill repliesTmp
+// for(let j =0; j < comments.length; j++){
+//
+//
+//
+//     //this condition for filling a string/Html replies array for specific comment and introduce them ordered in UI
+//     if(comments[j].replyTo == comments[i].msgID){
+//
+//               //  show hide controlls
+//                 let editBtnRep = "";
+//                 let deleteBtnRep = "";
+//                 if (ownerID == comments[j].posterID) {
+//                     editBtnRep = "edit";
+//                     deleteBtnRep = "delete";
+//                 } else {
+//
+//                     editBtnRep = "";
+//                     deleteBtnRep = "";
+//                 }
+//
+//
+//                 repliesArr.push(comments[j]);
+//                 countReplies++;
+//
+//
+//     } //end of  j loop's condition
+//
+// }//end of nested j loop
+
+//repliesArr.sort((a, b) => a.msgID - b.msgID);
+
+//repliesTmp for r loop
+
+//                for(let r =0; r < repliesArr.length; r++) {
+//
+//                     if(comments[r].replyTo == comments[i].msgID) {
+//
+//
+//                         let editBtnRep = "";
+//                         let deleteBtnRep = "";
+//                         if (ownerID == comments[r].posterID) {
+//                             editBtnRep = "edit";
+//                             deleteBtnRep = "delete";
+//                         } else {
+//
+//                             editBtnRep = "";
+//                             deleteBtnRep = "";
+//                         }
+//
+//                         repliesTmp += `
+//  <div id="replyDiv" style="width: 100%; margin-left: 10%">
+//   <div style="padding-left: 85% ">
+//                     <a data-toggle="modal" href="" onclick=" showUpdateModal(${repliesArr[r].posterID},${repliesArr[r].sessionID},${repliesArr[r].msgID},'${repliesArr[r].msgContents}');">${editBtnRep}</a>
+//                   <a href="" onclick="deleteMessage(${repliesArr[r].msgID}, ${repliesArr[r].posterID},${repliesArr[r].sessionID})">${deleteBtnRep}</a>
+//  </div>
+//     <div class="card-body">
+//                 <div class="d-flex flex-start align-items-center">
+//
+//                   <div>
+//                   <div style="  position: absolute;top: 8px;right: 16px; color: #005cbf ;font-size: 14px;">
+//                   <p>
+//
+//
+// <!--    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">edit</button>-->
+//
+//
+//                    </p>
+//                                    </div>
+//
+//                    </div>
+//                     <h6 class="fw-bold text-primary mb-1"> ${repliesArr[r].displayName}</h6>
+//
+//                   </div>
+//
+//                 <p class="mt-3 mb-4 pb-2">
+//
+//                    ${repliesArr[r].msgContents}
+//                 </p>
+//
+//                 <div class="small d-flex justify-content-start">
+//
+//
+//
+//                   <a href="form-control" class="d-flex align-items-center me-3">
+//                     <i class="far fa-comment-dots me-2"></i>
+//
+//                   </a>                <a href="#!" class="d-flex align-items-center me-3">
+//                     <i class="far fa-comment-dots me-2"></i>
+//                     <p class="mb-0">${repliesArr[r].likes}  likes</p>
+//                   </a>
+//
+//                 </div>
+//               </div>
+//
+//
+//
+//
+//
+//
+// </div><br/>
+//
+//
+// `;
+//
+//                     }
+//
+//
+//               }
+
+//   console.log(repliesArr);
+// repliesArr = [];
+//this condition for popping an element of "string/Html replies" being shown as a comment
