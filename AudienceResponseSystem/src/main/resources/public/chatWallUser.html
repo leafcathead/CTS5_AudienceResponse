@@ -108,6 +108,12 @@
                 const error = document.querySelector('#error');
                 error.style.display = event.target.value.length >= 4 ? "none" : "block";
               });
+              function showResultTextArea() {
+                let x = document.getElementById("showNullResult");
+                x.className = "show";
+                setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+
+              }
             </script>
           </div>
         </div>

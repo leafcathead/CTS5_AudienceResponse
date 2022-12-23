@@ -229,6 +229,8 @@ function getPosts() {
                 //fill repliesTmp
                 for (let j = 0; j < comments.length; j++) {
 
+                    let time = comments[j].timestamp;
+                    let dateFormatRep = new Date(time);
 
                     //this condition for filling a string/Html replies array for specific comment and introduce them ordered in UI
                     if (comments[j].replyTo == comments[i].msgID) {
@@ -269,7 +271,7 @@ function getPosts() {
 </div>
                     <h6 class="fw-bold text-primary mb-1"> ${comments[j].displayName}</h6>
                     <p class="text-muted small mb-0">
-                        Shared publicly ${dateFormat}
+                         ${dateFormatRep}
                     </p>
 
                   </div>
@@ -424,7 +426,7 @@ ${visibilityButton}
                    </div>
                     <h6 class="fw-bold text-primary mb-1"> ${comments[i].displayName}</h6>
                     <p class="text-muted small mb-0">
-                        Shared publicly ${dateFormat}
+                         ${dateFormat}
                     </p>
 
                   </div>
@@ -466,7 +468,7 @@ ${visibilityButton}
             <br/><br/>
 
 `;
-
+                    dateFormat = "";
                     //console.log("comment");
                 }else{
                    //  comments.pop();
