@@ -489,17 +489,18 @@ ${visibilityButton}
     //end of Main for loop
             }
 
-            if(comments.length == 0){
+
+
+            console.log(comments);
+
+
+            if (comments.length == 0) {
                 let span = `
                 <span style="text-align: center; font-size: 20px;">no comments posted or not visible yet &nbsp;&nbsp;  :_(</span>
                 `;
                 $("#noCommentsYet").html(span);
 
             }
-
-            console.log(comments);
-
-
 
 
 
@@ -508,7 +509,6 @@ ${visibilityButton}
 
 comments= [];
     body= "";
-
 
 }
 
@@ -555,7 +555,7 @@ function likeMessage(msgID){
 
 }
 
-javascript:void(0)
+
 
 
 
