@@ -14,10 +14,7 @@ import java.util.Map;
 @CrossOrigin(origins = {"http://localhost:8080"},methods={RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD})
 @RequestMapping("/session")
 public class SessionRoomController {
-
-    @Autowired
-    private TestStudentService testStudentService;
-
+    
     @Autowired
     private SessionService sessionService;
 
