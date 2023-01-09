@@ -10,4 +10,6 @@ public interface SessionServiceInterface {
     public Map<String, Long> joinSession(String password);
     public Map<String, Object> closeSession(Long sessionID, Long ownerID);
 
+    public boolean checkSessionStatus(Long sessionID);
+
 }

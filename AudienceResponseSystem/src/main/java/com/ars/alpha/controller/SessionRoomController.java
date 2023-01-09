@@ -94,6 +94,21 @@ public class SessionRoomController {
         return sessionService.closeSession(session.getID(), session.getOwner().getId());
     }
 
+    /**
+     *
+     *
+     * @param session JSON Object in the form:
+     *                {
+     *                  "id": <Long>
+     *                }
+     * @return boolean value. If TRUE, the session is still active. If FALSE, the session is closed.
+     */
+    @GetMapping("/checkSessionStatus")
+    boolean checkStatus(@RequestBody SessionRoom session) {
+
+        return true;
+    }
+
 
 
 

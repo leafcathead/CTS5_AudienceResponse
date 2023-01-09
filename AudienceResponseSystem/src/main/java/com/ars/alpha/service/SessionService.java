@@ -1,6 +1,7 @@
 package com.ars.alpha.service;
 
 import com.ars.alpha.dao.SessionRepository;
+import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.other.Status;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.hibernate.exception.SQLGrammarException;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.PersistenceException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class SessionService implements SessionServiceInterface {
@@ -109,5 +111,14 @@ public class SessionService implements SessionServiceInterface {
         }
 
         return returnerMap;
+    }
+
+    @Override
+    public boolean checkSessionStatus(Long sessionID) {
+
+        Optional<SessionRoom> result = sessionRepository.findById(sessionID);
+        sessionRepository.flush();
+
+        return result.isPresent();
     }
 }
