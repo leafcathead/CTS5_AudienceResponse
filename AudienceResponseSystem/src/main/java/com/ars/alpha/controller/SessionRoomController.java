@@ -1,22 +1,12 @@
 package com.ars.alpha.controller;
 
 import com.ars.alpha.model.SessionRoom;
-import com.ars.alpha.model.SessionUser;
-import com.ars.alpha.model.TestStudent;
 import com.ars.alpha.other.Password;
 import com.ars.alpha.service.SessionService;
-import com.ars.alpha.service.TestStudentService;
 import com.ars.alpha.service.UserService;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import org.apache.tomcat.util.json.JSONParser;
-import org.apache.tomcat.util.json.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Entity;
-import java.util.HashMap;
 import java.util.Map;
 
 

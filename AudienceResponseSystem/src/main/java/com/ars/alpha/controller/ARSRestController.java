@@ -1,22 +1,16 @@
 package com.ars.alpha.controller;
 
 
-import com.ars.alpha.dao.TestStudentRepository;
 import com.ars.alpha.exception.TestStudentStoredProcedureException;
-import com.ars.alpha.model.SessionUser;
-import com.ars.alpha.model.TestStudent;
 import com.ars.alpha.service.MessageService;
 import com.ars.alpha.service.SessionService;
-import com.ars.alpha.service.TestStudentService;
 import com.ars.alpha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.SQLException;
-import java.util.List;
 
 @RestController
 @CrossOrigin
