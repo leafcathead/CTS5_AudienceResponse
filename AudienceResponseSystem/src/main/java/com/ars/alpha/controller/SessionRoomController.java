@@ -106,7 +106,7 @@ public class SessionRoomController {
     @GetMapping("/checkSessionStatus")
     boolean checkStatus(@RequestBody SessionRoom session) {
 
-        return true;
+        return sessionService.checkSessionStatus(session.getID());
     }
 
 
