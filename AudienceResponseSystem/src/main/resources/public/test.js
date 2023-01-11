@@ -1,5 +1,6 @@
 var stompClient = null;
 
+// THIS IS NOT IMPORTANT
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
@@ -13,13 +14,14 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var socket = new SockJS('http://localhost:8080/myTest');
+    var socket = new SockJS('http://localhost:8080/message');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/user/1/topic/retrieveMessages', function (greeting) {
-            console.log(greeting);
+        stompClient.subscribe('/user/1/topic/retrieveMessages', function (greeting) { // INSTEAD OF '1' PUT THE CURRENT SESSION ID!
+            console.log(greeting); // Greeting is the response back from the server, so just place all the Get Message code inside HERE!
+                                   // it will execute when this returns.
         });
     });
 }
@@ -41,6 +43,9 @@ function postComment() {
 }
 **/
 
+/**
+ * Works with Restful API too, just use websocket for the get messages.
+ */
 function postComment() {
 
         const data = {
@@ -81,6 +86,9 @@ function postComment() {
             })
 }
 
+/**
+ * Get messages using Web sockets.
+ */
 function getMessages() {
     var myDate = {id: 1};
     var stringObj = JSON.stringify(myDate);
@@ -88,6 +96,7 @@ function getMessages() {
     stompClient.send("/app/getMessages", {}, stringObj);
 }
 
+// RUN THIS WHENEVER THE JAVASCRIPT FILE IS OPENED SO THAT IT AUTO CONNECTS
 $(function () {
     connect();
 });
