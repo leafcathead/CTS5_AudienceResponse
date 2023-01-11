@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="float-end mt-2 pt-1">
+    <button type="button" class="btn btn-primary btn-sm" onclick="postComment()">Post comment</button>
+    <button type="button" class="btn btn-primary btn-sm" onclick="getMessages()">Get Messages</button>
+    <button  class="btn btn-outline-primary btn-sm" onclick="clearTextbox()">clear</button><script>function clearTextbox(){$("#textArea").val("");location.reload();}</script>
+</div>
+</body>
+</html>
+
+<script src="./assets/chatWallAssets/js/jquery.min.js"></script>
+<script src="./assets/chatWallAssets/js/popper.js"></script>
+<script src="./assets/chatWallAssets/js/bootstrap.min.js"></script>
+<script src="test.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="/webjars/sockjs-client/sockjs.min.js"></script>
+<script src="/webjars/stomp-websocket/stomp.min.js"></script>
