@@ -45,6 +45,7 @@ public class MessageService implements MessageServiceInterface {
      * 2.  Exit code
      * 3.  Message Id
      */
+   @Transactional
     public Map<String, Object> postComment(Long posterID, Long sessionID, String message, Long iD) {
         Map<String, Object> ret = new HashMap<String, Object>();
         try {
