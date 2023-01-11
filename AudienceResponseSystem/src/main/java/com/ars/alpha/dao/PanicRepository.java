@@ -12,7 +12,7 @@ import java.util.Map;
 
 public interface PanicRepository extends JpaRepository<PanicResponse, Long> {
     @Procedure(name = "INSERT_PANIC")
-    Long INSERT_PANIC (Long ID/*, Long PanicButtonPushed*/ , Long Panicker, Long SessionRoom, String LogTime) throws PersistenceException;
+    void INSERT_PANIC (String PanicButtonPushed , Long Panicker, Long SessionRoom) throws PersistenceException;
 //
     @Procedure(name = "GET_PANIC_RESPONSES")
     List<PanicResponse> GET_PANIC_RESPONSE (Long sessionID) throws PersistenceException;

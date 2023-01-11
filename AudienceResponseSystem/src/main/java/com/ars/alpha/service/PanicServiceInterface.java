@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface PanicServiceInterface {
 
-    //Map<String, Object> postPanic(Long ID/* Long PanicButtonPushed,*/, Long Panicker, Long SessionRoom, String LogTime);
+    Map<String, Object> postPanic(String buttonPushed, Long Panicker, Long SessionRoom);
 
     Map<String, Object> getPanicResponses(Long sessionID);
 }

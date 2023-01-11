@@ -16,17 +16,38 @@ public class PanicController {
     @Autowired
     PanicService panicService;
 
-//    @PostMapping("/postPanic")
-//    Map<String, Object> postPanic (@RequestBody PanicResponse newPanic) throws Exception{
-//
-////        if(newCo.checkOverSize()){
-////            throw new IllegalArgumentException("Panic type not accepted");
-////        }
-//
-//        //  System.out.println(newComment.toString());
-//
-//        return panicService.postPanic(newPanic.getID(), newPanic.getPanicker(), newPanic.getMessageContents(), null);
-//    }
+    /**
+     *
+     * @param newPanic JSON Object of the form:
+     *                 {
+     *                      "panicType": {
+     *                          "panicType": <4 Char String> (See DB for more information on acceptable formats)
+     *                      },
+     *                      "panicker": {
+     *                          "id": <Long>
+     *                      },
+     *                      "session": {
+     *                          "id": <Long>
+     *                     }
+     *                 }
+     * @return JSON Object in the form:
+     *          {
+     *              "Status": <SUCCESS, WARNING, ERROR>,
+     *              "Code": <int>
+     *          }
+     * @throws Exception
+     */
+    @PostMapping("/postPanic")
+    Map<String, Object> postPanic (@RequestBody PanicResponse newPanic) throws Exception{
+
+        if(newPanic.checkOverSize()){
+            throw new IllegalArgumentException("Panic type not accepted");
+        }
+
+        //  System.out.println(newComment.toString());
+
+        return panicService.postPanic(newPanic.getPanicType().getPanicType(), newPanic.getPanicker().getId(), newPanic.getSession().getID());
+    }
 
 
     /**

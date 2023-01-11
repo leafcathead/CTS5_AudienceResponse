@@ -10,11 +10,9 @@ import java.sql.Timestamp;
 @Table(appliesTo = "PanicResponse")
 
 @NamedStoredProcedureQuery(name = "INSERT_PANIC", procedureName = "INSERT_PANIC", parameters = {
-        @StoredProcedureParameter(mode = ParameterMode.IN, name = "ID", type = Long.class),
-        //@StoredProcedureParameter(mode = ParameterMode.IN, name = "PanicButtonPushed", type = Long.class),
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "PanicButtonPushed", type = String.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "Panicker", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "SessionRoom", type = Long.class),
-        @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "LogTime", type = String.class)
 })
 @NamedStoredProcedureQuery(name = "GET_PANIC_RESPONSES", procedureName = "GET_PANIC_RESPONSES", resultClasses = {PanicResponse.class}, parameters = {
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class)})
@@ -77,7 +75,7 @@ public class PanicResponse {
         this.id = id;
     }
 
-    boolean checkOverSize(){
+    public boolean checkOverSize(){
         return panicType.getPanicType().length() > 4;
     }
 }

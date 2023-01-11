@@ -226,7 +226,7 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
         jsonGenerator.close();
         String jsonString = writer.toString();
 
-        result =  this.mockMvc.perform(get("/session/checkSessionStatus").content(jsonString).contentType(MediaType.APPLICATION_JSON))
+        result =  this.mockMvc.perform(post("/session/checkSessionStatus").content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 
