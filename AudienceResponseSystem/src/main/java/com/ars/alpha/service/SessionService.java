@@ -118,4 +118,5 @@ public class SessionService implements SessionServiceInterface {
 
         return sessionRepository.existsById(sessionID);
     }
+
 }
