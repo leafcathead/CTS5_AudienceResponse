@@ -1,15 +1,11 @@
 package com.ars.alpha.dao;
 
 import com.ars.alpha.model.SessionRoom;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
-import org.hibernate.HibernateException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.query.Procedure;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.PersistenceException;
-import java.math.BigInteger;
 import java.util.Map;
 
 @Repository
@@ -27,5 +23,5 @@ public interface SessionRepository extends JpaRepository<SessionRoom, Long> {
     Long JOIN_SESSION (Long sessionID, Long newUserID);
 
     @Procedure(name = "CLOSE_SESSION")
-    void CLOSE_SESSION (Long sessionID, Long ownerID) throws PersistenceException;
+    void CLOSE_SESSION (Long sessionID) throws PersistenceException;
 }

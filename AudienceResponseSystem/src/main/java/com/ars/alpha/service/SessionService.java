@@ -94,7 +94,7 @@ public class SessionService implements SessionServiceInterface {
 
         try {
 
-            sessionRepository.CLOSE_SESSION(sessionID, ownerID);
+            sessionRepository.CLOSE_SESSION(sessionID);
 
             returnerMap.put("Status", Status.SUCCESS);
             returnerMap.put("Code", 0);

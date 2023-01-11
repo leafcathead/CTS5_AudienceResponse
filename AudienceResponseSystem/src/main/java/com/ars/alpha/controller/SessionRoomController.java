@@ -79,7 +79,7 @@ public class SessionRoomController {
     Map<String, Object> closeSession(@RequestBody SessionRoom session) {
         System.out.println("Closing session: " + session.getID());
 
-        return sessionService.closeSession(session.getID(), session.getOwner().getId());
+        return sessionService.closeSession(session.getID(), null);
     }
 
     /**

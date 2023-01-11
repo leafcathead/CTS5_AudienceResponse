@@ -24,8 +24,7 @@ import java.sql.Timestamp;
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "newUserID", type = Long.class) })
 @NamedStoredProcedureQuery(name = "CLOSE_SESSION", procedureName = "CLOSE_SESSION", parameters = {
-        @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class),
-        @StoredProcedureParameter(mode = ParameterMode.IN, name = "ownerID", type = Long.class) })
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class) })
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class SessionRoom {
     @Id

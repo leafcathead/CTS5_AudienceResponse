@@ -11,13 +11,13 @@ import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.ArgumentMatchers.isNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 import com.ars.alpha.dao.SessionRepository;
+import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.other.Password;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -53,6 +53,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.persistence.PersistenceException;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Optional;
 
 
 @RunWith(SpringRunner.class)
@@ -200,9 +201,50 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
 
     @Test
     @Transactional
-    public void closeSessionTest() {
+    public void closeSessionTest() throws Exception {
 
-        assert(false);
+        MvcResult result =  this.mockMvc.perform(get("/session/createSession").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                //.andExpect((ResultMatcher) jsonPath("$", anyList())) // How can I check that the length is the same size
+                .andExpect((ResultMatcher) jsonPath("$.newUserID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("['newUserID']", greaterThanOrEqualTo(1)))
+                .andExpect((ResultMatcher) jsonPath("$.newSessionID", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("['newSessionID']", greaterThanOrEqualTo(1)))
+                .andReturn();
+
+        String responseString = result.getResponse().getContentAsString();
+
+        TestObj someClass = new ObjectMapper().readValue(responseString, TestObj.class);
+
+        // Check that session is open
+
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeStringField("id", String.valueOf(someClass.newSessionID));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        String jsonString = writer.toString();
+
+        result =  this.mockMvc.perform(get("/session/checkSessionStatus").content(jsonString).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String resultString = result.getResponse().getContentAsString();
+        assertEquals("true", resultString);
+
+        // Close session
+
+        this.mockMvc.perform(delete("/session/closeSession").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                //           .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code",  Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andReturn();
+
     }
 
     static class TestObj {
