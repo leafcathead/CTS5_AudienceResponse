@@ -73,7 +73,7 @@ public class PanicController {
      *                  ]
      *          }
      */
-    @GetMapping("/getPanicResponses")
+    @PostMapping("/getPanicResponses")
     Map<String, Object> getResponses (@RequestBody SessionRoom s) {
 
         if (s.getID() == null) {
