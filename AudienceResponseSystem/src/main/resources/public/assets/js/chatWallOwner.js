@@ -117,9 +117,9 @@ function postReply(posterID = $("#RposterID").val(), sessionID = $("#RsessionID"
 
 //get posts from DB(Recommended way)
 function getPosts() {
-      if(checkSessionStatus()== true){
-
-
+      if(greeting() == false){
+// checkSessionStatus();
+           console.log(checkSessionStatus());
     let comments = [];
     let allUsers = 0;
     let body = $("#cardDiv").html();
@@ -484,9 +484,10 @@ ${visibilityButton}
     body = "";
 
 }    //end of checking session status condition
-else
+    else
 {
     console.log("the session has been deleted!");
+
 }
 }
 
@@ -867,10 +868,41 @@ function postAgain() {
 }
 
 
-async function checkSessionStatus() {
-
+function checkSessionStatus() {
+  let resulty = "fgdgc";
     fetch("http://localhost:8080/session/checkSessionStatus", {
         method: 'POST',
+        body: JSON.stringify({
+            id: sessionID
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            resulty = response.text()
+            return response.text()
+
+        })
+        .then((receivedJson) => {
+            //console.log(receivedJson);
+            //console.log(receivedJson);
+            console.log(receivedJson)
+        });
+
+    //return resulty;
+
+
+}
+
+function greeting(){
+
+    return false;
+}
+
+function deleteSession() {
+    fetch("http://localhost:8080/session/closeSession", {
+        method: 'DELETE',
         body: JSON.stringify({
             id: sessionID
         }),
@@ -882,14 +914,15 @@ async function checkSessionStatus() {
             return response.json()
         })
         .then((receivedJson) => {
-
-            console.log(receivedJson);
+            //  console.log(receivedJson);
+            return receivedJson;
+console.log("session has been deleted")
         });
-
-}
-
-function deleteSession() {
-
+    // localStorage.removeItem('ownerID');
+    // localStorage.removeItem('sessionID');
+    // localStorage.removeItem('sessionPassword');
+    // localStorage.removeItem('displyname');
+    // location.replace("index.html")
 }
 
 
@@ -898,7 +931,7 @@ function logOutOwner() {
     localStorage.removeItem('ownerID');
     localStorage.removeItem('sessionID');
     localStorage.removeItem('sessionPassword');
-    localStorage.removeItem('displyname');
+    localStorage.removeItem('displayname');
     location.replace("index.html")
 }
 
