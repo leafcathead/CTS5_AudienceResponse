@@ -1,10 +1,7 @@
-
-
-
 const ownerID = localStorage.getItem('ownerID');
 const sessionID = localStorage.getItem('sessionID');
 const sessionPassword = localStorage.getItem('sessionPassword');
-let displayname =  localStorage.getItem('displayname');
+let displayname = localStorage.getItem('displayname');
 
 // function fetching(){
 //     setTimeout(getPosts, 1000);}
@@ -12,69 +9,66 @@ let displayname =  localStorage.getItem('displayname');
 //post comment
 function postComment() {
 
-if($("#textArea").val() != ""){
-    let answer = document.getElementById('answer');
-    const data = {
-
-        poster: {
-            id:  ownerID
-        },
-        session: {
-            id: sessionID
-        },
-        messageContent:$("#textArea").val()
-
-    };
-    console.log(data);
-    fetch("http://localhost:8080/message/postComment", {
-        method: 'POST',
-        body: JSON.stringify({
+    if ($("#textArea").val() != "") {
+        let answer = document.getElementById('answer');
+        const data = {
 
             poster: {
-                id:  ownerID
+                id: ownerID
             },
             session: {
                 id: sessionID
             },
-            messageContent:$("#textArea").val()
+            messageContent: $("#textArea").val()
+
+        };
+        console.log(data);
+        fetch("http://localhost:8080/message/postComment", {
+            method: 'POST',
+            body: JSON.stringify({
+
+                poster: {
+                    id: ownerID
+                },
+                session: {
+                    id: sessionID
+                },
+                messageContent: $("#textArea").val()
 
 
-        }),
-        headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        }
-    })
-        .then((response) => {
-            return response.json()
+            }),
+            headers: {
+                "Content-Type": "application/json;charset=UTF-8"
+            }
         })
-        .then((data) => {
-            console.log(data)
-getPosts();
-            const parg = `
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log(data)
+                getPosts();
+                const parg = `
 
            
           your comment has been successfully posted<br/>
            <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
             `;
 
-            answer.innerHTML = parg;
-            answer = "";
-        })
-}else{
-    showResultTextArea();
-}
+                answer.innerHTML = parg;
+                answer = "";
+            })
+    } else {
+        showResultTextArea();
+    }
 
 }
-
-
 
 
 //post reply
-function postReply(posterID=$("#RposterID").val(),sessionID=$("#RsessionID").val(),msgID=$("#RmsgID").val(),msgContent=$("#RmsgContent").val()) {
- // let answer = document.getElementById('');
+function postReply(posterID = $("#RposterID").val(), sessionID = $("#RsessionID").val(), msgID = $("#RmsgID").val(), msgContent = $("#RmsgContent").val()) {
+    // let answer = document.getElementById('');
 
-console.log(posterID, sessionID,msgID, msgContent);
-
+    console.log(posterID, sessionID, msgID, msgContent);
 
 
     fetch("http://localhost:8080/message/postReply", {
@@ -82,17 +76,16 @@ console.log(posterID, sessionID,msgID, msgContent);
         body: JSON.stringify({
 
 
-
-        poster: {
-        id: posterID
-    },
-        session: {
-        id: sessionID
-    },
-        replyTo: {
-        id: msgID
-    },
-        messageContent: msgContent
+            poster: {
+                id: posterID
+            },
+            session: {
+                id: sessionID
+            },
+            replyTo: {
+                id: msgID
+            },
+            messageContent: msgContent
 
         }),
         headers: {
@@ -105,15 +98,15 @@ console.log(posterID, sessionID,msgID, msgContent);
         .then((data) => {
             console.log(data)
 
-          //   const parg = `
-          //
-          //
-          // your comment has been successfully posted<br/>
-          //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
-          //   `;
-          //
-          //  answer.innerHTML = parg;
-          //  answer = "";
+            //   const parg = `
+            //
+            //
+            // your comment has been successfully posted<br/>
+            //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+            //   `;
+            //
+            //  answer.innerHTML = parg;
+            //  answer = "";
 
         })
 
@@ -122,16 +115,12 @@ console.log(posterID, sessionID,msgID, msgContent);
 }
 
 
-
-
-
-
-
-
-
 //get posts from DB(Recommended way)
 function getPosts() {
-    let comments =[];
+      if(checkSessionStatus()== true){
+
+
+    let comments = [];
     let allUsers = 0;
     let body = $("#cardDiv").html();
     fetch("http://localhost:8080/message/getMessages", {
@@ -150,28 +139,28 @@ function getPosts() {
 
             console.log(receivedJson);
 
-               //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
-            for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
+            //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
+            for (let i = 0; i < Object.keys(receivedJson.Messages).length; i++) {
 
 
-                        for(let k = 0; k <  Object.keys(receivedJson.Messages).length; k++){
+                for (let k = 0; k < Object.keys(receivedJson.Messages).length; k++) {
 
-                            if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster){
+                    if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster) {
 
-                                comments.push({
-                                    posterID: receivedJson.Messages[k].poster,
-                                    displayName: receivedJson.Messages[i].poster.displayName,
-                                    sessionID: receivedJson.Messages[k].session,
-                                    msgID: receivedJson.Messages[k].id,
-                                    timestamp: receivedJson.Messages[k].timestamp,
-                                    msgContents: receivedJson.Messages[k].messageContents,
-                                    replyTo: receivedJson.Messages[k].replyTo,
-                                    visible: receivedJson.Messages[k].visible,
-                                    likes: receivedJson.Messages[k].likes
-                                });
+                        comments.push({
+                            posterID: receivedJson.Messages[k].poster,
+                            displayName: receivedJson.Messages[i].poster.displayName,
+                            sessionID: receivedJson.Messages[k].session,
+                            msgID: receivedJson.Messages[k].id,
+                            timestamp: receivedJson.Messages[k].timestamp,
+                            msgContents: receivedJson.Messages[k].messageContents,
+                            replyTo: receivedJson.Messages[k].replyTo,
+                            visible: receivedJson.Messages[k].visible,
+                            likes: receivedJson.Messages[k].likes
+                        });
 
-                            }
-                        } //end of k loop
+                    }
+                } //end of k loop
                 if (receivedJson.Messages[i].poster.id) {
 
 
@@ -186,19 +175,17 @@ function getPosts() {
                         visible: receivedJson.Messages[i].visible,
                         likes: receivedJson.Messages[i].likes
                     });
-                 }
+                }
 
             }
 
 
-
-            console.log("comments" , comments)
+            console.log("comments", comments)
             comments.sort((a, b) => a.msgID - b.msgID);
 
 
-
 //browsing the comments[] array and control it in several aspects
-            for (let i = 0; i <  comments.length; i++) {
+            for (let i = 0; i < comments.length; i++) {
 
 
                 let countReplies = 0;
@@ -218,12 +205,10 @@ function getPosts() {
                 }
 
                 let repliesTmp = "";
-              //  let repliesArr = [];
+                //  let repliesArr = [];
 
                 let timeStamp = comments[i].timestamp;
                 let dateFormat = new Date(timeStamp);
-
-
 
 
                 //fill repliesTmp
@@ -314,21 +299,18 @@ function getPosts() {
                 }//end of nested j loop
 
 
-
-                if (comments[i].replyTo == null){
-
-
+                if (comments[i].replyTo == null) {
 
 
 //initializing visibility toggle button
-                   let visibilityButton = ``;
-                    if(comments[i].visible === true){
+                    let visibilityButton = ``;
+                    if (comments[i].visible === true) {
                         visibilityButton = `
 <label class="toggle">
     <input checked id="toggleswitch${comments[i].msgID}"  type="checkbox" onclick="getVisibility(${comments[i].msgID},${comments[i].posterID},${comments[i].visible})">
     <span class="roundbutton"><span id="status${comments[i].msgID}" style="color: whitesmoke; font-size: 11px">&nbsp;&nbsp;&nbsp;visible</span></span>
 </label>`;
-                    }else{
+                    } else {
                         visibilityButton = `
           <label class="toggle">
              <input id="toggleswitch${comments[i].msgID}"  type="checkbox" value="${comments[i].msgID}" onclick="getVisibility(${comments[i].msgID},${comments[i].posterID},${comments[i].visible})">
@@ -470,25 +452,17 @@ ${visibilityButton}
 `;
                     dateFormat = "";
                     //console.log("comment");
-                }else{
-                   //  comments.pop();
+                } else {
+                    //  comments.pop();
                 }
 
 
-
-              // repliesTmp = "";
+                // repliesTmp = "";
                 $("#cardDiv").html(body);
 
 
-
-
-
-
-
-
-    //end of Main for loop
+                //end of Main for loop
             }
-
 
 
             console.log(comments);
@@ -503,22 +477,24 @@ ${visibilityButton}
             }
 
 
-
         }) // end of .then(receivedJson)
 
 
-comments= [];
-    body= "";
+    comments = [];
+    body = "";
 
+}    //end of checking session status condition
+else
+{
+    console.log("the session has been deleted!");
+}
 }
 
 
+function likeMessage(msgID) {
 
 
-function likeMessage(msgID){
-
-
-     console.log(msgID);
+    console.log(msgID);
 
 
     fetch("http://localhost:8080/message/likeMessage", {
@@ -545,25 +521,13 @@ function likeMessage(msgID){
             console.log(data)
 
 
-
         })
-
-
-
-
 
 
 }
 
 
-
-
-
-
-
-
-
-function deleteMessage(msgID, posterID, sessionID){
+function deleteMessage(msgID, posterID, sessionID) {
 
     console.log(msgID, posterID, sessionID);
     fetch("http://localhost:8080/message/deleteMessage", {
@@ -604,29 +568,27 @@ function deleteMessage(msgID, posterID, sessionID){
 }
 
 
-
-
 //visibility
-function getVisibility(msgID,posterID,visible){
+function getVisibility(msgID, posterID, visible) {
 
 //if(document.getElementById('status'+data == true){}
-    let input = document.getElementById('toggleswitch'+msgID);
-      let outputtext = document.getElementById('status'+msgID);
+    let input = document.getElementById('toggleswitch' + msgID);
+    let outputtext = document.getElementById('status' + msgID);
 
-    if(visible === true){
+    if (visible === true) {
 
-       // console.log(data);
+        // console.log(data);
         fetch("http://localhost:8080/message/updateVisibility", {
             method: 'PUT',
             body: JSON.stringify({
 
                 id: msgID,
-                                  poster: {
-                                          id: posterID
-                                      },
-                                      session: {
-                                          id: sessionID
-                                      }
+                poster: {
+                    id: posterID
+                },
+                session: {
+                    id: sessionID
+                }
 
             }),
             headers: {
@@ -651,7 +613,7 @@ function getVisibility(msgID,posterID,visible){
             });
 
         console.log("is visible" + visible);
-    }else{
+    } else {
         fetch("http://localhost:8080/message/updateVisibility", {
             method: 'PUT',
             body: JSON.stringify({
@@ -687,22 +649,20 @@ function getVisibility(msgID,posterID,visible){
             });
 
 
-
         console.log("is visible" + visible);
     }
 
 
-
-    input.addEventListener('change',function(){
-        if(this.checked) {
-               outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;visible";
-         //   console.log(this.value);
-        //    console.log("1");
+    input.addEventListener('change', function () {
+        if (this.checked) {
+            outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;visible";
+            //   console.log(this.value);
+            //    console.log("1");
 
 
         } else {
-              outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invisible";
-          //  console.log("0")
+            outputtext.innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;invisible";
+            //  console.log("0")
         }
     });
     // var x = document.getElementById("invisible");
@@ -711,12 +671,6 @@ function getVisibility(msgID,posterID,visible){
     // } else {
     //     console.log("invisible");
     // }
-
-
-
-
-
-
 
 
 //     if(data = true){
@@ -748,12 +702,8 @@ function getVisibility(msgID,posterID,visible){
 }
 
 
-
-
-
-
 //show data model first then call updateComment();
-function showUpdateModal(posterID,sessionID, msgID, msgContent){
+function showUpdateModal(posterID, sessionID, msgID, msgContent) {
     $("#exampleModal").modal('show');
 
     $("#msgID").val(msgID);
@@ -762,30 +712,28 @@ function showUpdateModal(posterID,sessionID, msgID, msgContent){
     $("#msgContent").val(msgContent);
 
 
-    console.log(posterID,sessionID, msgID, msgContent);
+    console.log(posterID, sessionID, msgID, msgContent);
 
 }
 
-function showReplyModal(posterID,sessionID, msgID){
+function showReplyModal(posterID, sessionID, msgID) {
     $("#replyModal").modal('show');
 
     $("#RmsgID").val(msgID);
     $("#RposterID").val(posterID);
     $("#RsessionID").val(sessionID);
-   $("#RmsgContent").val("");
+    $("#RmsgContent").val("");
 
 
-    console.log(posterID,sessionID, msgID);
+    console.log(posterID, sessionID, msgID);
 
 }
 
 
-
-
 //update comment
-function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),sessionID=$("#sessionID").val(),msgContent=$("#msgContent").val()){
+function updateComment(posterID = $("#posterID").val(), msgID = $("#msgID").val(), sessionID = $("#sessionID").val(), msgContent = $("#msgContent").val()) {
 //test
-    console.log("i am update comment   " + posterID +"  " + msgID+"  " + sessionID+"  " + msgContent);
+    console.log("i am update comment   " + posterID + "  " + msgID + "  " + sessionID + "  " + msgContent);
     //VPN is not working updateMessageContent type PUT is not yet tested
 
 
@@ -804,7 +752,7 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
     //
     // };
 //last version
-  //  console.log(data);
+    //  console.log(data);
     fetch("http://localhost:8080/message/updateMessageContent", {
         method: 'PUT',
         body: JSON.stringify({
@@ -829,15 +777,15 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
         .then((data) => {
             console.log(data)
 
-      //       const parg = `
-      //
-      //
-      // your comment has been successfully posted<br/>
-      //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
-      //   `;
-      //
-      //       answer.innerHTML = parg;
-      //       answer = "";
+            //       const parg = `
+            //
+            //
+            // your comment has been successfully posted<br/>
+            //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+            //   `;
+            //
+            //       answer.innerHTML = parg;
+            //       answer = "";
         });
 
 
@@ -845,26 +793,23 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
 
 
 //update comment
-function updateDisplayname(){
+function updateDisplayname() {
 //test
     $("#myModal").modal('show');
     $("#newDisNameField").val(displayname);
-   // data-toggle="modal" data-target="#myModal"
-    console.log("posterID: " + ownerID +"  sessionID: " + sessionID +"  displayname:  " + $("#newDisNameField").val());
+    // data-toggle="modal" data-target="#myModal"
+    console.log("posterID: " + ownerID + "  sessionID: " + sessionID + "  displayname:  " + $("#newDisNameField").val());
     //VPN is not working updateMessageContent type PUT is not yet tested
 
     //  let answer = document.getElementById('answer');
 
 
-
-
 }
 
 
+function newDisplyname() {
 
-function newDisplyname(){
-
-    console.log(ownerID, sessionID, $("#newDisNameField").val() )
+    console.log(ownerID, sessionID, $("#newDisNameField").val())
 
 
     fetch("http://localhost:8080/user/updateDisplayName", {
@@ -872,15 +817,13 @@ function newDisplyname(){
         body: JSON.stringify({
 
 
-
-                id: ownerID
+            id: ownerID
             ,
-            displayName:  $("#newDisNameField").val(),
+            displayName: $("#newDisNameField").val(),
             session: {
                 id: sessionID
 
             }
-
 
 
         }),
@@ -896,7 +839,7 @@ function newDisplyname(){
             localStorage.setItem('displayname', $("#newDisNameField").val());
 
 
-            if(data.Status == "SUCCESS"){
+            if (data.Status == "SUCCESS") {
                 const parg = `
 
 
@@ -907,11 +850,10 @@ function newDisplyname(){
                 answer.innerHTML = parg;
 
 
-            }else{
+            } else {
 
                 console.log("Error has been occurred");
             }
-
 
 
         })
@@ -920,17 +862,38 @@ function newDisplyname(){
 }
 
 
-function postAgain(){
+function postAgain() {
     location.replace("chatWallOwner.html");
 }
 
 
+async function checkSessionStatus() {
+
+    fetch("http://localhost:8080/session/checkSessionStatus", {
+        method: 'POST',
+        body: JSON.stringify({
+            id: sessionID
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((receivedJson) => {
+
+            console.log(receivedJson);
+        });
+
+}
+
+function deleteSession() {
+
+}
 
 
-
-
-
-function logOutOwner(){
+function logOutOwner() {
 
     localStorage.removeItem('ownerID');
     localStorage.removeItem('sessionID');
@@ -1042,9 +1005,6 @@ function logOutOwner(){
 //
 // }
 //setInterval(getPosts,1000);
-
-
-
 
 
 //                 for (let j = 0; j < Object.keys(receivedJson.Messages).length; j++) {
@@ -1170,17 +1130,6 @@ function logOutOwner(){
 //                 }
 
 
-
-
-
-
-
-
-
-
-
-
-
 // Replies Abstract
 //  let cReplies="";
 //  for (let k = 0; k < replies.length; k++){
@@ -1213,7 +1162,6 @@ function logOutOwner(){
 //
 // <!--                    }-->
 // <!--</script>-->
-
 
 
 // <style>
@@ -1380,7 +1328,6 @@ function logOutOwner(){
 //
 
 
-
 // if(comments[i].visible==false){
 //     invisible = "invisible";
 //     visible = "";
@@ -1407,8 +1354,6 @@ function logOutOwner(){
 //     visibilityButtonUnchecked = ``;
 //
 // }
-
-
 
 
 //togBtn
@@ -1501,7 +1446,6 @@ function logOutOwner(){
 //                                 <!--END-->
 //                             </div>
 //                     </label>
-
 
 
 //STATISTICS

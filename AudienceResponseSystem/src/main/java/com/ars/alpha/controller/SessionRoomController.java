@@ -88,7 +88,7 @@ public class SessionRoomController {
      *                }
      * @return boolean value. If TRUE, the session is still active. If FALSE, the session is closed.
      */
-    @GetMapping("/checkSessionStatus")
+    @PostMapping("/checkSessionStatus")
     boolean checkStatus(@RequestBody SessionRoom session) {
 //        boolean result = sessionService.checkSessionStatus(session.getID());
 //        Map<String, Boolean> returnerMap = new HashMap<String, Boolean>();
