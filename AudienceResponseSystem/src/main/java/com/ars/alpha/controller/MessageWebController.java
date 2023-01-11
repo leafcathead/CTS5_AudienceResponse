@@ -26,17 +26,22 @@ public class MessageWebController {
     @Autowired
     SimpMessagingTemplate messagingTemplate;
 
-    @MessageMapping("/postComment")
-    @SendTo("/topic/webMessage")
-    public Map<String, Object> postMessage(Message newComment) {
-        System.out.println("Got a response here");
-        //messagingTemplate.convertAndSendToUser("/topic/webMessage", getMessages(newComment.getSession()));
-        getMessages(newComment.getSession());
-        return messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents(), 0L);
-    }
+//    @MessageMapping("/postComment")
+//   // @SendTo("/topic/webMessage")
+//    public Map<String, Object> postMessage(Message newComment) {
+//        System.out.println("Got a response here");
+//        messagingTemplate.convertAndSendToUser(Long.toString(newComment.getSession().getID()), "/topic/webMessage", getMessages(newComment.getSession()));
+//        messagingTemplate.convertAndSendToUser(Long.toString(newComment.getSession().getID()), "/topic/webMessage", messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents(), 0L));
+//        return null;
+//    }
 
+    /**
+     *  Get Messages using Web Sockets
+     * @param session
+     * @return
+     */
     @MessageMapping("/getMessages")
-    @SendTo("/topic/webMessage")
+   // @SendTo("/topic/webMessage")
     public @ResponseBody Map<String, Object> getMessages(SessionRoom session) {
 
         Map<String, Object> returnerMap = new HashMap<String, Object>();

@@ -8,6 +8,7 @@ import com.ars.alpha.service.MessageService;
 import org.assertj.core.error.future.Warning;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +18,14 @@ import java.util.Map;
 @RestController
 @CrossOrigin(origins = {"http://localhost:8080"})
 @RequestMapping("/message")
-@SendTo("/topic/message")
+//@SendTo("/topic/message")
 public class MessageController {
 
     @Autowired
     private MessageService messageService;
+
+    @Autowired
+    SimpMessagingTemplate messagingTemplate;
 
     /**
      *
@@ -50,10 +54,11 @@ public class MessageController {
         if(newComment.checkOverSize()){
             throw new IllegalArgumentException("You cannot send a message longer than 1024 characters.");
         }
-
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
       //  System.out.println(newComment.toString());
-
-        return messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents(), 0L);
+        returnerMap = messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents(), 0L);
+        messagingTemplate.convertAndSendToUser(Long.toString(newComment.getSession().getID()), "/topic/retrieveMessages", getMessages(newComment.getSession()));
+        return returnerMap;
     }
 
     /**
@@ -82,7 +87,11 @@ public class MessageController {
     Map<String, Object> postReply(@RequestBody Message newReply) {
         System.out.println(newReply.toString());
 
-        return messageService.postReply(newReply.getPoster().getId(), newReply.getSession().getID(), newReply.getReplyTo().getId(), newReply.getMessageContents());
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
+
+        returnerMap = messageService.postReply(newReply.getPoster().getId(), newReply.getSession().getID(), newReply.getReplyTo().getId(), newReply.getMessageContents());
+        messagingTemplate.convertAndSendToUser(Long.toString(newReply.getSession().getID()), "/topic/retrieveMessages", getMessages(newReply.getSession()));
+        return returnerMap;
     }
 
     /**
