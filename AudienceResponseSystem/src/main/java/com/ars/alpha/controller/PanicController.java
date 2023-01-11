@@ -4,8 +4,10 @@ import com.ars.alpha.model.PanicResponse;
 import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.service.PanicService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -13,8 +15,12 @@ import java.util.Map;
 @RequestMapping("/panic")
 public class PanicController {
 
+    static final String GET_PANIC_PATH = "/topic/retrievePanic";
     @Autowired
     PanicService panicService;
+
+    @Autowired
+    SimpMessagingTemplate messagingTemplate;
 
     /**
      *
@@ -46,7 +52,11 @@ public class PanicController {
 
         //  System.out.println(newComment.toString());
 
-        return panicService.postPanic(newPanic.getPanicType().getPanicType(), newPanic.getPanicker().getId(), newPanic.getSession().getID());
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
+
+        returnerMap = panicService.postPanic(newPanic.getPanicType().getPanicType(), newPanic.getPanicker().getId(), newPanic.getSession().getID());
+        messagingTemplate.convertAndSendToUser(Long.toString(newPanic.getSession().getID()), GET_PANIC_PATH, getResponses(newPanic.getSession()));
+        return returnerMap;
     }
 
 

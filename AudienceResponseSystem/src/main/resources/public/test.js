@@ -23,6 +23,9 @@ function connect() {
             console.log(greeting); // Greeting is the response back from the server, so just place all the Get Message code inside HERE!
                                    // it will execute when this returns.
         });
+        stompClient.subscribe('/user/1/topic/retrievePanic', function (panic) {
+            console.log(panic);
+        });
     });
 }
 
@@ -94,6 +97,13 @@ function getMessages() {
     var stringObj = JSON.stringify(myDate);
 
     stompClient.send("/app/getMessages", {}, stringObj);
+}
+
+function insertPanic() {
+    var myDate = {id: 1};
+    var stringObj = JSON.stringify(myDate);
+
+
 }
 
 // RUN THIS WHENEVER THE JAVASCRIPT FILE IS OPENED SO THAT IT AUTO CONNECTS
