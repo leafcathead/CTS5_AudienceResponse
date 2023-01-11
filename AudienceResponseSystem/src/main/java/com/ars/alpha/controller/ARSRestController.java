@@ -22,8 +22,7 @@ public class ARSRestController {
 //        return "Hello world";
 //    }
 
-    @Autowired
-    private TestStudentService testStudentService;
+
 
     @Autowired
     private SessionService sessionService;
@@ -46,52 +45,6 @@ public class ARSRestController {
         return modelAndView;
     }
 
-
-    @GetMapping("/testAddStudent")
-    int testAddStudent() {
-
-        System.out.println("Received");
-        try {
-            String displayName = "Jimmy John";
-            testStudentService.addStudent(displayName);
-
-            if (false) {
-                throw new SQLException();
-            }
-
-        } catch (SQLException e) {
-
-            System.out.println("Uh-oh");
-            return 1;
-        }
-
-        return 0;
-    }
-
-    @GetMapping("/testAddStudentSPROC")
-    int testAddStudentSPROC() {
-
-        System.out.println("Received");
-        try {
-            String displayName = "francis";
-            testStudentService.addStudentBySPROC(displayName);
-
-            if (false) {
-                throw new SQLException();
-            }
-
-        } catch (SQLException e) {
-
-            System.out.println("Uh-oh");
-            return 1;
-        } catch(TestStudentStoredProcedureException e) {
-
-            System.out.println("Procedure bug");
-            return 500;
-        }
-
-        return 0;
-    }
 
 
     @ResponseStatus(HttpStatus.NOT_FOUND)

@@ -7,6 +7,7 @@ import com.ars.alpha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -14,7 +15,7 @@ import java.util.Map;
 @CrossOrigin(origins = {"http://localhost:8080"},methods={RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD})
 @RequestMapping("/session")
 public class SessionRoomController {
-    
+
     @Autowired
     private SessionService sessionService;
 
@@ -92,7 +93,10 @@ public class SessionRoomController {
      */
     @GetMapping("/checkSessionStatus")
     boolean checkStatus(@RequestBody SessionRoom session) {
-
+//        boolean result = sessionService.checkSessionStatus(session.getID());
+//        Map<String, Boolean> returnerMap = new HashMap<String, Boolean>();
+//        returnerMap.put("Open", result);
+//        return returnerMap;
         return sessionService.checkSessionStatus(session.getID());
     }
 
