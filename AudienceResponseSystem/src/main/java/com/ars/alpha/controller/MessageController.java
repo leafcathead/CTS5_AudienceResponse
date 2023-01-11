@@ -21,6 +21,8 @@ import java.util.Map;
 //@SendTo("/topic/message")
 public class MessageController {
 
+    static final String GET_MESSAGE_PATH = "/topic/retrieveMessages";
+
     @Autowired
     private MessageService messageService;
 
@@ -57,7 +59,7 @@ public class MessageController {
         Map<String, Object> returnerMap = new HashMap<String, Object>();
       //  System.out.println(newComment.toString());
         returnerMap = messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents(), 0L);
-        messagingTemplate.convertAndSendToUser(Long.toString(newComment.getSession().getID()), "/topic/retrieveMessages", getMessages(newComment.getSession()));
+        messagingTemplate.convertAndSendToUser(Long.toString(newComment.getSession().getID()), GET_MESSAGE_PATH, getMessages(newComment.getSession()));
         return returnerMap;
     }
 
@@ -90,7 +92,7 @@ public class MessageController {
         Map<String, Object> returnerMap = new HashMap<String, Object>();
 
         returnerMap = messageService.postReply(newReply.getPoster().getId(), newReply.getSession().getID(), newReply.getReplyTo().getId(), newReply.getMessageContents());
-        messagingTemplate.convertAndSendToUser(Long.toString(newReply.getSession().getID()), "/topic/retrieveMessages", getMessages(newReply.getSession()));
+        messagingTemplate.convertAndSendToUser(Long.toString(newReply.getSession().getID()), GET_MESSAGE_PATH, getMessages(newReply.getSession()));
         return returnerMap;
     }
 
@@ -175,7 +177,11 @@ public class MessageController {
             return returnerMap;
         };
 
-        return messageService.updateMessageContent(m.getId(), m.getPoster().getId(), m.getSession().getID(), m.getMessageContents());
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
+
+        returnerMap = messageService.updateMessageContent(m.getId(), m.getPoster().getId(), m.getSession().getID(), m.getMessageContents());
+        messagingTemplate.convertAndSendToUser(Long.toString(m.getSession().getID()), GET_MESSAGE_PATH, getMessages(m.getSession()));
+        return returnerMap;
     }
 
     /**
@@ -201,7 +207,11 @@ public class MessageController {
 
         // We don't need the new value of the visibility, calling this method just flips it.
 
-        return messageService.updateMessageVisibility(m.getId(), m.getPoster().getId(), m.getSession().getID());
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
+
+        returnerMap = messageService.updateMessageVisibility(m.getId(), m.getPoster().getId(), m.getSession().getID());
+        messagingTemplate.convertAndSendToUser(Long.toString(m.getSession().getID()), GET_MESSAGE_PATH, getMessages(m.getSession()));
+        return returnerMap;
     }
 
     /**
@@ -225,8 +235,11 @@ public class MessageController {
      */
     @DeleteMapping("/deleteMessage")
     Map<String, Object> deleteComment(@RequestBody Message delComment){
-        //TODO
-        return messageService.deleteComment(delComment.getPoster().getId(), delComment.getSession().getID(), delComment.getId());
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
+
+        returnerMap = messageService.deleteComment(delComment.getPoster().getId(), delComment.getSession().getID(), delComment.getId());
+        messagingTemplate.convertAndSendToUser(Long.toString(delComment.getSession().getID()), GET_MESSAGE_PATH, getMessages(delComment.getSession()));
+        return returnerMap;
     }
 
     /**
@@ -250,7 +263,10 @@ public class MessageController {
     @PutMapping("/likeMessage")
     Map<String, Object> likeMessage(@RequestBody Liked like) {
 
-        System.out.println(like.toString());
-        return messageService.likeMessage(like.getLikedMessage().getId(), like.getLiker().getId());
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
+
+        returnerMap = messageService.likeMessage(like.getLikedMessage().getId(), like.getLiker().getId());
+       // messagingTemplate.convertAndSendToUser(Long.toString(.getSession().getID()), GET_MESSAGE_PATH, getMessages(m.getSession()));
+        return returnerMap;
     }
 }
