@@ -116,9 +116,6 @@ public class SessionService implements SessionServiceInterface {
     @Override
     public boolean checkSessionStatus(Long sessionID) {
 
-        Optional<SessionRoom> result = sessionRepository.findById(sessionID);
-        sessionRepository.flush();
-
-        return result.isPresent();
+        return sessionRepository.existsById(sessionID);
     }
 }
