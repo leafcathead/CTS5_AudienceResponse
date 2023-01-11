@@ -64,10 +64,7 @@ public class SessionRoomController {
      *
      * @param session JSON Object in the form
      *                 {
-     *                      "id": <Long>,
-     *                      "owner": {
-     *                          "id": <Long>
-     *                      }
+     *                      "id": <Long> (Of session)
      *                 }
      * @return JSON Object in the form:
      *              {
@@ -87,7 +84,7 @@ public class SessionRoomController {
      *
      * @param session JSON Object in the form:
      *                {
-     *                  "id": <Long>
+     *                  "id": <Long> (Of Session)
      *                }
      * @return boolean value. If TRUE, the session is still active. If FALSE, the session is closed.
      */

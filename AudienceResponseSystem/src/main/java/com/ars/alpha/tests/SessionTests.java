@@ -253,5 +253,4 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
         public String randomPassword;
     }
 
-
 }
