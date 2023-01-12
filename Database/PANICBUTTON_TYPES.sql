@@ -12,32 +12,32 @@ USE DB_ARS
 
 -- Talking too fast
 
-INSERT INTO PanicButton (PanicType, [Desc])
+INSERT INTO PanicButton (PanicType, [ButtonDesc])
 	VALUES('2FST', 'Push this button if the speaker is speaking too quickly and you would like them to slow down.')
 
 
 -- Talking too quietly
 
-INSERT INTO PanicButton (PanicType, [Desc])
+INSERT INTO PanicButton (PanicType, [ButtonDesc])
 	VALUES('2QIT','Push this button if the speaker is speaking too quietly and you would lie them to speak up.')
 
 -- Repeat!
 
-INSERT INTO PanicButton (PanicType, [Desc])
+INSERT INTO PanicButton (PanicType, [ButtonDesc])
 	VALUES('REPT', 'Push this button if you would like the speaker to repeat what he has just said.')
 
 -- Explain Further
 
-INSERT INTO PanicButton (PanicType, [Desc])
+INSERT INTO PanicButton (PanicType, [ButtonDesc])
 	VALUES('EXPL','Push this button if you would like the speaker to go into more detail about the current topic.')
 
 -- Please wait
 
-INSERT INTO PanicButton(PanicType, [Desc])
+INSERT INTO PanicButton(PanicType, [ButtonDesc])
 	VALUES('WAIT', 'Push this button if you want the speaker to temporarily stop speaking so that you can catch up.')
 
 -- General Panic
 
-INSERT INTO PanicButton (PanicType, [Desc])
+INSERT INTO PanicButton (PanicType, [ButtonDesc])
 	VALUES('GENP','Push this button if your concern does not fall into the realm of the other buttons.')
 
