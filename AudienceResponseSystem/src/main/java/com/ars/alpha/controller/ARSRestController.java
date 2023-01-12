@@ -45,6 +45,14 @@ public class ARSRestController {
         return modelAndView;
     }
 
+    @GetMapping("/test")
+    ModelAndView test () {
+        System.out.println("Someone visited our website!");
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("WebSocketTest.html");
+        return modelAndView;
+    }
+
 
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
