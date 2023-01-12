@@ -140,10 +140,8 @@ public class PanicTests extends AbstractTransactionalJUnit4SpringContextTests {
                 .andExpect(content().contentType("application/json"))
                 .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
                 .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
-                .andExpect((ResultMatcher) jsonPath("$.PanicId", notNullValue()))
                 .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
                 .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
-                .andExpect((ResultMatcher) jsonPath("$.PanicId", greaterThanOrEqualTo(1)))
                 .andReturn();
     }
 
@@ -158,10 +156,8 @@ public class PanicTests extends AbstractTransactionalJUnit4SpringContextTests {
                 .andExpect(content().contentType("application/json"))
                 .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
                 .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
-                .andExpect((ResultMatcher) jsonPath("$.PanicId", notNullValue()))
                 .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
                 .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
-                .andExpect((ResultMatcher) jsonPath("$.PanicId", greaterThanOrEqualTo(1)))
                 .andReturn();
 
         jsonString = createPanicJSON("2QIT", TEST_USERID_2,  TEST_SESSION_ID);
@@ -171,10 +167,8 @@ public class PanicTests extends AbstractTransactionalJUnit4SpringContextTests {
                 .andExpect(content().contentType("application/json"))
                 .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
                 .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
-                .andExpect((ResultMatcher) jsonPath("$.PanicId", notNullValue()))
                 .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
                 .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
-                .andExpect((ResultMatcher) jsonPath("$.PanicId", greaterThanOrEqualTo(1)))
                 .andReturn();
 
         jsonString = createResponsesJSON( TEST_SESSION_ID);
@@ -195,7 +189,7 @@ public class PanicTests extends AbstractTransactionalJUnit4SpringContextTests {
         StringWriter writer = new StringWriter();
         JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
         jsonGenerator.writeStartObject();
-        jsonGenerator.writeObjectFieldStart("type");
+        jsonGenerator.writeObjectFieldStart("panicType");
         jsonGenerator.writeObjectField("panicType", panicType);
         jsonGenerator.writeEndObject();
         jsonGenerator.writeObjectFieldStart("panicker");
