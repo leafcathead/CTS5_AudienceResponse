@@ -19,11 +19,11 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/user/2/topic/retrieveMessages', function (greeting) { // INSTEAD OF '1' PUT THE CURRENT SESSION ID!
+        stompClient.subscribe('/user/1/topic/retrieveMessages', function (greeting) { // INSTEAD OF '2' PUT THE CURRENT SESSION ID!
             console.log(greeting); // Greeting is the response back from the server, so just place all the Get Message code inside HERE!
                                    // it will execute when this returns.
         });
-        stompClient.subscribe('/user/2/topic/retrievePanic', function (panic) {
+        stompClient.subscribe('/user/1/topic/retrievePanic', function (panic) {
             console.log(panic);
         });
     });
@@ -54,10 +54,10 @@ function postComment() {
         const data = {
 
             poster: {
-                id:  5
+                id:  1
             },
             session: {
-                id: 2
+                id: 1
             },
             messageContent: "Austria"
 
@@ -68,10 +68,10 @@ function postComment() {
             body: JSON.stringify({
 
                 poster: {
-                    id:  5
+                    id:  1
                 },
                 session: {
-                    id: 2
+                    id: 1
                 },
                 messageContent: "Australia"
 
@@ -93,14 +93,14 @@ function postComment() {
  * Get messages using Web sockets.
  */
 function getMessages() {
-    var myDate = {id: 2};
+    var myDate = {id: 1};
     var stringObj = JSON.stringify(myDate);
 
     stompClient.send("/app/getMessages", {}, stringObj);
 }
 
 function insertPanic() {
-    var myDate = {id: 2};
+    var myDate = {id: 1};
     var stringObj = JSON.stringify(myDate);
 
 
