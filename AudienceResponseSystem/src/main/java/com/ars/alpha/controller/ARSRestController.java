@@ -51,7 +51,7 @@ public class ARSRestController {
     ModelAndView pageNotFound () {
         System.out.println("404: Page Not Found");
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("404");
+        modelAndView.setViewName("404.html");
         return modelAndView;
     }
 
