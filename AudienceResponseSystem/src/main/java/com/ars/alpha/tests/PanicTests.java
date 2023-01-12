@@ -6,8 +6,7 @@ import com.ars.alpha.controller.SessionRoomController;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.not;
 import static org.assertj.core.internal.bytebuddy.matcher.ElementMatchers.is;
-import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -16,11 +15,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.testng.AssertJUnit.assertNotNull;
 
 
 import com.ars.alpha.dao.PanicRepository;
 import com.ars.alpha.dao.SessionRepository;
 import com.ars.alpha.other.Password;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -74,6 +75,9 @@ public class PanicTests extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     PanicRepository panicRepository;
 
+    public static Long TEST_SESSION_ID;
+    public static Long TEST_USERID_OWNER;
+    public static Long TEST_USERID_2;
 
 
     //@LocalServerPort
@@ -83,10 +87,152 @@ public class PanicTests extends AbstractTransactionalJUnit4SpringContextTests {
     private MockMvc mockMvc;
 
     @BeforeEach
-    public void setup() throws Exception {
+    void setup() throws Exception {
 
+        // Create a new session.
+
+
+        MvcResult result =  this.mockMvc.perform(get("/session/createSession").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String responseString = result.getResponse().getContentAsString();
+
+        ObjectMapper objMapper = new ObjectMapper();
+
+        MessageTests.TestObj testObj = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        TEST_SESSION_ID = testObj.newSessionID;
+        TEST_USERID_OWNER = testObj.newUserID;
+
+        // Add users to that session
+
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeStringField("password", testObj.randomPassword);
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        String jsonString = writer.toString();
+
+        // Get the second user
+
+        result = this.mockMvc.perform(post("/session/joinSession").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andReturn();
+
+        responseString = result.getResponse().getContentAsString();
+
+        testObj = objMapper.readValue(responseString, MessageTests.TestObj.class);
+
+        TEST_USERID_2 = testObj.newUserID;
     }
 
+    @Test
+    @Transactional
+    public void insertPanic() throws Exception {
 
+        String jsonString = createPanicJSON("2FST", TEST_USERID_2,  TEST_SESSION_ID);
+
+        MvcResult result = this.mockMvc.perform(post("/panic/postPanic").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.PanicId", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.PanicId", greaterThanOrEqualTo(1)))
+                .andReturn();
+    }
+
+    @Test
+    @Transactional
+    public void insertTwoPanics() throws Exception {
+
+        String jsonString = createPanicJSON("2FST", TEST_USERID_2,  TEST_SESSION_ID);
+
+        MvcResult result = this.mockMvc.perform(post("/panic/postPanic").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.PanicId", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.PanicId", greaterThanOrEqualTo(1)))
+                .andReturn();
+
+        jsonString = createPanicJSON("2QIT", TEST_USERID_2,  TEST_SESSION_ID);
+
+        result = this.mockMvc.perform(post("/panic/postPanic").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.PanicId", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.PanicId", greaterThanOrEqualTo(1)))
+                .andReturn();
+
+        jsonString = createResponsesJSON( TEST_SESSION_ID);
+
+        result = this.mockMvc.perform(post("/panic/getPanicResponses").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.PanicResponse", notNullValue()))
+                .andExpect((ResultMatcher) jsonPath("$.Status", Matchers.is("SUCCESS")))
+                .andExpect((ResultMatcher) jsonPath("$.Code", Matchers.is(0)))
+                .andExpect((ResultMatcher) jsonPath("$.PanicResponse", Matchers.hasSize(1)))
+                .andReturn();
+    }
+
+    private String createPanicJSON(String panicType, Long panicker, Long session) throws IOException {
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeObjectFieldStart("type");
+        jsonGenerator.writeObjectField("panicType", panicType);
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeObjectFieldStart("panicker");
+        jsonGenerator.writeObjectField("id", String.valueOf(panicker));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.writeObjectFieldStart("session");
+        jsonGenerator.writeObjectField("id", String.valueOf(session));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        return writer.toString();
+    }
+
+    private String createResponsesJSON(Long session) throws IOException {
+        StringWriter writer = new StringWriter();
+        JsonGenerator jsonGenerator = jFactory.createGenerator(writer);
+        jsonGenerator.writeStartObject();
+        jsonGenerator.writeObjectField("id", String.valueOf(session));
+        jsonGenerator.writeEndObject();
+        jsonGenerator.close();
+        return writer.toString();
+    }
+
+    @Test
+    public void assertSetupSuccessful() {
+        assertNotNull("TEST_SESSION_ID IS NULL", TEST_SESSION_ID);
+        assertNotNull("TEST_USERID_OWNER IS NULL", TEST_USERID_OWNER);
+        assertNotNull("TEST_USERID_2 IS NULL", TEST_USERID_2);
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    static class TestObj {
+        public Long newUserID;
+        public Long newSessionID;
+        public String randomPassword;
+
+        public Long MessageID;
+
+    }
 
 }
