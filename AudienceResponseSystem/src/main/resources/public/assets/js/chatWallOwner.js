@@ -230,15 +230,17 @@ function insertPanic() {
 
 
 //get posts from DB(Recommended way)receivedJson
-function getPosts(receivedJson) {
+function getPosts(responseData) {
     // if(greeting() == false){
     // checkSessionStatus();
     //   console.log(checkSessionStatus());
+    let receivedJson = JSON.parse(responseData.body);
     let comments = [];
     let allUsers = 0;
     let body = $("#cardDiv").html();
-
+            console.log("Websocket response v2")
             console.log(receivedJson);
+
 
             //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
             for (let i = 0; i < Object.keys(receivedJson.Messages).length; i++) {

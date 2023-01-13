@@ -19,19 +19,32 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/user/1/topic/retrieveMessages', function (greeting) { // INSTEAD OF '2' PUT THE CURRENT SESSION ID!
-            console.log(greeting); // Greeting is the response back from the server, so just place all the Get Message code inside HERE!
-                                   // it will execute when this returns.
-
-            //getMessage()
-
-
-
-        });
+        stompClient.subscribe('/user/1/topic/retrieveMessages', myFunc);
         stompClient.subscribe('/user/1/topic/retrievePanic', function (panic) {
             console.log(panic);
         });
     });
+}
+
+function myFunc(responseData) {
+    console.log("Type: " + typeof responseData);
+ //   console.log("V1");
+  //  console.log(responseData);
+ //   console.log("V2");
+  //  console.log(responseData.json());
+  //   console.log("V3");
+  //   console.log(responseData.toJSON());
+   // console.log("Test:" +  responseData.Status);
+    console.log(responseData.body.Status);
+    console.log(responseData.body.status);
+    //console.log(responseData.body.messages.get("0"));
+    //console.log(responseData.body.stringify.json());
+    //console.log(responseData.body.parseJson());
+    //console.log(typeof responseData.body);console.log(parseJSON());
+    //console.log(responseData.body.json());
+    console.log(JSON.parse(responseData.body));
+
+
 }
 
 function disconnect() {
