@@ -7,23 +7,39 @@
 </head>
 <body>
 
+<script>
+function getMessagesWs(){
+    socket.send('getComments');
+    const socket = new WebSocket('http://localhost:8080/message');
+    socket.send('getComments');
+    // Define an event handler for when a message is received from the server
+    socket.onmessage = (event) => {
+        const comment = JSON.parse(event.data);
+        console.log(comment);
+        // Do something with the received comment, such as displaying it on the page
+    };
+}
+</script>
+
+
+
 
 
 
 <textarea id="comments"></textarea>
-<script>
-    document.getElementById('comments').onkeyup = characterCount;
+<!--<script>-->
+<!--    document.getElementById('comments').onkeyup = characterCount;-->
 
-    function characterCount() {
-        var container = this.nextSibling;
-        if (!container || container.className !== 'counter') {
-            container = document.createElement('div');
-            container.className = 'counter';
-            this.parentNode.insertBefore(container, this.nextSibling);
-        }
-        container.innerHTML = this.value.length;
-    }
-</script>
+<!--    function characterCount() {-->
+<!--        var container = this.nextSibling;-->
+<!--        if (!container || container.className !== 'counter') {-->
+<!--            container = document.createElement('div');-->
+<!--            container.className = 'counter';-->
+<!--            this.parentNode.insertBefore(container, this.nextSibling);-->
+<!--        }-->
+<!--        container.innerHTML = this.value.length;-->
+<!--    }-->
+<!--</script>-->
 
 
 

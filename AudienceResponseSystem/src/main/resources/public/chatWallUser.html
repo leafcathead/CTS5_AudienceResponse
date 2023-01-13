@@ -61,7 +61,21 @@
               <a class="nav-link" href="" data-toggle="modal" onclick="updateDisplayname()">edit your name</a>
             </li>
             <li class="nav-item active">
-              <a class="nav-link" href="#">Panic Button <img src="./assets/images/flame.png" style="height: 20px; width: 20px"></a>
+              <a class="nav-link" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Panic Button <img src="./assets/images/flame.png" style="height: 20px; width: 20px"></a>
+              <div class="dropdown show">
+
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item" href="#" onclick="panicButton('2FST ');">Too fast</a>
+                  <a class="dropdown-item" href="#" onclick="panicButton('2QIT ');">Too quiet</a>
+                  <a class="dropdown-item" href="#" onclick="panicButton('REPT ');">Repeat </a>
+                  <a class="dropdown-item" href="#" onclick="panicButton('EXPL');">Explain</a>
+                  <a class="dropdown-item" href="#" onclick="panicButton('WAIT ');">Wait</a>
+                  <a class="dropdown-item" href="#" onclick="panicButton('GENP ');">Something else</a>
+
+                </div>
+              </div>
+
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Ask for Voting</a>
