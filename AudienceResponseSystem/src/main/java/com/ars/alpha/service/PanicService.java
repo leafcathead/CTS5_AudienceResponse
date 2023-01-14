@@ -22,6 +22,8 @@ public class PanicService implements PanicServiceInterface{
     @Autowired
     PanicRepository panicRepository;
 
+    @Override
+    @Transactional
     public Map<String, Object> postPanic(String buttonPushed, Long Panicker, Long SessionRoom) {
         Map<String, Object> ret = new HashMap<String, Object>();
         try {
@@ -59,7 +61,7 @@ public class PanicService implements PanicServiceInterface{
 
         } catch (PersistenceException e) {
             System.out.println("Exception caught!");
-            if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
+            if (e.getCause().getCause() != null && e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
                 SQLServerException ex = (SQLServerException) e.getCause().getCause();
                 returnerMap.put("Status", Status.ERROR);
                 returnerMap.put("Code", ex.getSQLServerError().getErrorState());
