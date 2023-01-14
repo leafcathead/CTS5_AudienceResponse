@@ -116,7 +116,6 @@ function postReply(posterID = $("#RposterID").val(), sessionID = $("#RsessionID"
 }
 
 
-
 // /**
 //  *
 //  * webSocket
@@ -600,12 +599,12 @@ function postReply(posterID = $("#RposterID").val(), sessionID = $("#RsessionID"
 // }
 
 
-
 //API
-function panic(){
-   checkSessionStatus();
-
-     let panics = [];
+function panic() {
+    checkSessionStatus();
+    let panicDiv = document.getElementById('panic');
+let body = "";
+    let panics = [];
 
 
     fetch("http://localhost:8080/panic/getPanicResponses", {
@@ -613,8 +612,7 @@ function panic(){
         body: JSON.stringify({
 
 
-                id: sessionID
-
+            id: sessionID
 
 
         }),
@@ -633,14 +631,46 @@ function panic(){
             // $("#panicID")
 
 
+            for (var i = 0; i < Object.keys(data).length; i++) {
 
-            for(var i=0;i < Object.keys(data).length; i++ ){
+             //   console.log(data.PanicResponse[i].panicker.displayName);
+              //  console.log(data.PanicResponse[i].panicType.desc);
 
-                console.log(data.PanicResponse[i].panicker.displayName);
-                console.log(data.PanicResponse[i].panicType.desc);
+                body += `
+            
+              
+               <table class="table table-hover">
+  <thead>
+   
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">26</th>
+      <td>user#24</td>
+      <td>2FST</td>
+      <td>Push this button if the speaker is speaking too quickly and you would like them to slow down.</td>
+    </tr>
+  
+  </tbody>
+</table>
+               
+            
+            `;
+
+
             }
 
 
+
+let a = ` <table class="table table-hover"> <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th><br/>
+      <th scope="col">Code</th>
+      <th scope="col">Content</th>
+    </tr></table>`;
+
+            panicDiv.innerHTML = a+body;
+            panicDiv ="";
         })
 
 
@@ -649,7 +679,7 @@ function panic(){
 function getPosts() {
     // if(greeting() == false){
 // checkSessionStatus();
-   checkSessionStatus();
+    checkSessionStatus();
 
 
     let comments = [];
@@ -1396,7 +1426,6 @@ function newDisplyname() {
             }
 
 
-
         })
 
 
@@ -1412,8 +1441,7 @@ function postAgain() {
 }
 
 
-
-function  checkSessionStatus() {
+function checkSessionStatus() {
 
     fetch("http://localhost:8080/session/checkSessionStatus", {
         method: 'POST',
@@ -1431,22 +1459,20 @@ function  checkSessionStatus() {
         })
         .then((receivedJson) => {
 
-            if(receivedJson == true){
+            if (receivedJson == true) {
 
                 console.log("your session is exist!");
 
 
             }
-            if(receivedJson != true){
+            if (receivedJson != true) {
                 alert("your session has been deleted by the owner!");
                 console.log("your session is NOT exist!")
                 logOutOwner();
             }
 
 
-
         });
-
 
 
 }
@@ -1476,17 +1502,14 @@ function deleteSession() {
             });
 
 
-    }else{
+    } else {
 
 
     }
 
 
-logOutOwner();
+    logOutOwner();
 }
-
-
-
 
 
 function logOutOwner() {
