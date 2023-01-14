@@ -8,11 +8,11 @@
   <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="./assets/chatWallAssets/css/style.css">
-  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="/webjars/jquery/jquery.min.js"></script>
-  <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-  <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+<!--  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>-->
+<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
+<!--  <script src="/webjars/jquery/jquery.min.js"></script>-->
+<!--  <script src="/webjars/sockjs-client/sockjs.min.js"></script>-->
+<!--  <script src="/webjars/stomp-websocket/stomp.min.js"></script>-->
  <script src="assets/js/chatWallOwner.js"></script>
 </head>
 <body id="bodyDiv">
@@ -22,7 +22,6 @@
       <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(./assets/chatWallAssets/images/user.png);"></a>
       <p id="userInfo">
         <script>document.getElementById("userInfo").innerHTML = "OwnerID:   " + ownerID + "<br>" + "SessionID:   " + sessionID + "<br>" + "Session Password:  " + sessionPassword;
-
 
         </script></p></br></br></br></br></br></br></br></br></br></br></br></br>
       <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" onClick="logOutOwner()">signout</button>

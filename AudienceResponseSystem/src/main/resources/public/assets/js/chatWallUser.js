@@ -16,6 +16,10 @@ if(userID==null){
 
 //post comment
 function postComment() {
+    checkSessionStatus();
+
+
+
     if($("#textArea").val() != ""){
     let answer = document.getElementById('answer');
 
@@ -54,7 +58,7 @@ function postComment() {
         })
         .then((data) => {
             console.log(data)
-
+            getPosts();
             const parg = `
 
            
@@ -73,6 +77,7 @@ function postComment() {
 
 function postReply(posterID=$("#RposterID").val(),sessionID=$("#RsessionID").val(),msgID=$("#RmsgID").val(),msgContent=$("#RmsgContent").val()) {
     // let answer = document.getElementById('');
+    checkSessionStatus();
 
     console.log(posterID, sessionID,msgID, msgContent);
 
@@ -105,7 +110,7 @@ function postReply(posterID=$("#RposterID").val(),sessionID=$("#RsessionID").val
         })
         .then((data) => {
             console.log(data)
-
+            getPosts();
             //   const parg = `
             //
             //
@@ -127,6 +132,8 @@ function postReply(posterID=$("#RposterID").val(),sessionID=$("#RsessionID").val
 
 //fetch comments replies
 function getPosts() {
+  checkSessionStatus();
+
     let comments =[];
     let allUsers = 0;
     let body = $("#cardDiv").html();
@@ -480,7 +487,7 @@ function getPosts() {
 
 
 function likeMessage(msgID){
-
+    checkSessionStatus();
 
     console.log(msgID);
 
@@ -507,7 +514,7 @@ function likeMessage(msgID){
         })
         .then((data) => {
             console.log(data)
-
+            getPosts();
 
 
         })
@@ -525,6 +532,8 @@ function likeMessage(msgID){
 
 //show data model first then call updateComment();
 function showUpdateModal(posterID,sessionID, msgID, msgContent){
+    checkSessionStatus();
+
     $("#exampleModal").modal('show');
 
     $("#msgID").val(msgID);
@@ -540,62 +549,66 @@ function showUpdateModal(posterID,sessionID, msgID, msgContent){
 
 //update comment
 function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),sessionID=$("#sessionID").val(),msgContent=$("#msgContent").val()){
-//test
+    checkSessionStatus();
+
+
+    //test
     console.log("i am update comment   " + posterID +"  " + msgID+"  " + sessionID+"  " + msgContent);
     //VPN is not working updateMessageContent type PUT is not yet tested
 
 
-    // let answer = document.getElementById('answer');
-    //
-    // const data = {
-    //
-    //     id: msgID,
-    //     poster: {
-    //         id: posterID
-    //     },
-    //     session: {
-    //         id: sessionID
-    //     },
-    //     messageContent: $("#updateTextArea").val()
-    //
-    // };
-    // console.log(data);
-    // fetch("http://localhost:8080/message/updateMessageContent", {
-    //     method: 'PUT',
-    //     body: JSON.stringify({
-    //
-    //         id: msgID,
-    //         poster: {
-    //             id: posterID
-    //         },
-    //         session: {
-    //             id: sessionID
-    //         },
-    //         messageContent: $("#updateTextArea").val()
-    //
-    //
-    //     }),
-    //     headers: {
-    //         "Content-Type": "application/json;charset=UTF-8"
-    //     }
-    // })
-    //     .then((response) => {
-    //         return response.json()
-    //     })
-    //     .then((data) => {
-    //         console.log(data)
-    //
-    //         const parg = `
-    //
-    //
-    //   your comment has been successfully posted<br/>
-    //    <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
-    //     `;
-    //
-    //         answer.innerHTML = parg;
-    //         answer = "";
-    //     })
+    let answer = document.getElementById('answer');
 
+    const data = {
+
+        id: msgID,
+        poster: {
+            id: posterID
+        },
+        session: {
+            id: sessionID
+        },
+        messageContent: $("#updateTextArea").val()
+
+    };
+    console.log(data);
+    fetch("http://localhost:8080/message/updateMessageContent", {
+        method: 'PUT',
+        body: JSON.stringify({
+
+            id: msgID,
+            poster: {
+                id: posterID
+            },
+            session: {
+                id: sessionID
+            },
+            messageContent: $("#updateTextArea").val()
+
+
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+
+            const parg = `
+
+
+      your comment has been successfully posted<br/>
+       <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+        `;
+
+            answer.innerHTML = parg;
+            answer = "";
+        })
+
+    getPosts();
 
 }
 
@@ -603,6 +616,9 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
 
 
 function showReplyModal(posterID,sessionID, msgID){
+    checkSessionStatus();
+
+
     $("#replyModal").modal('show');
 
     $("#RmsgID").val(msgID);
@@ -622,6 +638,9 @@ function showReplyModal(posterID,sessionID, msgID){
 
 //update displayname
 function updateDisplayname(){
+    checkSessionStatus();
+
+
     $("#myModal").modal('show');
     $("#newDisNameField").val(displayname);
     // data-toggle="modal" data-target="#myModal"
@@ -636,7 +655,7 @@ function updateDisplayname(){
 
 
 function newDisplyname(){
-
+    checkSessionStatus();
     console.log(userID, sessionID, $("#newDisNameField").val() )
 
 
@@ -680,6 +699,7 @@ function newDisplyname(){
                 answer.innerHTML = parg;
 
 
+                getPosts();
             } else {
 
                 console.log("Error has been occurred");
@@ -696,6 +716,7 @@ function newDisplyname(){
 
 
 function deleteMessage(msgID, posterID, sessionID){
+    checkSessionStatus();
 
     console.log(msgID, posterID, sessionID);
     fetch("http://localhost:8080/message/deleteMessage", {
@@ -722,6 +743,7 @@ function deleteMessage(msgID, posterID, sessionID){
         .then((data) => {
             console.log(data)
 
+            getPosts();
             //       const parg = `
             //
             //
@@ -742,6 +764,45 @@ function postAgain(){
     location.replace("chatWallUser.html");
 }
 
+
+
+function  checkSessionStatus() {
+
+    fetch("http://localhost:8080/session/checkSessionStatus", {
+        method: 'POST',
+        body: JSON.stringify({
+            id: sessionID
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+
+            return response.json();
+
+        })
+        .then((receivedJson) => {
+
+            if(receivedJson == true){
+
+                console.log("your session is exist!");
+
+
+            }
+            if(receivedJson != true){
+                alert("your session has been deleted by the owner!");
+                console.log("your session is NOT exist!")
+                logOutUser();
+            }
+
+
+
+        });
+
+
+
+}
 
 
 //sign out for user chat wall
