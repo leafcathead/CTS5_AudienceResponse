@@ -20,9 +20,7 @@ function connect() {
         setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/user/1/topic/retrieveMessages', myFunc);
-        stompClient.subscribe('/user/1/topic/retrievePanic', function (panic) {
-            console.log(panic);
-        });
+        stompClient.subscribe('/user/1/topic/retrievePanic', myFunc2);
     });
 }
 
@@ -45,6 +43,10 @@ function myFunc(responseData) {
     console.log(JSON.parse(responseData.body));
 
 
+}
+
+function myFunc2(responseData) {
+    console.log(responseData);
 }
 
 function disconnect() {
@@ -106,6 +108,46 @@ function postComment() {
                 console.log(data)
             })
 }
+
+
+
+function panic(code){
+
+
+
+    fetch("http://localhost:8080/panic/postPanic", {
+        method: 'POST',
+        body: JSON.stringify({
+
+            panicType: {
+                panicType: "2FST"
+            },
+            panicker: {
+                id: 84
+            },
+            session: {
+                id: 1
+            }
+
+
+
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+        });
+
+
+
+
+}
+
 
 /**
  * Get messages using Web sockets.
