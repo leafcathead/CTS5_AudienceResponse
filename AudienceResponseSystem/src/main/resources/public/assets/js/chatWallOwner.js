@@ -1419,19 +1419,22 @@ function deleteSession() {
         })
             .then((response) => {
                 return response.json()
+
             })
             .then((receivedJson) => {
-                //  console.log(receivedJson);
+
                 return receivedJson;
-                console.log("session has been deleted")
 
             });
-        logOutOwner();
+
+
+    }else{
+
+
     }
 
 
-
-
+logOutOwner();
 }
 
 

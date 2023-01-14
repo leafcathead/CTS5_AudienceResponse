@@ -548,34 +548,102 @@ function showUpdateModal(posterID,sessionID, msgID, msgContent){
 
 
 //update comment
-function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),sessionID=$("#sessionID").val(),msgContent=$("#msgContent").val()){
+// function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),sessionID=$("#sessionID").val(),msgContent=$("#msgContent").val()){
+//     checkSessionStatus();
+//
+//
+//     //test
+//     console.log("i am update comment   " + posterID +"  " + msgID+"  " + sessionID+"  " + msgContent);
+//     //VPN is not working updateMessageContent type PUT is not yet tested
+//
+//
+//     let answer = document.getElementById('answer');
+//
+//     const data = {
+//
+//         id: msgID,
+//         poster: {
+//             id: posterID
+//         },
+//         session: {
+//             id: sessionID
+//         },
+//         messageContent: $("#updateTextArea").val()
+//
+//     };
+//     console.log(data);
+//     fetch("http://localhost:8080/message/updateMessageContent", {
+//         method: 'PUT',
+//         body: JSON.stringify({
+//
+//             id: msgID,
+//             poster: {
+//                 id: posterID
+//             },
+//             session: {
+//                 id: sessionID
+//             },
+//             messageContent: $("#updateTextArea").val()
+//
+//
+//         }),
+//         headers: {
+//             "Content-Type": "application/json;charset=UTF-8"
+//         }
+//     })
+//         .then((response) => {
+//             return response.json()
+//         })
+//         .then((data) => {
+//             console.log(data)
+//
+//             const parg = `
+//
+//
+//       your comment has been successfully posted<br/>
+//        <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+//         `;
+//
+//             answer.innerHTML = parg;
+//             answer = "";
+//         })
+//
+//     getPosts();
+//
+// }
+//
+
+
+
+function updateComment(posterID = $("#posterID").val(), msgID = $("#msgID").val(), sessionID = $("#sessionID").val(), msgContent = $("#msgContent").val()) {
+
     checkSessionStatus();
 
-
     //test
-    console.log("i am update comment   " + posterID +"  " + msgID+"  " + sessionID+"  " + msgContent);
+    console.log("i am update comment   " + posterID + "  " + msgID + "  " + sessionID + "  " + msgContent);
     //VPN is not working updateMessageContent type PUT is not yet tested
 
 
     let answer = document.getElementById('answer');
 
-    const data = {
-
-        id: msgID,
-        poster: {
-            id: posterID
-        },
-        session: {
-            id: sessionID
-        },
-        messageContent: $("#updateTextArea").val()
-
-    };
-    console.log(data);
+    // const data = {
+    //
+    //     id: msgID,
+    //     poster: {
+    //         id: posterID
+    //     },
+    //     session: {
+    //         id: sessionID
+    //     },
+    //     messageContent: $("#updateTextArea").val()
+    //
+    // };
+//last version
+    //  console.log(data);
     fetch("http://localhost:8080/message/updateMessageContent", {
         method: 'PUT',
         body: JSON.stringify({
-
+//
             id: msgID,
             poster: {
                 id: posterID
@@ -583,8 +651,7 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
             session: {
                 id: sessionID
             },
-            messageContent: $("#updateTextArea").val()
-
+            messageContent: msgContent
 
         }),
         headers: {
@@ -596,19 +663,18 @@ function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),ses
         })
         .then((data) => {
             console.log(data)
+            getPosts();
+            //       const parg = `
+            //
+            //
+            // your comment has been successfully posted<br/>
+            //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
+            //   `;
+            //
+            //       answer.innerHTML = parg;
+            //       answer = "";
+        });
 
-            const parg = `
-
-
-      your comment has been successfully posted<br/>
-       <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
-        `;
-
-            answer.innerHTML = parg;
-            answer = "";
-        })
-
-    getPosts();
 
 }
 
@@ -708,6 +774,73 @@ function newDisplyname(){
 
 
         })
+
+
+}
+
+
+function panic(code){
+
+
+
+    checkSessionStatus();
+    console.log(userID, sessionID, $("#newDisNameField").val() )
+
+
+    fetch("http://localhost:8080/panic/postPanic", {
+        method: 'POST',
+        body: JSON.stringify({
+
+            panicType: {
+                panicType: code
+            },
+            panicker: {
+                id: userID
+            },
+
+            id: userID
+            ,
+            session: {
+                id: sessionID
+            }
+
+
+
+        }),
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        }
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+            localStorage.setItem('displayname', $("#newDisNameField").val());
+
+
+         //   if (data.Status == "SUCCESS") {
+                const parg = `
+
+
+      your panic has been sent<br/>
+
+        `;
+
+                answer.innerHTML = parg;
+
+
+                getPosts();
+           // } else {
+
+            //    console.log("Error has been occurred");
+          //  }
+
+
+
+        })
+
+
 
 
 }
