@@ -627,12 +627,21 @@ function panic(){
         })
         .then((data) => {
             console.log(data)
+            console.log(Object.keys(data.PanicResponse).length)
+            var panicSpan = document.getElementById("panicID");
+            panicSpan.textContent = Object.keys(data.PanicResponse).length;
             // $("#panicID")
 
 
+
+            for(var i=0;i < Object.keys(data).length; i++ ){
+
+                console.log(data.PanicResponse[i].panicker.displayName);
+                console.log(data.PanicResponse[i].panicType.desc);
+            }
+
+
         })
-
-
 
 
 }
