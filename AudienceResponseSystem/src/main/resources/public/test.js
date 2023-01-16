@@ -1,5 +1,6 @@
 var stompClient = null;
 const SITE_URL = "https://rhit-r90y2r8w"
+var token = "";
 
 // THIS IS NOT IMPORTANT
 function setConnected(connected) {
@@ -99,7 +100,8 @@ function postComment() {
 
             }),
             headers: {
-                "Content-Type": "application/json;charset=UTF-8"
+                "Content-Type": "application/json;charset=UTF-8",
+                'X-CSRF-TOKEN': token
             },
             port: 443
         })
@@ -135,7 +137,8 @@ function panic(code){
 
         }),
         headers: {
-            "Content-Type": "application/json;charset=UTF-8"
+            "Content-Type": "application/json;charset=UTF-8",
+            'X-CSRF-TOKEN': token
         },
         port: 443
     })
@@ -172,5 +175,22 @@ function insertPanic() {
 // RUN THIS WHENEVER THE JAVASCRIPT FILE IS OPENED SO THAT IT AUTO CONNECTS
 $(function () {
     connect();
+    console.log("Begin fetch");
+    fetch(SITE_URL + "/csrf", {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        port: 443
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+            let doc = document.getElementById("csrfToken");
+            doc.innerHTML = data.token;
+            token = data.token;
+        });
 });
 
