@@ -188,8 +188,6 @@ $(function () {
         })
         .then((data) => {
             console.log(data)
-            let doc = document.getElementById("csrfToken");
-            doc.innerHTML = data.token;
             token = data.token;
         });
 });

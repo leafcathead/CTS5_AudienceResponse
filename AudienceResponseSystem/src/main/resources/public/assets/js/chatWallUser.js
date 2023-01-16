@@ -8,6 +8,7 @@ const userID = localStorage.getItem('userID');
 const sessionID = localStorage.getItem('sessionID');
 let displayname =  localStorage.getItem('displayname');
 const SITE_URL = "https://rhit-r90y2r8w"
+var token = "";
 
 //check if user logged in
 if(userID==null){
@@ -51,8 +52,10 @@ function postComment() {
 
         }),
         headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        }
+            "Content-Type": "application/json;charset=UTF-8",
+            'X-CSRF-TOKEN': token
+        },
+        port: 443
     })
         .then((response) => {
             return response.json()
@@ -103,8 +106,10 @@ function postReply(posterID=$("#RposterID").val(),sessionID=$("#RsessionID").val
 
         }),
         headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        }
+            "Content-Type": "application/json;charset=UTF-8",
+            'X-CSRF-TOKEN': token
+        },
+        port: 443
     })
         .then((response) => {
             return response.json()
@@ -144,8 +149,10 @@ function getPosts() {
             id: sessionID
         }),
         headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        }
+            "Content-Type": "application/json;charset=UTF-8",
+            'X-CSRF-TOKEN': token
+        },
+        port: 443
     })
         .then((response) => {
             return response.json()
@@ -507,8 +514,10 @@ function likeMessage(msgID){
 
         }),
         headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        }
+            "Content-Type": "application/json;charset=UTF-8",
+            'X-CSRF-TOKEN': token
+        },
+        port: 443
     })
         .then((response) => {
             return response.json()
@@ -589,8 +598,10 @@ function showUpdateModal(posterID,sessionID, msgID, msgContent){
 //
 //         }),
 //         headers: {
-//             "Content-Type": "application/json;charset=UTF-8"
-//         }
+//             "Content-Type": "application/json;charset=UTF-8",
+//              'X-CSRF-TOKEN': token
+//         },
+//         port: 443
 //     })
 //         .then((response) => {
 //             return response.json()
@@ -656,8 +667,10 @@ function updateComment(posterID = $("#posterID").val(), msgID = $("#msgID").val(
 
         }),
         headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        }
+            "Content-Type": "application/json;charset=UTF-8",
+            'X-CSRF-TOKEN': token
+        },
+        port: 443
     })
         .then((response) => {
             return response.json()
@@ -744,8 +757,10 @@ function newDisplyname(){
 
         }),
         headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        }
+            "Content-Type": "application/json;charset=UTF-8",
+            'X-CSRF-TOKEN': token
+        },
+        port: 443
     })
         .then((response) => {
             return response.json()
@@ -809,8 +824,10 @@ function panic(code){
 
         }),
         headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        }
+            "Content-Type": "application/json;charset=UTF-8",
+            'X-CSRF-TOKEN': token
+        },
+        port: 443
     })
         .then((response) => {
             return response.json()
@@ -868,8 +885,10 @@ function deleteMessage(msgID, posterID, sessionID){
 
         }),
         headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        }
+            "Content-Type": "application/json;charset=UTF-8",
+            'X-CSRF-TOKEN': token
+        },
+        port: 443
     })
         .then((response) => {
             return response.json()
@@ -908,8 +927,10 @@ function  checkSessionStatus() {
             id: sessionID
         }),
         headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        }
+            "Content-Type": "application/json;charset=UTF-8",
+            'X-CSRF-TOKEN': token
+        },
+        port: 443
     })
         .then((response) => {
 
@@ -973,8 +994,10 @@ function logOutUser(){
 //         url: SITE_URL + '/message/getMessages',
 //         headers: {
 //             'Content-Type': 'application/json',
-//             'Accept': 'application/json'
-//         },
+//             'Accept': 'application/json',
+//             'X-CSRF-TOKEN': token
+//         },,
+//         port: 443
 //         data: JSON.stringify(data),
 //         type: 'POST',
 //         dataType: 'JSON',
@@ -1021,8 +1044,10 @@ function logOutUser(){
 //             id: sessionID
 //         }),
 //         headers: {
-//             "Content-Type": "application/json;charset=UTF-8"
-//         }
+//             "Content-Type": "application/json;charset=UTF-8",
+//              'X-CSRF-TOKEN': token
+//         },
+//         port: 443
 //     })
 //         .then((response) => {
 //             return response.json()
@@ -1112,8 +1137,10 @@ function logOutUser(){
 //             id: sessionID
 //         }),
 //         headers: {
-//             "Content-Type": "application/json;charset=UTF-8"
-//         }
+//             "Content-Type": "application/json;charset=UTF-8",
+//              'X-CSRF-TOKEN': token
+//         },
+//         port: 443
 //     })
 //         .then((response) => {
 //             return response.json()
@@ -1418,8 +1445,10 @@ function logOutUser(){
 // //             id: sessionID
 // //         }),
 // //         headers: {
-// //             "Content-Type": "application/json;charset=UTF-8"
-// //         }
+// //             "Content-Type": "application/json;charset=UTF-8",
+// //              'X-CSRF-TOKEN': token
+// //         },
+//         port: 443
 // //     })
 // //         .then((response) => {
 // //             return response.json()
@@ -1660,3 +1689,20 @@ function logOutUser(){
 // //     body= "";
 //
 // }
+
+    //connect();
+    console.log("Begin fetch");
+    fetch(SITE_URL + "/csrf", {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        port: 443
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data)
+            token = data.token;
+        });

@@ -4,6 +4,8 @@
 // }
 //console.log('your password is:  '+ localStorageUserId);
 
+var token = document.cookie;
+
 
 // session check "localstorage session type owner/user type"
 // if you have logged in before you will be directed to chatWallUser.html
@@ -67,10 +69,11 @@ function joinSession() {
     };
     console.log(data);
     $.ajax({
-        url: 'http://localhost:8080/session/joinSession',
+        url: SITE_URL + '/session/joinSession',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': token
         },
         data: JSON.stringify(data),
         type: 'POST',
@@ -113,7 +116,13 @@ function createSession() {
 
     let div =  document.getElementById('createSessionDiv');
 
-    fetch(SITE_URL + "/session/createSession")
+    fetch(SITE_URL + "/session/createSession", {
+        method: 'GET',
+            headers: {
+                'X-CSRF-TOKEN': token
+        },
+        port: 443
+    })
     .then(function(resp) {
         return resp.json();
     })
@@ -147,6 +156,23 @@ function createSession() {
 
             // //   document.getElementById('outputDiv').textContent = resp.newUserID;
 }
+
+
+fetch(SITE_URL + "/csrf", {
+    method: 'GET',
+    headers: {
+        "Content-Type": "application/json;charset=UTF-8"
+    },
+    port: 443
+})
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        //localStorage.setItem('_csrf', data.token);
+        token = data.token;
+    });
+
 
 
 
