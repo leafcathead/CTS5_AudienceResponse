@@ -12,7 +12,7 @@ import java.util.Map;
 
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:8080"},methods={RequestMethod.GET, RequestMethod.POST, RequestMethod.HEAD})
+@CrossOrigin
 @RequestMapping("/session")
 public class SessionRoomController {
 

@@ -3,28 +3,12 @@ const sessionID = localStorage.getItem('sessionID');
 const sessionPassword = localStorage.getItem('sessionPassword');
 const SITE_URL = "https://rhit-r90y2r8w"
 let displayname = localStorage.getItem('displayname');
-let token = "";
+var token = "";
 
 // function fetching(){
 //     setTimeout(getPosts, 1000);}
 
-function getToken() {
-    fetch(SITE_URL + "/csrf", {
-        method: 'GET',
-        headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        },
-        port: 443
-    })
-        .then((response) => {
-            return response.json()
-        })
-        .then((data) => {
-            console.log(data)
-            return data.token;
-        });
-    return "";
-}
+
 
 
 //post comment
@@ -160,7 +144,22 @@ function connect(options) {
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
       //  console.log('Connected: ' + frame);
-        token = getToken();
+
+        fetch(SITE_URL + "/csrf", {
+            method: 'GET',
+            headers: {
+                "Content-Type": "application/json;charset=UTF-8"
+            },
+            port: 443
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                console.log(data)
+                token = data.token;
+            });
+
         let urlMessage = "/user/"+sessionID+"/topic/retrieveMessages";
         stompClient.subscribe(urlMessage, getPosts);
 

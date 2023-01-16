@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = {"https://rhit-r90y2r8w/"})
+@CrossOrigin
 @RequestMapping("/message")
 //@SendTo("/topic/message")
 public class MessageController {
