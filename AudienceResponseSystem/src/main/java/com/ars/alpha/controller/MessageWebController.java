@@ -20,6 +20,7 @@ import java.util.Map;
 @Controller
 public class MessageWebController {
 
+    static final String GET_MESSAGE_PATH = "/topic/retrieveMessages";
     @Autowired
     MessageService messageService;
 
@@ -54,6 +55,7 @@ public class MessageWebController {
             returnerMap.put("Messages", new HashMap<Integer, Message>());
         }
 
+        messagingTemplate.convertAndSendToUser(Long.toString(session.getID()), GET_MESSAGE_PATH, returnerMap);
         return returnerMap;
 
     }

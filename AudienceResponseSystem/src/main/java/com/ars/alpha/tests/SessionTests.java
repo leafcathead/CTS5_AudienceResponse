@@ -43,7 +43,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 //import org.testng.annotations.Test;
 import org.junit.jupiter.api.Test;
@@ -78,6 +80,9 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
     //private int port;
 
     @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    @Autowired
     private MockMvc mockMvc;
 
     @Before
@@ -94,6 +99,8 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
     @Transactional
     public void creatingSessionsDatabase() throws Exception {
 
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
         this.mockMvc.perform(get("/session/createSession")).andExpect(status().isOk());
 
     }
@@ -106,7 +113,9 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
     @Transactional
     public void creatingSessionBackend() throws Exception {
 
-        MvcResult result =  this.mockMvc.perform(get("/session/createSession").contentType(MediaType.APPLICATION_JSON))
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
+        MvcResult result =  this.mockMvc.perform(get("/session/createSession").secure(true).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 //.andExpect((ResultMatcher) jsonPath("$", anyList())) // How can I check that the length is the same size
                 .andExpect((ResultMatcher) jsonPath("$.newUserID", notNullValue()))
@@ -127,8 +136,10 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
     @Transactional
     public void joiningRealSession() throws Exception {
 
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
         // Create session to test.
-        MvcResult result =  this.mockMvc.perform(get("/session/createSession").contentType(MediaType.APPLICATION_JSON))
+        MvcResult result =  this.mockMvc.perform(get("/session/createSession").secure(true).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
 
         String responseString = result.getResponse().getContentAsString();
@@ -144,7 +155,7 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
         jsonGenerator.close();
         String jsonString = writer.toString();
 
-        result = this.mockMvc.perform(post("/session/joinSession").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        result = this.mockMvc.perform(post("/session/joinSession").secure(true).content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
      //           .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
@@ -164,6 +175,8 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
     @Test
     @Transactional
     public void joiningFakeSession() throws Exception {
+
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
 
         final String fakeSessionPass = "XXXX";
 
@@ -187,7 +200,7 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
         jsonGenerator.close();
         String jsonString = writer.toString();
 
-         this.mockMvc.perform(post("/session/joinSession").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+         this.mockMvc.perform(post("/session/joinSession").secure(true).content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 //           .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
@@ -203,7 +216,9 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
     @Transactional
     public void closeSessionTest() throws Exception {
 
-        MvcResult result =  this.mockMvc.perform(get("/session/createSession").contentType(MediaType.APPLICATION_JSON))
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+
+        MvcResult result =  this.mockMvc.perform(get("/session/createSession").secure(true).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 //.andExpect((ResultMatcher) jsonPath("$", anyList())) // How can I check that the length is the same size
                 .andExpect((ResultMatcher) jsonPath("$.newUserID", notNullValue()))
@@ -226,7 +241,7 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
         jsonGenerator.close();
         String jsonString = writer.toString();
 
-        result =  this.mockMvc.perform(post("/session/checkSessionStatus").content(jsonString).contentType(MediaType.APPLICATION_JSON))
+        result =  this.mockMvc.perform(post("/session/checkSessionStatus").secure(true).content(jsonString).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -235,7 +250,7 @@ public class SessionTests extends AbstractTransactionalJUnit4SpringContextTests 
 
         // Close session
 
-        this.mockMvc.perform(delete("/session/closeSession").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        this.mockMvc.perform(delete("/session/closeSession").secure(true).content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 //           .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))

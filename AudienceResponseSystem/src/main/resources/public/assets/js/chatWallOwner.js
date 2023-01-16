@@ -53,7 +53,7 @@ function postComment() {
             })
             .then((data) => {
                 console.log(data)
-                getPosts();
+              //  getPosts();
                 const parg = `
 
            
@@ -107,7 +107,7 @@ function postReply(posterID = $("#RposterID").val(), sessionID = $("#RsessionID"
         })
         .then((data) => {
             console.log(data)
-            getPosts();
+           // getPosts();
 
             //   const parg = `
             //
@@ -261,6 +261,7 @@ function getPosts(responseData) {
     // if(greeting() == false){
     // checkSessionStatus();
     //   console.log(checkSessionStatus());
+    console.log(responseData);
     let receivedJson = JSON.parse(responseData.body);
     let comments = [];
     let allUsers = 0;
@@ -1069,7 +1070,7 @@ function likeMessage(msgID) {
         })
         .then((data) => {
             console.log(data)
-            getPosts();
+            //getPosts();
 
         })
 
@@ -1117,7 +1118,7 @@ function deleteMessage(msgID, posterID, sessionID) {
             //       answer.innerHTML = parg;
             //       answer = "";
         });
-    getPosts();
+    //getPosts();
 }
 
 
@@ -1340,7 +1341,7 @@ function updateComment(posterID = $("#posterID").val(), msgID = $("#msgID").val(
         })
         .then((data) => {
             console.log(data)
-            getPosts();
+           // getPosts();
             //       const parg = `
             //
             //
@@ -1403,7 +1404,7 @@ function newDisplyname() {
             return response.json()
         })
         .then((data) => {
-            getPosts();
+            //getPosts();
             console.log(data)
             localStorage.setItem('displayname', $("#newDisNameField").val());
 
@@ -1432,7 +1433,7 @@ function newDisplyname() {
 
 function postAgain() {
     checkSessionStatus();
-    getPosts();
+  // getPosts();
     location.replace("chatWallOwner.html");
 
 
