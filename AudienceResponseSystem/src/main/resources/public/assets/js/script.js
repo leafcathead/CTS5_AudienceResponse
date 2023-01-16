@@ -11,6 +11,7 @@ const localStorageUserID = localStorage.getItem('userID');
 const localStorageOwnerID = localStorage.getItem('ownerID');
 const localStorageSessionID = localStorage.getItem('sessionID');
 const localStorageSessionPassword = localStorage.getItem('sessionPassword');
+const SITE_URL = "https://rhit-r90y2r8w"
 
 //in case user
 if (localStorageUserID != null) {
@@ -112,7 +113,7 @@ function createSession() {
 
     let div =  document.getElementById('createSessionDiv');
 
-    fetch("http://localhost:8080/session/createSession")
+    fetch(SITE_URL + "/session/createSession")
     .then(function(resp) {
         return resp.json();
     })

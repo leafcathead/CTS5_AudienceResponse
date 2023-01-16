@@ -7,6 +7,7 @@
 const userID = localStorage.getItem('userID');
 const sessionID = localStorage.getItem('sessionID');
 let displayname =  localStorage.getItem('displayname');
+const SITE_URL = "https://rhit-r90y2r8w"
 
 //check if user logged in
 if(userID==null){
@@ -35,7 +36,7 @@ function postComment() {
 
     };
     console.log(data);
-    fetch("http://localhost:8080/message/postComment", {
+    fetch(SITE_URL + "/message/postComment", {
         method: 'POST',
         body: JSON.stringify({
 
@@ -83,7 +84,7 @@ function postReply(posterID=$("#RposterID").val(),sessionID=$("#RsessionID").val
 
 
 
-    fetch("http://localhost:8080/message/postReply", {
+    fetch(SITE_URL + "/message/postReply", {
         method: 'POST',
         body: JSON.stringify({
 
@@ -137,7 +138,7 @@ function getPosts() {
     let comments =[];
     let allUsers = 0;
     let body = $("#cardDiv").html();
-    fetch("http://localhost:8080/message/getMessages", {
+    fetch(SITE_URL + "/message/getMessages", {
         method: 'POST',
         body: JSON.stringify({
             id: sessionID
@@ -492,7 +493,7 @@ function likeMessage(msgID){
     console.log(msgID);
 
 
-    fetch("http://localhost:8080/message/likeMessage", {
+    fetch(SITE_URL + "/message/likeMessage", {
         method: 'PUT',
         body: JSON.stringify({
 
@@ -572,7 +573,7 @@ function showUpdateModal(posterID,sessionID, msgID, msgContent){
 //
 //     };
 //     console.log(data);
-//     fetch("http://localhost:8080/message/updateMessageContent", {
+//     fetch(SITE_URL + "/message/updateMessageContent", {
 //         method: 'PUT',
 //         body: JSON.stringify({
 //
@@ -640,7 +641,7 @@ function updateComment(posterID = $("#posterID").val(), msgID = $("#msgID").val(
     // };
 //last version
     //  console.log(data);
-    fetch("http://localhost:8080/message/updateMessageContent", {
+    fetch(SITE_URL + "/message/updateMessageContent", {
         method: 'PUT',
         body: JSON.stringify({
 //
@@ -725,7 +726,7 @@ function newDisplyname(){
     console.log(userID, sessionID, $("#newDisNameField").val() )
 
 
-    fetch("http://localhost:8080/user/updateDisplayName", {
+    fetch(SITE_URL + "/user/updateDisplayName", {
         method: 'PUT',
         body: JSON.stringify({
 
@@ -787,7 +788,7 @@ function panic(code){
     console.log(userID, sessionID, $("#newDisNameField").val() )
 
 
-    fetch("http://localhost:8080/panic/postPanic", {
+    fetch(SITE_URL + "/panic/postPanic", {
         method: 'POST',
         body: JSON.stringify({
 
@@ -852,7 +853,7 @@ function deleteMessage(msgID, posterID, sessionID){
     checkSessionStatus();
 
     console.log(msgID, posterID, sessionID);
-    fetch("http://localhost:8080/message/deleteMessage", {
+    fetch(SITE_URL + "/message/deleteMessage", {
         method: 'DELETE',
         body: JSON.stringify({
 
@@ -901,7 +902,7 @@ function postAgain(){
 
 function  checkSessionStatus() {
 
-    fetch("http://localhost:8080/session/checkSessionStatus", {
+    fetch(SITE_URL + "/session/checkSessionStatus", {
         method: 'POST',
         body: JSON.stringify({
             id: sessionID
@@ -961,7 +962,7 @@ function logOutUser(){
 
 //testing codes
 
-// fetch('http://localhost:8080/message/getMessages', {
+// fetch(SITE_URL + '/message/getMessages', {
 //     method: 'POST',
 //     body: data,
 // })
@@ -969,7 +970,7 @@ function logOutUser(){
 //     .then(data => console.log(data))
 
 //     $.ajax({
-//         url: 'http://localhost:8080/message/getMessages',
+//         url: SITE_URL + '/message/getMessages',
 //         headers: {
 //             'Content-Type': 'application/json',
 //             'Accept': 'application/json'
@@ -1014,7 +1015,7 @@ function logOutUser(){
 //
 //     const data = { id: sessionID };
 //     console.log(data);
-//     fetch("http://localhost:8080/message/getMessages", {
+//     fetch(SITE_URL + "/message/getMessages", {
 //         method: 'POST',
 //         body: JSON.stringify({
 //             id: sessionID
@@ -1105,7 +1106,7 @@ function logOutUser(){
 //
 //     let comments =[];
 //     let body = $("#cardDiv").html();
-//     fetch("http://localhost:8080/message/getMessages", {
+//     fetch(SITE_URL + "/message/getMessages", {
 //         method: 'POST',
 //         body: JSON.stringify({
 //             id: sessionID
@@ -1411,7 +1412,7 @@ function logOutUser(){
 //     //     let comments =[];
 // //     let replies=[];
 // //     let body = $("#cardDiv").html();
-// //     fetch("http://localhost:8080/message/getMessages", {
+// //     fetch(SITE_URL + "/message/getMessages", {
 // //         method: 'POST',
 // //         body: JSON.stringify({
 // //             id: sessionID

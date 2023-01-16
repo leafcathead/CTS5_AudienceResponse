@@ -1,6 +1,7 @@
 const ownerID = localStorage.getItem('ownerID');
 const sessionID = localStorage.getItem('sessionID');
 const sessionPassword = localStorage.getItem('sessionPassword');
+const SITE_URL = "https://rhit-r90y2r8w"
 let displayname = localStorage.getItem('displayname');
 
 // function fetching(){
@@ -23,7 +24,7 @@ function postComment() {
 
         };
         console.log(data);
-        fetch("http://localhost:8080/message/postComment", {
+        fetch(SITE_URL + "/message/postComment", {
             method: 'POST',
             body: JSON.stringify({
 
@@ -71,7 +72,7 @@ function postReply(posterID = $("#RposterID").val(), sessionID = $("#RsessionID"
     console.log(posterID, sessionID, msgID, msgContent);
 
 
-    fetch("http://localhost:8080/message/postReply", {
+    fetch(SITE_URL + "/message/postReply", {
         method: 'POST',
         body: JSON.stringify({
 
@@ -130,7 +131,7 @@ function postReply(posterID = $("#RposterID").val(), sessionID = $("#RsessionID"
 // function connect(options) {
 //
 //
-//     var socket = new SockJS('http://localhost:8080/message');
+//     var socket = new SockJS(SITE_URL + "/message");
 //     stompClient = Stomp.over(socket);
 //     stompClient.connect({}, function (frame) {
 //         console.log('Connected: ' + frame);
@@ -177,7 +178,7 @@ function postReply(posterID = $("#RposterID").val(), sessionID = $("#RsessionID"
 // //
 // //     };
 // //     console.log(data);
-// //     fetch("http://localhost:8080/message/postComment", {
+// //     fetch(SITE_URL + "/message/postComment", {
 // //         method: 'POST',
 // //         body: JSON.stringify({
 // //
@@ -608,7 +609,7 @@ function panic(){
      let panics = [];
 
 
-    fetch("http://localhost:8080/panic/getPanicResponses", {
+    fetch(SITE_URL + "/panic/getPanicResponses", {
         method: 'POST',
         body: JSON.stringify({
 
@@ -655,7 +656,7 @@ function getPosts() {
     let comments = [];
     let allUsers = 0;
     let body = $("#cardDiv").html();
-    fetch("http://localhost:8080/message/getMessages", {
+    fetch(SITE_URL + "/message/getMessages", {
         method: 'POST',
         body: JSON.stringify({
             id: sessionID
@@ -1029,7 +1030,7 @@ function likeMessage(msgID) {
     console.log(msgID);
 
 
-    fetch("http://localhost:8080/message/likeMessage", {
+    fetch(SITE_URL + "/message/likeMessage", {
         method: 'PUT',
         body: JSON.stringify({
 
@@ -1062,7 +1063,7 @@ function likeMessage(msgID) {
 function deleteMessage(msgID, posterID, sessionID) {
     checkSessionStatus();
     console.log(msgID, posterID, sessionID);
-    fetch("http://localhost:8080/message/deleteMessage", {
+    fetch(SITE_URL + "/message/deleteMessage", {
         method: 'DELETE',
         body: JSON.stringify({
 
@@ -1111,7 +1112,7 @@ function getVisibility(msgID, posterID, visible) {
     if (visible === true) {
 
         // console.log(data);
-        fetch("http://localhost:8080/message/updateVisibility", {
+        fetch(SITE_URL + "/message/updateVisibility", {
             method: 'PUT',
             body: JSON.stringify({
 
@@ -1147,7 +1148,7 @@ function getVisibility(msgID, posterID, visible) {
 
         console.log("is visible" + visible);
     } else {
-        fetch("http://localhost:8080/message/updateVisibility", {
+        fetch(SITE_URL + "/message/updateVisibility", {
             method: 'PUT',
             body: JSON.stringify({
 
@@ -1291,7 +1292,7 @@ function updateComment(posterID = $("#posterID").val(), msgID = $("#msgID").val(
     // };
 //last version
     //  console.log(data);
-    fetch("http://localhost:8080/message/updateMessageContent", {
+    fetch(SITE_URL + "/message/updateMessageContent", {
         method: 'PUT',
         body: JSON.stringify({
 //
@@ -1352,7 +1353,7 @@ function newDisplyname() {
     console.log(ownerID, sessionID, $("#newDisNameField").val())
 
 
-    fetch("http://localhost:8080/user/updateDisplayName", {
+    fetch(SITE_URL + "/user/updateDisplayName", {
         method: 'PUT',
         body: JSON.stringify({
 
@@ -1415,7 +1416,7 @@ function postAgain() {
 
 function  checkSessionStatus() {
 
-    fetch("http://localhost:8080/session/checkSessionStatus", {
+    fetch(SITE_URL + "/session/checkSessionStatus", {
         method: 'POST',
         body: JSON.stringify({
             id: sessionID
@@ -1456,7 +1457,7 @@ function deleteSession() {
 
     if (confirm("Are you sure that you want to delete the session!")) {
 
-        fetch("http://localhost:8080/session/closeSession", {
+        fetch(SITE_URL + "/session/closeSession", {
             method: 'DELETE',
             body: JSON.stringify({
                 id: sessionID
@@ -1508,7 +1509,7 @@ function logOutOwner() {
 //
 //     //let data = { id: sessionID };
 //     //console.log(data);
-//     fetch("http://localhost:8080/message/getMessages", {
+//     fetch(SITE_URL + "/message/getMessages", {
 //         method: 'POST',
 //         body: JSON.stringify({
 //             id: sessionID
