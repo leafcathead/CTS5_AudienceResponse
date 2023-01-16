@@ -7,6 +7,7 @@ import com.ars.alpha.service.SessionService;
 import com.ars.alpha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -51,6 +52,11 @@ public class ARSRestController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("WebSocketTest.html");
         return modelAndView;
+    }
+
+    @GetMapping("/csrf")
+    public CsrfToken csrf(CsrfToken token) {
+        return token;
     }
 
 

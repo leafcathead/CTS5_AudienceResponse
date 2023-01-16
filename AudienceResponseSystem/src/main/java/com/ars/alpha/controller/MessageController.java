@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = {"http://localhost:8080"})
+@CrossOrigin
 @RequestMapping("/message")
 //@SendTo("/topic/message")
 public class MessageController {

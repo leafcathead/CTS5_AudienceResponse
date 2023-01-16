@@ -1,4 +1,6 @@
 var stompClient = null;
+const SITE_URL = "https://rhit-r90y2r8w"
+var token = "";
 
 // THIS IS NOT IMPORTANT
 function setConnected(connected) {
@@ -14,7 +16,7 @@ function setConnected(connected) {
 }
 
 function connect() {
-    var socket = new SockJS('http://localhost:8080/message');
+    var socket = new SockJS(SITE_URL + '/message');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         setConnected(true);
@@ -83,7 +85,7 @@ function postComment() {
 
         };
         console.log(data);
-        fetch("http://localhost:8080/message/postComment", {
+        fetch(SITE_URL + "/message/postComment", {
             method: 'POST',
             body: JSON.stringify({
 
@@ -98,8 +100,10 @@ function postComment() {
 
             }),
             headers: {
-                "Content-Type": "application/json;charset=UTF-8"
-            }
+                "Content-Type": "application/json;charset=UTF-8",
+                'X-CSRF-TOKEN': token
+            },
+            port: 443
         })
             .then((response) => {
                 return response.json()
@@ -115,7 +119,7 @@ function panic(code){
 
 
 
-    fetch("http://localhost:8080/panic/postPanic", {
+    fetch(SITE_URL + "/panic/postPanic", {
         method: 'POST',
         body: JSON.stringify({
 
@@ -133,8 +137,10 @@ function panic(code){
 
         }),
         headers: {
-            "Content-Type": "application/json;charset=UTF-8"
-        }
+            "Content-Type": "application/json;charset=UTF-8",
+            'X-CSRF-TOKEN': token
+        },
+        port: 443
     })
         .then((response) => {
             return response.json()
@@ -169,5 +175,20 @@ function insertPanic() {
 // RUN THIS WHENEVER THE JAVASCRIPT FILE IS OPENED SO THAT IT AUTO CONNECTS
 $(function () {
     connect();
+    console.log("Begin fetch");
+    fetch(SITE_URL + "/csrf", {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json;charset=UTF-8"
+        },
+        port: 443
+    })
+        .then((response) => {
+            return response.json()
+        })
+        .then((data) => {
+            console.log(data);
+            token = data.token;
+        });
 });
 
