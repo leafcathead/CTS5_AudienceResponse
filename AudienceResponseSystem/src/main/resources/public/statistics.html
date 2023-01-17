@@ -69,15 +69,15 @@
             </div>
         </nav>
 
-<!--        I will simulate the results later in chart -->
+        <!--        I will simulate the results later in chart -->
 
         <div id="contentBody">
             <div id="returnedDiv"></div>
             <canvas id="myChart" style="width:100%;max-width:100%"></canvas>
-<!--            <p>Total users  <span id="users"> </span></p><br>-->
-<!--            <p>Total comments  <span id="comments"> </span></p><br>-->
-<!--            <p>Total replies  <span id="replies"> </span></p><br>-->
-<!--            <p>Total likes  <span id="likes"> </span></p><br>-->
+            <!--            <p>Total users  <span id="users"> </span></p><br>-->
+            <!--            <p>Total comments  <span id="comments"> </span></p><br>-->
+            <!--            <p>Total replies  <span id="replies"> </span></p><br>-->
+            <!--            <p>Total likes  <span id="likes"> </span></p><br>-->
 
 
             <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
@@ -85,102 +85,102 @@
 
             <script>
                 statistics();
-              function statistics() {
-                let comments =[];
-                let tUsers = 0;
+                function statistics() {
+                    let comments =[];
+                    let tUsers = 0;
 
 
-                fetch("http://localhost:8080/message/getMessages", {
-                  method: 'POST',
-                  body: JSON.stringify({
-                    id: sessionID
-                  }),
-                  headers: {
-                    "Content-Type": "application/json;charset=UTF-8"
-                  }
-                })
+                    fetch("http://localhost:8080/message/getMessages", {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            id: sessionID
+                        }),
+                        headers: {
+                            "Content-Type": "application/json;charset=UTF-8"
+                        }
+                    })
                         .then((response) => {
-                          return response.json()
+                            return response.json()
                         })
                         .then((receivedJson) => {
 
-                          console.log(receivedJson);
-                          //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
-                          for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
-                            if (receivedJson.Messages[i].poster.id ) {
-                              tUsers++;
-                              comments.push({
-                                posterID: receivedJson.Messages[i].poster.id,
-                                displayName: receivedJson.Messages[i].poster.displayName,
-                                sessionID: receivedJson.Messages[i].session,
-                                msgID: receivedJson.Messages[i].id,
-                                timestamp: receivedJson.Messages[i].timestamp,
-                                msgContents: receivedJson.Messages[i].messageContents,
-                                replyTo: receivedJson.Messages[i].replyTo,
-                                visible: receivedJson.Messages[i].visible,
-                                likes: receivedJson.Messages[i].likes
-                              });
-                            } else {
+                            console.log(receivedJson);
+                            //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
+                            for (let i = 0; i <  Object.keys(receivedJson.Messages).length; i++) {
+                                if (receivedJson.Messages[i].poster.id ) {
+                                    tUsers++;
+                                    comments.push({
+                                        posterID: receivedJson.Messages[i].poster.id,
+                                        displayName: receivedJson.Messages[i].poster.displayName,
+                                        sessionID: receivedJson.Messages[i].session,
+                                        msgID: receivedJson.Messages[i].id,
+                                        timestamp: receivedJson.Messages[i].timestamp,
+                                        msgContents: receivedJson.Messages[i].messageContents,
+                                        replyTo: receivedJson.Messages[i].replyTo,
+                                        visible: receivedJson.Messages[i].visible,
+                                        likes: receivedJson.Messages[i].likes
+                                    });
+                                } else {
 
-                              comments.push({
+                                    comments.push({
 
-                                posterID: receivedJson.Messages[i].poster,
-                                displayName: receivedJson.Messages[i].poster.displayName,
-                                sessionID: receivedJson.Messages[i].session,
-                                msgID: receivedJson.Messages[i].id,
-                                msgContents: receivedJson.Messages[i].messageContents,
-                                timestamp: receivedJson.Messages[i].timestamp,
-                                replyTo: receivedJson.Messages[i].replyTo,
-                                visible: receivedJson.Messages[i].visible,
-                                likes: receivedJson.Messages[i].likes,
-                              });
-                              JSON.stringify(comments);
+                                        posterID: receivedJson.Messages[i].poster,
+                                        displayName: receivedJson.Messages[i].poster.displayName,
+                                        sessionID: receivedJson.Messages[i].session,
+                                        msgID: receivedJson.Messages[i].id,
+                                        msgContents: receivedJson.Messages[i].messageContents,
+                                        timestamp: receivedJson.Messages[i].timestamp,
+                                        replyTo: receivedJson.Messages[i].replyTo,
+                                        visible: receivedJson.Messages[i].visible,
+                                        likes: receivedJson.Messages[i].likes,
+                                    });
+                                    JSON.stringify(comments);
+                                }
                             }
-                          }
 
-                          //Statistics
+                            //Statistics
                             let returnedDiv = document.getElementById('returnedDiv');
-                          let totalLikes = 0;
-                          let totalComments = 0;
-                          let totalReplies = 0;
+                            let totalLikes = 0;
+                            let totalComments = 0;
+                            let totalReplies = 0;
 
-                          // let tUsers  =[];
-                          //  let allUsers = 0;
-
-
-                          for (let i = 0; i <  comments.length; i++) {
+                            // let tUsers  =[];
+                            //  let allUsers = 0;
 
 
-                            //total likes
-                            totalLikes += comments[i].likes;
+                            for (let i = 0; i <  comments.length; i++) {
 
-                            //total comments
-                            if(comments[i].replyTo==null){
-                              totalComments++;
+
+                                //total likes
+                                totalLikes += comments[i].likes;
+
+                                //total comments
+                                if(comments[i].replyTo==null){
+                                    totalComments++;
+                                }
+
+                                //total comments
+                                if(comments[i].replyTo!=null){
+                                    totalReplies++;
+                                }
                             }
-
-                            //total comments
-                            if(comments[i].replyTo!=null){
-                              totalReplies++;
-                            }
-                          }
 
                             let totalCRL = totalComments + totalReplies + totalLikes;
                             console.log("totalLikes: "+ totalCRL);
 
-                               console.log("tUsers: " + tUsers);
-                                // $("#users").html(tUsers)
+                            console.log("tUsers: " + tUsers);
+                            // $("#users").html(tUsers)
 
-                              console.log("totalComments: "+totalComments  + " in percentage " + ((totalComments * 100)/totalCRL).toFixed(1)+"%");
-                              // $("#comments").html(totalComments);
+                            console.log("totalComments: "+totalComments  + " in percentage " + ((totalComments * 100)/totalCRL).toFixed(1)+"%");
+                            // $("#comments").html(totalComments);
 
-                              console.log("totalReplies:  "+totalReplies + " in percentage  " + ((totalReplies * 100)/totalCRL).toFixed(1)+"%");
-                             // $("#replies").html(totalReplies);
+                            console.log("totalReplies:  "+totalReplies + " in percentage  " + ((totalReplies * 100)/totalCRL).toFixed(1)+"%");
+                            // $("#replies").html(totalReplies);
 
-                              console.log("totalLikes: "+totalLikes + " in percentage  " + ((totalLikes * 100)/totalCRL).toFixed(1)+"%");
-                             // $("#likes").html(totalLikes);
+                            console.log("totalLikes: "+totalLikes + " in percentage  " + ((totalLikes * 100)/totalCRL).toFixed(1)+"%");
+                            // $("#likes").html(totalLikes);
 
-                              let div = `
+                            let div = `
 
 
                                            <p>Total users    :  ${tUsers} </p>
@@ -190,10 +190,10 @@
 
                               `;
 
-                              returnedDiv.innerHTML = div;
+                            returnedDiv.innerHTML = div;
 
 
-                              //my Chart
+                            //my Chart
                             let xValues = ["Comments " + (((totalComments * 100)/totalCRL).toFixed(1))+"%", "Replies " + ((totalReplies * 100)/totalCRL).toFixed(1)+"%", "Likes " + ((totalLikes * 100)/totalCRL).toFixed(1)+"%"];
                             let yValues = [totalComments , totalReplies , totalLikes];
                             let barColors = [
@@ -227,15 +227,15 @@
 
 
 
-              }
+                }
             </script>
 
 
 
-                    </div>
-                </div>
+        </div>
+    </div>
 
-            </div>
+</div>
 
 
 
@@ -358,13 +358,12 @@
 
 
 
-            <script src="./assets/chatWallAssets/js/jquery.min.js"></script>
-            <script src="./assets/chatWallAssets/js/popper.js"></script>
-            <script src="./assets/chatWallAssets/js/bootstrap.min.js"></script>
-            <script src="./assets/chatWallAssets/js/main.js"></script>
-            </body>
-            </html>
-
+<script src="./assets/chatWallAssets/js/jquery.min.js"></script>
+<script src="./assets/chatWallAssets/js/popper.js"></script>
+<script src="./assets/chatWallAssets/js/bootstrap.min.js"></script>
+<script src="./assets/chatWallAssets/js/main.js"></script>
+</body>
+</html>
 
 
 

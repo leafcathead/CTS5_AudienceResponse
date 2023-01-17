@@ -261,6 +261,12 @@ function getPosts(responseData) {
     // if(greeting() == false){
     // checkSessionStatus();
     //   console.log(checkSessionStatus());
+    var myDate = {id: 1};
+    var stringObj = JSON.stringify(myDate);
+
+    stompClient.send("/app/getMessages", {}, stringObj);
+
+
     console.log(responseData);
     let receivedJson = JSON.parse(responseData.body);
     let comments = [];
