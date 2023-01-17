@@ -47,7 +47,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 //import org.testng.annotations.Test;
 import org.junit.jupiter.api.Test;
@@ -67,6 +69,8 @@ public class PanicTests extends AbstractTransactionalJUnit4SpringContextTests {
 
     final static JsonFactory jFactory = new JsonFactory();
 
+    @Autowired
+    private WebApplicationContext webApplicationContext;
 
     @InjectMocks
     PanicController panicController;
@@ -89,10 +93,11 @@ public class PanicTests extends AbstractTransactionalJUnit4SpringContextTests {
     @BeforeEach
     void setup() throws Exception {
 
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         // Create a new session.
 
 
-        MvcResult result =  this.mockMvc.perform(get("/session/createSession").contentType(MediaType.APPLICATION_JSON))
+        MvcResult result =  this.mockMvc.perform(get("/session/createSession").secure(true).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -117,7 +122,7 @@ public class PanicTests extends AbstractTransactionalJUnit4SpringContextTests {
 
         // Get the second user
 
-        result = this.mockMvc.perform(post("/session/joinSession").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        result = this.mockMvc.perform(post("/session/joinSession").secure(true).content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andReturn();
@@ -135,7 +140,7 @@ public class PanicTests extends AbstractTransactionalJUnit4SpringContextTests {
 
         String jsonString = createPanicJSON("2FST", TEST_USERID_2,  TEST_SESSION_ID);
 
-        MvcResult result = this.mockMvc.perform(post("/panic/postPanic").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        MvcResult result = this.mockMvc.perform(post("/panic/postPanic").secure(true).content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
@@ -151,7 +156,7 @@ public class PanicTests extends AbstractTransactionalJUnit4SpringContextTests {
 
         String jsonString = createPanicJSON("2FST", TEST_USERID_2,  TEST_SESSION_ID);
 
-        MvcResult result = this.mockMvc.perform(post("/panic/postPanic").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        MvcResult result = this.mockMvc.perform(post("/panic/postPanic").secure(true).content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
@@ -162,7 +167,7 @@ public class PanicTests extends AbstractTransactionalJUnit4SpringContextTests {
 
         jsonString = createPanicJSON("2QIT", TEST_USERID_2,  TEST_SESSION_ID);
 
-        result = this.mockMvc.perform(post("/panic/postPanic").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        result = this.mockMvc.perform(post("/panic/postPanic").secure(true).content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))
@@ -173,7 +178,7 @@ public class PanicTests extends AbstractTransactionalJUnit4SpringContextTests {
 
         jsonString = createResponsesJSON( TEST_SESSION_ID);
 
-        result = this.mockMvc.perform(post("/panic/getPanicResponses").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        result = this.mockMvc.perform(post("/panic/getPanicResponses").secure(true).content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect((ResultMatcher) jsonPath("$.Status", notNullValue()))

@@ -55,7 +55,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultMatcher;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 //import org.testng.annotations.Test;
 
@@ -86,6 +88,9 @@ public class UserTests extends AbstractTransactionalJUnit4SpringContextTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
     public static Long TEST_SESSION_ID;
     public static Long TEST_USER_ID;
 
@@ -93,9 +98,10 @@ public class UserTests extends AbstractTransactionalJUnit4SpringContextTests {
     @Transactional
     void setup() throws Exception {
 
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
         // Create a new session to run the test in. Session consists of one user: the owner.
 
-        MvcResult result =  this.mockMvc.perform(get("/session/createSession").contentType(MediaType.APPLICATION_JSON))
+        MvcResult result =  this.mockMvc.perform(get("/session/createSession").secure(true).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -150,7 +156,7 @@ public class UserTests extends AbstractTransactionalJUnit4SpringContextTests {
         jsonGenerator.close();
         jsonString = writer.toString();
 
-        MvcResult result = this.mockMvc.perform(put("/user/updateDisplayName").content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+        MvcResult result = this.mockMvc.perform(put("/user/updateDisplayName").secure(true).content(jsonString).contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect((ResultMatcher) jsonPath("$.Code", notNullValue()))
