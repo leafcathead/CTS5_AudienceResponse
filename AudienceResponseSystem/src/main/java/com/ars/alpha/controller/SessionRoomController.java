@@ -7,7 +7,6 @@ import com.ars.alpha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -25,12 +24,13 @@ public class SessionRoomController {
 
     /**
      * Creates both a session and a user within the database
+     *
      * @return JSON Mapping of the new session and user ID in the form of:
-     *  {
-     *     "newUserID": <Long>,
-     *     "randomPassword": <Password String for Session>,
-     *     "newSessionID": <Long>
-     *  }
+     * {
+     * "newUserID": <Long>,
+     * "randomPassword": <Password String for Session>,
+     * "newSessionID": <Long>
+     * }
      */
     @GetMapping("/createSession")
     Map<String, Object> createSession() {
@@ -39,16 +39,14 @@ public class SessionRoomController {
     }
 
     /**
-     *
      * @param password Special object to handle mapping from JSON into String. POST in the form of:
-     * {
-     *       "password": <sample password here>
-     * }
-     *
+     *                 {
+     *                 "password": <sample password here>
+     *                 }
      * @return JSON object that contains the new User ID and the session ID that they wish to join. If the session does not exist an ID of 0 is returned.
-     *{
-     *       "newSessionID": <Long>,
-     *       "newUserID": <Long>
+     * {
+     * "newSessionID": <Long>,
+     * "newUserID": <Long>
      * }
      */
     @PostMapping("/joinSession")
@@ -61,16 +59,15 @@ public class SessionRoomController {
     }
 
     /**
-     *
      * @param session JSON Object in the form
-     *                 {
-     *                      "id": <Long> (Of session)
-     *                 }
+     *                {
+     *                "id": <Long> (Of session)
+     *                }
      * @return JSON Object in the form:
-     *              {
-     *                  "Status": <ERROR, WARNING, SUCCESS>,
-     *                  "Code": <int>
-     *              }
+     * {
+     * "Status": <ERROR, WARNING, SUCCESS>,
+     * "Code": <int>
+     * }
      */
     @DeleteMapping("/closeSession")
     Map<String, Object> closeSession(@RequestBody SessionRoom session) {
@@ -80,11 +77,9 @@ public class SessionRoomController {
     }
 
     /**
-     *
-     *
      * @param session JSON Object in the form:
      *                {
-     *                  "id": <Long> (Of Session)
+     *                "id": <Long> (Of Session)
      *                }
      * @return boolean value. If TRUE, the session is still active. If FALSE, the session is closed.
      */
@@ -96,8 +91,6 @@ public class SessionRoomController {
 //        return returnerMap;
         return sessionService.checkSessionStatus(session.getID());
     }
-
-
 
 
 }

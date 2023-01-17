@@ -1,17 +1,17 @@
 package com.ars.alpha.controller;
 
 
-import com.ars.alpha.exception.TestStudentStoredProcedureException;
 import com.ars.alpha.service.MessageService;
 import com.ars.alpha.service.SessionService;
 import com.ars.alpha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.sql.SQLException;
 
 @RestController
 @CrossOrigin
@@ -24,7 +24,6 @@ public class ARSRestController {
 //    }
 
 
-
     @Autowired
     private SessionService sessionService;
 
@@ -35,11 +34,8 @@ public class ARSRestController {
     private MessageService messageService;
 
 
-
-
-
     @GetMapping("/")
-    ModelAndView welcome () {
+    ModelAndView welcome() {
         System.out.println("Someone visited our website!");
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index.html");
@@ -47,7 +43,7 @@ public class ARSRestController {
     }
 
     @GetMapping("/test")
-    ModelAndView test () {
+    ModelAndView test() {
         System.out.println("Someone visited our website!");
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("WebSocketTest.html");
@@ -60,9 +56,8 @@ public class ARSRestController {
     }
 
 
-
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    ModelAndView pageNotFound () {
+    ModelAndView pageNotFound() {
         System.out.println("404: Page Not Found");
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("404.html");

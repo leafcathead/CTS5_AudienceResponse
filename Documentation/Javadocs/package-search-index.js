@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.ars.alpha"},{"l":"com.ars.alpha.controller"},{"l":"com.ars.alpha.dao"},{"l":"com.ars.alpha.model"},{"l":"com.ars.alpha.other"},{"l":"com.ars.alpha.service"},{"l":"com.ars.alpha.tests"}];updateSearchResults();

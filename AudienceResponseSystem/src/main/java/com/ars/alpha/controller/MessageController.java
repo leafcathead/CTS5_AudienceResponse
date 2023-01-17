@@ -5,15 +5,15 @@ import com.ars.alpha.model.Message;
 import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.other.Status;
 import com.ars.alpha.service.MessageService;
-import org.assertj.core.error.future.Warning;
+import com.ars.alpha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @CrossOrigin
@@ -22,68 +22,64 @@ import java.util.Map;
 public class MessageController {
 
     static final String GET_MESSAGE_PATH = "/topic/retrieveMessages";
-
+    @Autowired
+    SimpMessagingTemplate messagingTemplate;
     @Autowired
     private MessageService messageService;
 
     @Autowired
-    SimpMessagingTemplate messagingTemplate;
+    private UserService userService;
 
     /**
-     *
      * @param newComment JSON object in the form of:
-     *       {
+     *                   {
      *                   "poster": {
-     *                      "id": <Long>
+     *                   "id": <Long>
      *                   },
      *                   "session": {
-     *                      "id": <Long>
+     *                   "id": <Long>
      *                   },
      *                   "messageContent": <String>
-     *       }
-     *
-     *
+     *                   }
      * @return JSON object in the form
-     *      {
-     *          "Status": <SUCCESS, WARNING, ERROR>
-     *          "MessageID": <Long>,
-     *          "Code": <int>
-     *      }
+     * {
+     * "Status": <SUCCESS, WARNING, ERROR>
+     * "MessageID": <Long>,
+     * "Code": <int>
+     * }
      */
     @PostMapping("/postComment")
-    Map<String, Object> postComment (@RequestBody Message newComment) throws Exception{
+    Map<String, Object> postComment(@RequestBody Message newComment) throws Exception {
 
-        if(newComment.checkOverSize()){
+        if (newComment.checkOverSize()) {
             throw new IllegalArgumentException("You cannot send a message longer than 1024 characters.");
         }
         Map<String, Object> returnerMap = new HashMap<String, Object>();
-      //  System.out.println(newComment.toString());
+        //  System.out.println(newComment.toString());
         returnerMap = messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents(), 0L);
         messagingTemplate.convertAndSendToUser(Long.toString(newComment.getSession().getID()), GET_MESSAGE_PATH, getMessages(newComment.getSession()));
         return returnerMap;
     }
 
     /**
-     *
-     * @param newReply
-     *       {
-     *                   "poster": {
-     *                      "id": <Long>
-     *                   },
-     *                   "session": {
-     *                      "id": <Long>
-     *                   },
-     *                   "replyTo": {
-     *                      "id": <Long>
-     *                   },
-     *                   "messageContent": <String>
-     *       }
+     * @param newReply {
+     *                 "poster": {
+     *                 "id": <Long>
+     *                 },
+     *                 "session": {
+     *                 "id": <Long>
+     *                 },
+     *                 "replyTo": {
+     *                 "id": <Long>
+     *                 },
+     *                 "messageContent": <String>
+     *                 }
      * @return JSON object in the form
-     *      {
-     *          "Status": <SUCCESS, WARNING, ERROR>
-     *          "MessageID": <Long>,
-     *          "Code": <int>
-     *      }
+     * {
+     * "Status": <SUCCESS, WARNING, ERROR>
+     * "MessageID": <Long>,
+     * "Code": <int>
+     * }
      */
     @PostMapping("/postReply")
     Map<String, Object> postReply(@RequestBody Message newReply) {
@@ -97,39 +93,33 @@ public class MessageController {
     }
 
     /**
-     *
-     *
-     * @param session
-     *      {
-     *          "id": <Long>
-     *      }
-     *
-     *
+     * @param session {
+     *                "id": <Long>
+     *                }
      * @return a Complicated JSON object. Unnecessary information in JSON object omitted.
-     *      {
-     *          "Status": <ERROR, WARNING, SUCCESS>,
-     *          "Code": <int>,
-     *          "Messages": {
-     *             "0": {
-     *                  "id": <Long>,
-     *                  "poster": {
-     *                      "id": <Long>
-     *                  },
-     *                  "replyTo": {
-     *                      "id": <Long>
-     *                  },
-     *                  "timestamp": <Timestamp>,
-     *                  "visible": <boolean>,
-     *                  "likes": <int>,
-     *                  "messageContents": <String>
-     *             },
-     *             ...
-     *          }
-     *      }
-     *
+     * {
+     * "Status": <ERROR, WARNING, SUCCESS>,
+     * "Code": <int>,
+     * "Messages": {
+     * "0": {
+     * "id": <Long>,
+     * "poster": {
+     * "id": <Long>
+     * },
+     * "replyTo": {
+     * "id": <Long>
+     * },
+     * "timestamp": <Timestamp>,
+     * "visible": <boolean>,
+     * "likes": <int>,
+     * "messageContents": <String>
+     * },
+     * ...
+     * }
+     * }
      */
-   //Must be post type JS can't send GET request with body!!!
-        // LAME! -Connor
+    //Must be post type JS can't send GET request with body!!!
+    // LAME! -Connor
     @PostMapping("/getMessages")
     public @ResponseBody Map<String, Object> getMessages(@RequestBody SessionRoom session) {
 
@@ -148,23 +138,22 @@ public class MessageController {
     }
 
     /**
-     *
      * @param m JSON object in the form of:
      *          {
-     *              "id": <Long>,
-     *              "poster": {
-     *                  "id": <Long>
-     *              },
-     *              "session": {
-     *                  "id": <Long>
-     *              },
-     *              "messageContent": <String>
+     *          "id": <Long>,
+     *          "poster": {
+     *          "id": <Long>
+     *          },
+     *          "session": {
+     *          "id": <Long>
+     *          },
+     *          "messageContent": <String>
      *          }
      * @return JSON object in the form
-     *           {
-     *              "Status": <SUCCESS, WARNING, ERROR>,
-     *              "Code": <int>
-     *           }
+     * {
+     * "Status": <SUCCESS, WARNING, ERROR>,
+     * "Code": <int>
+     * }
      */
     @PutMapping("/updateMessageContent")
     Map<String, Object> updateMessageContent(@RequestBody Message m) {
@@ -175,7 +164,7 @@ public class MessageController {
             returnerMap.put("Status", Status.WARNING);
             returnerMap.put("Code", 99);
             return returnerMap;
-        };
+        }
 
         Map<String, Object> returnerMap = new HashMap<String, Object>();
 
@@ -185,22 +174,21 @@ public class MessageController {
     }
 
     /**
-     *
      * @param m JSON Object in the form:
      *          {
-     *              "id": <Long>,
-     *              "poster": {
-     *                  "id": <Long>
-     *              },
-     *              "session": {
-     *                  "id": <Long>
-     *              }
+     *          "id": <Long>,
+     *          "poster": {
+     *          "id": <Long>
+     *          },
+     *          "session": {
+     *          "id": <Long>
+     *          }
      *          }
      * @return JSON Object formatted like this:
-     *          {
-     *              "Status": <SUCCESS, WARNING, ERROR>,
-     *              "Code": <int>
-     *          }
+     * {
+     * "Status": <SUCCESS, WARNING, ERROR>,
+     * "Code": <int>
+     * }
      */
     @PutMapping("/updateVisibility")
     Map<String, Object> updateMessageVisibility(@RequestBody Message m) {
@@ -215,26 +203,24 @@ public class MessageController {
     }
 
     /**
-     *
      * @param delComment Message Object in JSON form
-     *          {
-     *              "id": <Long>,
-     *              "poster": {
-     *                  "id": <Long>
-     *              },
-     *              "session": {
-     *                  "id": <Long>
-     *              }
-     *          }
-     *
+     *                   {
+     *                   "id": <Long>,
+     *                   "poster": {
+     *                   "id": <Long>
+     *                   },
+     *                   "session": {
+     *                   "id": <Long>
+     *                   }
+     *                   }
      * @return A JSON Object in the form of:
-     *          {
-     *              "Status": <SUCCESS, WARNING, ERROR>,
-     *              "Code": <int>
-     *          }
+     * {
+     * "Status": <SUCCESS, WARNING, ERROR>,
+     * "Code": <int>
+     * }
      */
     @DeleteMapping("/deleteMessage")
-    Map<String, Object> deleteComment(@RequestBody Message delComment){
+    Map<String, Object> deleteComment(@RequestBody Message delComment) {
         Map<String, Object> returnerMap = new HashMap<String, Object>();
 
         returnerMap = messageService.deleteComment(delComment.getPoster().getId(), delComment.getSession().getID(), delComment.getId());
@@ -243,30 +229,38 @@ public class MessageController {
     }
 
     /**
-     *
      * @param like JSON Object of the form
      *             {
-     *                  "liker": {
-     *                      "id": <Long>
-     *                  },
-     *                  "likedMessage": {
-     *                      "id": <Long>
-     *                  }
+     *             "liker": {
+     *             "id": <Long>
+     *             },
+     *             "likedMessage": {
+     *             "id": <Long>
+     *             }
      *             }
      * @return a JSON Object of the form:
-     *          {
-     *              "Status": <SUCCESS, WARNING, ERROR>,
-     *              "Code": <int>,
-     *              "Liked": <boolean> // Likes are toggled just like visibility. This communicates the new status.
-     *          }
+     * {
+     * "Status": <SUCCESS, WARNING, ERROR>,
+     * "Code": <int>,
+     * "Liked": <boolean> // Likes are toggled just like visibility. This communicates the new status.
+     * }
      */
     @PutMapping("/likeMessage")
     Map<String, Object> likeMessage(@RequestBody Liked like) {
 
         Map<String, Object> returnerMap = new HashMap<String, Object>();
+        SessionRoom room;
 
-        returnerMap = messageService.likeMessage(like.getLikedMessage().getId(), like.getLiker().getId());
-       // messagingTemplate.convertAndSendToUser(Long.toString(.getSession().getID()), GET_MESSAGE_PATH, getMessages(m.getSession()));
+        try {
+            room = userService.getSessionRoomByID(like.getLiker().getId());
+            returnerMap = messageService.likeMessage(like.getLikedMessage().getId(), like.getLiker().getId());
+            messagingTemplate.convertAndSendToUser(Long.toString(room.getID()), GET_MESSAGE_PATH, getMessages(room));
+        } catch (NoSuchElementException e) {
+            returnerMap.put("Status", Status.ERROR);
+            returnerMap.put("Code", 99);
+            returnerMap.put("Liked", false);
+        }
+
         return returnerMap;
     }
 }

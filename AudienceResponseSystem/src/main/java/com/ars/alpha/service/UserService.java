@@ -1,6 +1,7 @@
 package com.ars.alpha.service;
 
 import com.ars.alpha.dao.UserRepository;
+import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.other.Status;
 import com.microsoft.sqlserver.jdbc.SQLServerException;
 import org.apache.catalina.User;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.PersistenceException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @Service
 public class UserService implements UserServiceInterface {
@@ -51,6 +53,18 @@ public class UserService implements UserServiceInterface {
 
 
         return returnerMap;
+    }
+
+    /**
+     * Returns the sessionRoomID given a userID, assuming the User exists.
+     *
+     * @param userID the userID, self-explanatory
+     * @return SessionRoom object
+     * @throws NoSuchElementException Occurs if the user does not exist
+     */
+    @Override
+    public SessionRoom getSessionRoomByID(Long userID) throws NoSuchElementException {
+        return userRepository.findById(userID).orElseThrow().getSession();
     }
 
 

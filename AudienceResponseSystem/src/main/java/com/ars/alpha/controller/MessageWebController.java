@@ -6,12 +6,9 @@ import com.ars.alpha.other.Status;
 import com.ars.alpha.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.UnexpectedRollbackException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -37,12 +34,13 @@ public class MessageWebController {
 //    }
 
     /**
-     *  Get Messages using Web Sockets
+     * Get Messages using Web Sockets
+     *
      * @param session
      * @return
      */
     @MessageMapping("/getMessages")
-   // @SendTo("/topic/webMessage")
+    // @SendTo("/topic/webMessage")
     public @ResponseBody Map<String, Object> getMessages(SessionRoom session) {
 
         Map<String, Object> returnerMap = new HashMap<String, Object>();
