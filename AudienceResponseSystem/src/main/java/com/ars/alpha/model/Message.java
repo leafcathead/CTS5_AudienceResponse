@@ -143,24 +143,38 @@ public class Message {
         return this.visible;
     }
 
+
     public Timestamp getTimestamp() {
         return this.timestamp;
     }
 
+    /**
+     * Default constructor for Message
+     */
     public Message() {
 
     }
 
+    /**
+     *
+     * @return returns if the object is over size
+     */
     public boolean checkOverSize(){
         if (messageContent.length() >= 1024) return true;
         return false;
     }
 
-    public boolean checkBlasphemy() {
-        //Body of the check
-        return false;
-    }
 
+    /**
+     * Constructor for Message
+     * @param ID
+     * @param user
+     * @param messageContent
+     * @param likes
+     * @param visible
+     * @param replyTo
+     * @param timestamp
+     */
     public Message(Long ID, SessionUser user, String messageContent, int likes, boolean visible, Message replyTo, Timestamp timestamp) {
         this.id = ID;
         this.poster = user;
@@ -171,10 +185,18 @@ public class Message {
         this.timestamp = timestamp;
     }
 
+    /**
+     *
+     * @param id
+     */
     public Message(Long id) {
         this.id = id;
     }
 
+    /**
+     *
+     * @return String representation of object
+     */
     @Override
     public String toString() {
         return "Message{" +
