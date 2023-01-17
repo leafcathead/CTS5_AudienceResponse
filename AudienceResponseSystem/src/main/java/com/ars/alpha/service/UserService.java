@@ -58,9 +58,9 @@ public class UserService implements UserServiceInterface {
     /**
      * Returns the sessionRoomID given a userID, assuming the User exists.
      *
-     * @param userID
-     * @return
-     * @throws NoSuchElementException
+     * @param userID the userID, self-explanatory
+     * @return SessionRoom object
+     * @throws NoSuchElementException Occurs if the user does not exist
      */
     @Override
     public SessionRoom getSessionRoomByID(Long userID) throws NoSuchElementException {
