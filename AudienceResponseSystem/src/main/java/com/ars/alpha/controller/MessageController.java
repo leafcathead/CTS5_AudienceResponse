@@ -5,6 +5,7 @@ import com.ars.alpha.model.Message;
 import com.ars.alpha.model.SessionRoom;
 import com.ars.alpha.other.Status;
 import com.ars.alpha.service.MessageService;
+import com.ars.alpha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.transaction.UnexpectedRollbackException;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 @RestController
 @CrossOrigin
@@ -24,6 +26,9 @@ public class MessageController {
     SimpMessagingTemplate messagingTemplate;
     @Autowired
     private MessageService messageService;
+
+    @Autowired
+    private UserService userService;
 
     /**
      * @param newComment JSON object in the form of:
@@ -244,9 +249,18 @@ public class MessageController {
     Map<String, Object> likeMessage(@RequestBody Liked like) {
 
         Map<String, Object> returnerMap = new HashMap<String, Object>();
+        SessionRoom room;
 
-        returnerMap = messageService.likeMessage(like.getLikedMessage().getId(), like.getLiker().getId());
-        // messagingTemplate.convertAndSendToUser(Long.toString(.getSession().getID()), GET_MESSAGE_PATH, getMessages(m.getSession()));
+        try {
+            room = userService.getSessionRoomByID(like.getLiker().getId());
+            returnerMap = messageService.likeMessage(like.getLikedMessage().getId(), like.getLiker().getId());
+            messagingTemplate.convertAndSendToUser(Long.toString(room.getID()), GET_MESSAGE_PATH, getMessages(room));
+        } catch (NoSuchElementException e) {
+            returnerMap.put("Status", Status.ERROR);
+            returnerMap.put("Code", 99);
+            returnerMap.put("Liked", false);
+        }
+        
         return returnerMap;
     }
 }
