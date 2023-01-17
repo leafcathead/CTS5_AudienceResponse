@@ -260,7 +260,7 @@ public class MessageController {
             returnerMap.put("Code", 99);
             returnerMap.put("Liked", false);
         }
-        
+
         return returnerMap;
     }
 }

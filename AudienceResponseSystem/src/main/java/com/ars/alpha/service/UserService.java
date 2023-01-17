@@ -55,6 +55,13 @@ public class UserService implements UserServiceInterface {
         return returnerMap;
     }
 
+    /**
+     * Returns the sessionRoomID given a userID, assuming the User exists.
+     *
+     * @param userID
+     * @return
+     * @throws NoSuchElementException
+     */
     @Override
     public SessionRoom getSessionRoomByID(Long userID) throws NoSuchElementException {
         return userRepository.findById(userID).orElseThrow().getSession();
