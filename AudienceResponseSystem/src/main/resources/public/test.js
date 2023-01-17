@@ -1,5 +1,7 @@
 var stompClient = null;
-const SITE_URL = "https://rhit-r90y2r8w"
+const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de"
+// const SITE_URL = "https://rhit-r90y2r8w"
+// const SITE_URL = "https://localhost"
 var token = "";
 
 // THIS IS NOT IMPORTANT
@@ -21,8 +23,8 @@ function connect() {
     stompClient.connect({}, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/user/1/topic/retrieveMessages', myFunc);
-        stompClient.subscribe('/user/1/topic/retrievePanic', myFunc2);
+        stompClient.subscribe('/user/2/topic/retrieveMessages', myFunc);
+        stompClient.subscribe('/user/2/topic/retrievePanic', myFunc2);
     });
 }
 
@@ -76,10 +78,10 @@ function postComment() {
         const data = {
 
             poster: {
-                id:  1
+                id:  5
             },
             session: {
-                id: 1
+                id: 2
             },
             messageContent: "Austria"
 
@@ -90,10 +92,10 @@ function postComment() {
             body: JSON.stringify({
 
                 poster: {
-                    id:  1
+                    id:  5
                 },
                 session: {
-                    id: 1
+                    id: 2
                 },
                 messageContent: "Australia"
 
