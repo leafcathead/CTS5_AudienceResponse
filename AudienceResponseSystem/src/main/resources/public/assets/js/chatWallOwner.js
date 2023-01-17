@@ -2,8 +2,8 @@ const ownerID = localStorage.getItem('ownerID');
 const sessionID = localStorage.getItem('sessionID');
 const sessionPassword = localStorage.getItem('sessionPassword');
 // const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de";
- const SITE_URL = "https://rhit-r90y2r8w";
-// const SITE_URL = "https://localhost";
+//  const SITE_URL = "https://rhit-r90y2r8w";
+const SITE_URL = "https://DESKTOP-FUO6UAL";
 let displayname = localStorage.getItem('displayname');
 var token = "";
 
@@ -55,7 +55,7 @@ function postComment() {
             })
             .then((data) => {
                 console.log(data)
-              //  getPosts();
+               //getPosts();
                 const parg = `
 
            
@@ -65,6 +65,7 @@ function postComment() {
 
                 answer.innerHTML = parg;
                 answer = "";
+                location.reload();
             })
     } else {
         showResultTextArea();
@@ -128,12 +129,6 @@ function postReply(posterID = $("#RposterID").val(), sessionID = $("#RsessionID"
 }
 
 
-/**
- *
- * webSocket
- *
- *
- * */
 
 /**
  *
@@ -153,6 +148,14 @@ function connect(options) {
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
       //  console.log('Connected: ' + frame);
+      //   var myDate = {id: sessionID};
+      //   var stringObj = JSON.stringify(myDate);
+      //
+      //   stompClient.send("/app/getMessages", {}, stringObj);
+
+        var myDate = {id: sessionID};
+        var stringObj = JSON.stringify(myDate);
+        stompClient.send("/app/getMessages", {}, stringObj);
 
         fetch(SITE_URL + "/csrf", {
             method: 'GET',
@@ -168,6 +171,8 @@ function connect(options) {
                 console.log(data)
                 token = data.token;
             });
+
+
 
         let urlMessage = "/user/"+sessionID+"/topic/retrieveMessages";
         stompClient.subscribe(urlMessage, getPosts);
@@ -256,28 +261,26 @@ function disconnect() {
 //
 // RUN THIS WHENEVER THE JAVASCRIPT FILE IS OPENED SO THAT IT AUTO CONNECTS
 
-    //connect(); // MOVED TO VERY BOTTOM -Connor
+    //connect(); // MOVED TO VERY BOTTOM
 
 //get posts from DB WebSocket(Recommended way)receivedJson
 function getPosts(responseData) {
     // if(greeting() == false){
     // checkSessionStatus();
     //   console.log(checkSessionStatus());
-    var myDate = {id: 1};
-    var stringObj = JSON.stringify(myDate);
 
-    stompClient.send("/app/getMessages", {}, stringObj);
 
 
     console.log(responseData);
     let receivedJson = JSON.parse(responseData.body);
     let comments = [];
     let allUsers = 0;
+
     let body = $("#cardDiv").html();
             console.log("Websocket response v2")
             console.log(receivedJson);
 
-
+    body= "";
             //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
             for (let i = 0; i < Object.keys(receivedJson.Messages).length; i++) {
 
@@ -666,6 +669,92 @@ let data = JSON.stringify({
 
             console.log(receivedJsonFetch);
         });
+
+}
+
+function panic(data) {
+  //  console.log(data);
+    // checkSessionStatus();
+    // let panicDiv = document.getElementById('panic');
+
+    let panics = [];
+  //  console.log(responseData);
+    let dataJson = JSON.parse(data.body);
+    console.log("panics  " + Object.keys(dataJson).length)
+    var panicSpan = document.getElementById("panicID");
+             panicSpan.textContent = Object.keys(dataJson.PanicResponse).length;
+                 for (var i = 0; i < Object.keys(dataJson).length; i++) {
+                     console.log(dataJson.PanicResponse[i].panicker.displayName);
+                     console.log(dataJson.PanicResponse[i].panicType.desc);
+                 }
+
+//
+//     fetch("http://localhost:8080/panic/getPanicResponses", {
+//         method: 'POST',
+//         body: JSON.stringify({
+//
+//
+//             id: sessionID
+//
+//
+//         }),
+//         headers: {
+//             "Content-Type": "application/json;charset=UTF-8"
+//         }
+//     })
+//         .then((response) => {
+//             return response.json()
+//         })
+//         .then((data) => {
+//             console.log(data)
+//             console.log(Object.keys(data.PanicResponse).length)
+//             var panicSpan = document.getElementById("panicID");
+//             panicSpan.textContent = Object.keys(data.PanicResponse).length;
+//             // $("#panicID")
+//
+//
+//             for (var i = 0; i < Object.keys(data).length; i++) {
+//
+//                 //   console.log(data.PanicResponse[i].panicker.displayName);
+//                 //  console.log(data.PanicResponse[i].panicType.desc);
+//
+//                 body += `
+//
+//
+//                <table class="table table-hover">
+//   <thead>
+//
+//   </thead>
+//   <tbody>
+//     <tr>
+//       <th scope="row">26</th>
+//       <td>user#24</td>
+//       <td>2FST</td>
+//       <td>Push this button if the speaker is speaking too quickly and you would like them to slow down.</td>
+//     </tr>
+//
+//   </tbody>
+// </table>
+//
+//
+//             `;
+//
+//
+//             }
+//
+//
+//
+            let a = ` <table class="table table-hover"> <tr>
+      <th scope="col">ID</th>
+      <th scope="col">Name</th><br/>
+      <th scope="col">Code</th>
+      <th scope="col">Content</th>
+    </tr></table>`;
+
+            panicDiv.innerHTML = a+body;
+//             panicDiv ="";
+//         })
+
 
 }
 

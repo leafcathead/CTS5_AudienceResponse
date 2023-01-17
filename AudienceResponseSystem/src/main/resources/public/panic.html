@@ -1,0 +1,393 @@
+
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <title>ARS - Statistics</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900" rel="stylesheet">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="./assets/chatWallAssets/css/style.css">
+  <script src="assets/js/chatWallOwner.js"></script>
+</head>
+<body id="bodyDiv">
+<div class="wrapper d-flex align-items-stretch">
+  <nav id="sidebar" >
+    <div class="p-4 pt-5 position-fixed">
+      <a href="#" class="img logo rounded-circle mb-5" style="background-image: url(./assets/chatWallAssets/images/user.png);"></a>
+      <p id="userInfo">
+        <script>document.getElementById("userInfo").innerHTML = "OwnerID:   " + ownerID + "<br>" + "SessionID:   " + sessionID + "<br>" + "Session Password:  " + sessionPassword;
+
+
+        </script></p></br></br></br></br></br></br></br></br></br></br></br></br>
+      <button class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" onClick="logOutOwner()">signout</button>
+
+      <div class="footer">
+        <p>
+          Designed<i class="icon-heart" aria-hidden="true"></i> by <a href="index.html" target="_blank">ARS TEAM   </a><script>document.write(new Date().getFullYear());</script>
+
+        </p>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Page Content  -->
+  <div id="content" class="p-4 p-md-5">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+
+        <button type="button" id="sidebarCollapse" class="btn btn-primary">
+          <i class="fa fa-bars"></i>
+          <span class="sr-only">Toggle Menu</span>
+        </button>
+        <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fa fa-bars"></i>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="chatWallOwner.html">Chat wall</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="" data-toggle="modal" onclick="updateDisplayname()">edit your name</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="statistics.html">Statistics</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Vote</a>
+            </li>
+            <li class="nav-item" >
+              <a class="nav-link" href="#" style="color: red">Delete session</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!--        I will simulate the results later in chart -->
+
+    <div id="contentBody">
+      <div id="returnedDiv"></div>
+      <canvas id="myChart" style="width:100%;max-width:100%"></canvas>
+      <!--            <p>Total users  <span id="users"> </span></p><br>-->
+      <!--            <p>Total comments  <span id="comments"> </span></p><br>-->
+      <!--            <p>Total replies  <span id="replies"> </span></p><br>-->
+      <!--            <p>Total likes  <span id="likes"> </span></p><br>-->
+
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+
+      <script>
+        statistics();
+        function statistics() {
+
+          let totalPanics = 0;
+          fetch(SITE_URL + "/csrf", {
+            method: 'GET',
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8"
+            },
+            port: 443
+          })
+                  .then((response) => {
+                    return response.json()
+                  })
+                  .then((data) => {
+                    console.log(data)
+                    token = data.token;
+                    return data.token;
+                  }).then((csrf) =>{
+            fetch("https://desktop-fuo6ual/panic/getPanicResponses", {
+              method: 'POST',
+              body: JSON.stringify({
+                id: sessionID
+              }),
+              headers: {
+                "Content-Type": "application/json;charset=UTF-8",
+                'X-CSRF-TOKEN': csrf
+              },
+              port: 443
+            })
+                    .then((response) => {
+                      return response.json()
+                    })
+                    .then((receivedJson) => {
+
+                      console.log(receivedJson);
+
+                      let total2FST  = 0;
+                      let total2QIT  = 0;
+                      let totalREPT  = 0;
+                      let totalEXPL = 0;
+                      let totalWAIT = 0;
+                      let totalGENP  = 0;
+
+                      //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
+                      for (let i = 0; i <  Object.keys(receivedJson.PanicResponse).length; i++) {
+                      //  console.log(receivedJson.PanicResponse[i].panicType);
+                        console.log(receivedJson.PanicResponse[i].panicType.panicType);
+
+                        totalPanics++;
+                        if(receivedJson.PanicResponse[i].panicType.panicType == "2FST"){
+                          total2FST++;
+                        }
+                        if(receivedJson.PanicResponse[i].panicType.panicType == "2QIT"){
+                          total2QIT++;
+                        }
+                        if(receivedJson.PanicResponse[i].panicType.panicType == "REPT"){
+                          totalREPT++;
+                        }
+                        if(receivedJson.PanicResponse[i].panicType.panicType == "EXPL"){
+                          totalEXPL++;
+                        }
+                        if(receivedJson.PanicResponse[i].panicType.panicType == "WAIT"){
+                          totalWAIT++;
+                        }
+                        if(receivedJson.PanicResponse[i].panicType.panicType == "GENP"){
+                          totalGENP++;
+                        }
+
+
+
+
+
+                      }
+                        console.log(totalREPT)
+                      //Panics Statistics
+                      let returnedDiv = document.getElementById('returnedDiv');
+
+
+                   //   let totalCRL = totalComments + totalReplies + totalLikes;
+                   //    console.log("totalLikes: "+ totalCRL);
+                   //
+                   //    console.log("tUsers: " + tUsers);
+                   //    // $("#users").html(tUsers)
+                   //
+                   //    console.log("totalComments: "+totalComments  + " in percentage " + ((totalComments * 100)/totalCRL).toFixed(1)+"%");
+                   //    // $("#comments").html(totalComments);
+                   //
+                   //    console.log("totalReplies:  "+totalReplies + " in percentage  " + ((totalReplies * 100)/totalCRL).toFixed(1)+"%");
+                   //    // $("#replies").html(totalReplies);
+                   //
+                   //    console.log("totalLikes: "+totalLikes + " in percentage  " + ((totalLikes * 100)/totalCRL).toFixed(1)+"%");
+                   //    // $("#likes").html(totalLikes);
+
+                      let div = `
+
+
+                                           <p style="alignment: center; font-size: larger; color: #181717; font-style: italic;">Total number of panicers are    :  ${totalPanics} </p>
+
+
+                              `;
+
+                      returnedDiv.innerHTML = div;
+
+
+                      //my Chart
+                      let xValues = [
+                        "Too fast " + (((total2FST * 100)/totalPanics).toFixed(1))+"%",
+                        "Too quiet " + (((total2QIT * 100)/totalPanics).toFixed(1))+"%",
+                        "Repeat " + (((totalREPT * 100)/totalPanics).toFixed(1))+"%",
+                        "Explain " + (((totalEXPL * 100)/totalPanics).toFixed(1))+"%",
+                        "Wait " + (((totalWAIT * 100)/totalPanics).toFixed(1))+"%",
+                        "Something else " + (((totalGENP * 100)/totalPanics).toFixed(1))+"%"
+                      ];
+                      let yValues = [
+                        total2FST,
+                        total2QIT,
+                        totalREPT ,
+                        totalEXPL,
+                        totalWAIT,
+                        totalGENP
+                      ];
+
+                      let barColors = [
+                        "#b91d47",
+                        "#25a407",
+                        "#0b2844",
+                        "#23030c",
+                        "#2eab94",
+                        "#572fce"
+
+                      ];
+
+                      new Chart("myChart", {
+                        type: "pie",
+                        data: {
+                          labels: xValues,
+                          datasets: [{
+                            backgroundColor: barColors,
+                            data: yValues
+                          }]
+                        },
+                        options: {
+                          title: {
+                            display: true,
+                            text: "Total session panic statistics"
+                          }
+                        }
+                      });
+
+
+
+                    }); // end of .then(receivedJson)
+          });
+
+
+
+
+        }
+      </script>
+
+
+
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+<!--edit form-->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input id="msgID" type="hidden"/>
+        <input id="sessionID" type="hidden"/>
+        <input id="posterID" type="hidden"/>
+        <textarea id="msgContent" style="width: 100%;" ></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+        <button onclick="updateComment()" type="button" class="btn btn-primary" data-dismiss="modal">update</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- Modal display name -->
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header" style="text-align: center">
+        <h4 class="modal-title" style="color: goldenrod">Update your display name</h4>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <label>New display name</label>
+        <input class="input-group" id="newDisNameField" placeholder="max 18 letters...">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-sm"  data-dismiss="modal" onclick="newDisplyname();">update</button>
+        <button type="button" class="btn btn-primary btn-sm"  data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+
+
+
+
+<!-- snackbar-->
+<style>
+  #snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%;
+    bottom: 30px;
+    font-size: 17px;
+  }
+
+  #snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  }
+
+  @-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+
+  @keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+  }
+
+  @-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }
+
+  @keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+  }
+</style>
+
+
+
+<script>
+  function showResult() {
+    let x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+  }
+</script>
+<!-- end snackbar-->
+
+
+
+
+
+
+<script src="./assets/chatWallAssets/js/jquery.min.js"></script>
+<script src="./assets/chatWallAssets/js/popper.js"></script>
+<script src="./assets/chatWallAssets/js/bootstrap.min.js"></script>
+<script src="./assets/chatWallAssets/js/main.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

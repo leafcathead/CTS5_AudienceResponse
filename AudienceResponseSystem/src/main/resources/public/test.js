@@ -1,7 +1,7 @@
 var stompClient = null;
 // const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de"
- const SITE_URL = "https://rhit-r90y2r8w"
-// const SITE_URL = "https://localhost"
+ //const SITE_URL = "https://rhit-r90y2r8w"
+const SITE_URL = "https://desktop-fuo6ual"
 var token = "";
 
 // THIS IS NOT IMPORTANT
@@ -24,7 +24,7 @@ function connect() {
         setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/user/2/topic/retrieveMessages', myFunc);
-        stompClient.subscribe('/user/2/topic/retrievePanic', myFunc2);
+        stompClient.subscribe('/user/60/topic/retrievePanic', myFunc2);
     });
 }
 

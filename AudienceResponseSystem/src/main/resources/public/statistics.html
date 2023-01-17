@@ -88,16 +88,31 @@
                 function statistics() {
                     let comments =[];
                     let tUsers = 0;
-
-
-                    fetch("http://localhost:8080/message/getMessages", {
+                    fetch(SITE_URL + "/csrf", {
+                        method: 'GET',
+                        headers: {
+                            "Content-Type": "application/json;charset=UTF-8"
+                        },
+                        port: 443
+                    })
+                        .then((response) => {
+                            return response.json()
+                        })
+                        .then((data) => {
+                            console.log(data)
+                            token = data.token;
+                            return data.token;
+                        }).then((csrf) =>{
+                    fetch("https://desktop-fuo6ual/message/getMessages", {
                         method: 'POST',
                         body: JSON.stringify({
                             id: sessionID
                         }),
                         headers: {
-                            "Content-Type": "application/json;charset=UTF-8"
-                        }
+                            "Content-Type": "application/json;charset=UTF-8",
+                            'X-CSRF-TOKEN': csrf
+                        },
+                        port: 443
                     })
                         .then((response) => {
                             return response.json()
@@ -221,8 +236,8 @@
 
 
 
-                        }) // end of .then(receivedJson)
-
+                        }); // end of .then(receivedJson)
+                    });
 
 
 
