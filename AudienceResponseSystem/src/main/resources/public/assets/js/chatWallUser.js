@@ -175,8 +175,8 @@ function connect(options) {
         let urlMessage = "/user/"+sessionID+"/topic/retrieveMessages";
         stompClient.subscribe(urlMessage, getPosts);
 
-        // let urlPanic ="/user/"+sessionID+"/topic/retrievePanic";
-        // stompClient.subscribe(urlPanic, panic);
+        let urlPanic ="/user/"+sessionID+"/topic/retrievePanic";
+        stompClient.subscribe(urlPanic, panic);
     });
 }
 
@@ -187,65 +187,7 @@ function disconnect() {
     setConnected(false);
     console.log("Disconnected");
 }
-//
-// /**
-//  function postComment() {
-//     var myDate = {messageContent: "Good morning", poster: {id: "1"}, session: { id: "1"}};
-//     var stringObj = JSON.stringify(myDate);
-//
-//     stompClient.send("/app/getMessages", {}, stringObj);
-// }
 
-// function insertPanic() {
-//     var myDate = {id: 1};
-//     var stringObj = JSON.stringify(myDate);
-//
-// /**
-//  * Works with Restful API too, just use websocket for the get messages.
-//  */
-// // function postCommentsssssss() {
-// //
-// //     const data = {
-// //
-// //         poster: {
-// //             id:  1
-// //         },
-// //         session: {
-// //             id: 1
-// //         },
-// //         messageContent: "Austria"
-// //
-// //     };
-// //     console.log(data);
-// //     fetch(SITE_URL + "/message/postComment", {
-// //         method: 'POST',
-// //         body: JSON.stringify({
-// //
-// //             poster: {
-// //                 id:  1
-// //             },
-// //             session: {
-// //                 id: 1
-// //             },
-// //             messageContent: "Australia"
-// //
-// //
-// //         }),
-// //         headers: {
-// //             "Content-Type": "application/json;charset=UTF-8",
-// //              'X-CSRF-TOKEN': token
-// //         },
-//         port: 443
-// //     })
-// //         .then((response) => {
-// //             return response.json()
-// //         })
-// //         .then((data) => {
-// //             console.log(data)
-// //         })
-// // }
-//
-// }
 
 // RUN THIS WHENEVER THE JAVASCRIPT FILE IS OPENED SO THAT IT AUTO CONNECTS
 fetch(SITE_URL + "/csrf", {
@@ -649,7 +591,7 @@ fetch(SITE_URL + "/csrf", {
 
 
 // Restful API fetch comments replies
-function getPosts() {
+function getPosts(receivedJson) {
   checkSessionStatus();
 
     let comments =[];
