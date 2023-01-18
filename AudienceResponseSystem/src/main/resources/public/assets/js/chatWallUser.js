@@ -80,6 +80,7 @@ function postComment() {
 
             answer.innerHTML = parg;
             answer = "";
+            getPosts()
         })
 }else{
     showResultTextArea();
@@ -287,7 +288,7 @@ fetch(SITE_URL + "/csrf", {
 
 
 
-//get posts from DB WebSocket(Recommended way)receivedJson
+// get posts from DB WebSocket(Recommended way)receivedJson
 function getPosts(responseData) {
     // if(greeting() == false){
     // checkSessionStatus();
@@ -308,44 +309,44 @@ function getPosts(responseData) {
     //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
     for (let i = 0; i < Object.keys(receivedJson.Messages).length; i++) {
 
+        if (receivedJson.Messages[i].visible == true) {
+            for (let k = 0; k < Object.keys(receivedJson.Messages).length; k++) {
 
-        for (let k = 0; k < Object.keys(receivedJson.Messages).length; k++) {
+                if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster) {
 
-            if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster) {
+                    comments.push({
+                        posterID: receivedJson.Messages[k].poster,
+                        displayName: receivedJson.Messages[i].poster.displayName,
+                        sessionID: receivedJson.Messages[k].session,
+                        msgID: receivedJson.Messages[k].id,
+                        timestamp: receivedJson.Messages[k].timestamp,
+                        msgContents: receivedJson.Messages[k].messageContents,
+                        replyTo: receivedJson.Messages[k].replyTo,
+                        visible: receivedJson.Messages[k].visible,
+                        likes: receivedJson.Messages[k].likes
+                    });
+
+                }
+            } //end of k loop
+            if (receivedJson.Messages[i].poster.id) {
+
 
                 comments.push({
-                    posterID: receivedJson.Messages[k].poster,
+                    posterID: receivedJson.Messages[i].poster.id,
                     displayName: receivedJson.Messages[i].poster.displayName,
-                    sessionID: receivedJson.Messages[k].session,
-                    msgID: receivedJson.Messages[k].id,
-                    timestamp: receivedJson.Messages[k].timestamp,
-                    msgContents: receivedJson.Messages[k].messageContents,
-                    replyTo: receivedJson.Messages[k].replyTo,
-                    visible: receivedJson.Messages[k].visible,
-                    likes: receivedJson.Messages[k].likes
+                    sessionID: receivedJson.Messages[i].session,
+                    msgID: receivedJson.Messages[i].id,
+                    timestamp: receivedJson.Messages[i].timestamp,
+                    msgContents: receivedJson.Messages[i].messageContents,
+                    replyTo: receivedJson.Messages[i].replyTo,
+                    visible: receivedJson.Messages[i].visible,
+                    likes: receivedJson.Messages[i].likes
                 });
-
             }
-        } //end of k loop
-        if (receivedJson.Messages[i].poster.id) {
 
-
-            comments.push({
-                posterID: receivedJson.Messages[i].poster.id,
-                displayName: receivedJson.Messages[i].poster.displayName,
-                sessionID: receivedJson.Messages[i].session,
-                msgID: receivedJson.Messages[i].id,
-                timestamp: receivedJson.Messages[i].timestamp,
-                msgContents: receivedJson.Messages[i].messageContents,
-                replyTo: receivedJson.Messages[i].replyTo,
-                visible: receivedJson.Messages[i].visible,
-                likes: receivedJson.Messages[i].likes
-            });
         }
 
     }
-
-
     console.log("comments", comments)
     comments.sort((a, b) => a.msgID - b.msgID);
 
@@ -469,7 +470,6 @@ function getPosts(responseData) {
 
 
 //initia
-
 
 
             body += `
@@ -612,9 +612,9 @@ function getPosts(responseData) {
         // repliesTmp = "";
         $("#cardDiv").html(body);
 
-
-        //end of Main for loop
     }
+        //end of Main for loop
+    // }
 
 
     console.log(comments);
@@ -630,6 +630,7 @@ function getPosts(responseData) {
 
 
     // end of .then(receivedJson)
+
 
 
     comments = [];

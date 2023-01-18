@@ -65,7 +65,6 @@ function postComment() {
 
                 answer.innerHTML = parg;
                 answer = "";
-                location.reload();
             })
     } else {
         showResultTextArea();
@@ -1598,18 +1597,17 @@ function deleteSession() {
             })
             .then((receivedJson) => {
 
+
                 return receivedJson;
 
             });
+        logOutOwner();
+    } //end if statement
 
 
-    } else {
 
 
-    }
 
-
-    logOutOwner();
 }
 
 
