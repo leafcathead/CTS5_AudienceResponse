@@ -13,9 +13,9 @@
 const userID = localStorage.getItem('userID');
 const sessionID = localStorage.getItem('sessionID');
 let displayname =  localStorage.getItem('displayname');
-// const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de";
+ const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de";
 // const SITE_URL = "https://rhit-r90y2r8w";
-const SITE_URL = "https://DESKTOP-FUO6UAL";
+// const SITE_URL = "https://DESKTOP-FUO6UAL";
 var token = "";
 
 //check if user logged in
