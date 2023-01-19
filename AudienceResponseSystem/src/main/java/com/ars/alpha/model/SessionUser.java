@@ -53,23 +53,44 @@ public class SessionUser {
         this.name = newName;
     }
 
+    /**
+     * Default constructor
+     */
     public SessionUser () {
 
     }
 
+    /**
+     * Constructor for SessionUser with only ID
+     * @param id userID
+     */
     public SessionUser(Long id) {
         this.id = id;
     }
 
+    /**
+     * Constructor for SessionUser with ID and DisplayName
+     * @param id userID
+     * @param name user DisplayName
+     */
     public SessionUser(Long id, String name) {
         this.id = id; this.name = name;
     }
 
+    /**
+     * Constructor with ID and SessionID
+     * @param id userID
+     * @param sessionID sessionID
+     */
     public SessionUser(Long id, Long sessionID) {
         this.id = id;
         this.session = new SessionRoom(sessionID);
     }
 
+    /**
+     * toString
+     * @return String representation of SessionUser
+     */
     @Override
     public String toString() {
         return "SessionUser{" +

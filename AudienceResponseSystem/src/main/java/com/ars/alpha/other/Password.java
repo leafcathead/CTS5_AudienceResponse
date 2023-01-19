@@ -7,6 +7,10 @@ public class Password {
     private String password;
 
 
+    /**
+     * Constructor for Password
+     * @param randomPassword randomPassword for Session
+     */
     public Password(@JsonProperty("password") String randomPassword) {
         this.password = randomPassword;
     }

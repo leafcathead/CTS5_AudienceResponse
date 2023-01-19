@@ -22,6 +22,17 @@ public class SimpleCORSFilter implements Filter {
         log.info("SimpleCORSFilter init");
     }
 
+    /**
+     * Does Black Magic to allow CORS access
+     * @param req  The request to process
+     * @param res The response associated with the request
+     * @param chain    Provides access to the next filter in the chain for this
+     *                 filter to pass the request and response to for further
+     *                 processing
+     *
+     * @throws IOException
+     * @throws ServletException
+     */
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
 

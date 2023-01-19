@@ -8,10 +8,6 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.UUID;
 
-// These will work once we know what database we use. For now they will cause errors.
-// @Entity
-//@Table(name = "Message")
-
 @Entity
 @Table(name = "Message")
 
@@ -27,8 +23,6 @@ import java.util.UUID;
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "replyToID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "msgContent", type = String.class),
         @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "newMessageID", type = Long.class) })
-//@NamedStoredProcedureQuery(name = "RETRIEVE_MESSAGES", procedureName = "RETRIEVE_MESSAGES", parameters = {
-//        @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class)})
 @NamedStoredProcedureQuery(name = "RETRIEVE_MESSAGES", procedureName = "RETRIEVE_MESSAGES", resultClasses = {Message.class}, parameters = {
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "sessionID", type = Long.class)})
 @NamedStoredProcedureQuery(name = "UPDATE_MESSAGE", procedureName = "UPDATE_MESSAGE", parameters = {
@@ -50,16 +44,6 @@ import java.util.UUID;
         @StoredProcedureParameter(mode = ParameterMode.IN, name = "likerID", type = Long.class),
         @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "liked", type = Boolean.class)
 })
-//@SqlResultSetMapping(name = "Mapping.Message", // I THINK THIS IS UNNEEDED. I HOPE TO GOD IT IS NOT NEEDED
-//                     classes = @ConstructorResult(targetClass = Message.class,
-//                               columns = {@ColumnResult(name = "ID"),
-//                                            @ColumnResult(name = "SessionID"),
-//                                            @ColumnResult(name = "MsgContent"),
-//                                             @ColumnResult(name = "PosterID"),
-//                                             @ColumnResult(name = "ReplyTo"),
-//                                             @ColumnResult(name = "Likes"),
-//                                             @ColumnResult(name = "IS_APPROVED"),
-//                                             @ColumnResult(name = "Timestamp")}))
 @JsonIdentityInfo(generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Message {
     @Id
@@ -115,8 +99,7 @@ public class Message {
     public void setPoster(SessionUser poster) {
         this.poster = poster;
     }
-    //  private Session session;
-  //  private User poster;
+
 
     public String getMessageContents() {
         return this.messageContent;
@@ -156,7 +139,7 @@ public class Message {
     }
 
     /**
-     *
+     * Checks if message content is too long to be inserted into DB without truncation.
      * @return returns if the object is over size
      */
     public boolean checkOverSize(){
@@ -167,13 +150,13 @@ public class Message {
 
     /**
      * Constructor for Message
-     * @param ID
-     * @param user
-     * @param messageContent
-     * @param likes
-     * @param visible
-     * @param replyTo
-     * @param timestamp
+     * @param ID messageID
+     * @param user userID
+     * @param messageContent body text of message
+     * @param likes number of likes, defaults to 0
+     * @param visible whether the message is visible, defaults to false
+     * @param replyTo ID of message
+     * @param timestamp time inserted into DB
      */
     public Message(Long ID, SessionUser user, String messageContent, int likes, boolean visible, Message replyTo, Timestamp timestamp) {
         this.id = ID;
@@ -186,15 +169,15 @@ public class Message {
     }
 
     /**
-     *
-     * @param id
+     * Constructor with only ID
+     * @param id MessageID
      */
     public Message(Long id) {
         this.id = id;
     }
 
     /**
-     *
+     * toString()
      * @return String representation of object
      */
     @Override

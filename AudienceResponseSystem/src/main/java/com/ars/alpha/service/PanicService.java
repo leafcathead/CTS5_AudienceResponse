@@ -22,6 +22,13 @@ public class PanicService implements PanicServiceInterface{
     @Autowired
     PanicRepository panicRepository;
 
+    /**
+     * Posts PanicResponse to DB
+     * @param buttonPushed 4 Char String abbreviation for PanicButton
+     * @param Panicker ID field of SessionUser
+     * @param SessionRoom ID field of SessionRoom
+     * @return Map containing Status, Code, and PanicResponse ID
+     */
     @Override
     @Transactional
     public Map<String, Object> postPanic(String buttonPushed, Long Panicker, Long SessionRoom) {
@@ -31,7 +38,7 @@ public class PanicService implements PanicServiceInterface{
             ret.put("Status", Status.SUCCESS);
             ret.put("Code", 0);
             ret.put("PanicId", buttonPushed);
-        }catch (PersistenceException e){ // Will error, need the IF statement to check to make sure e.getCause().getCause() is a SQLServerException
+        }catch (PersistenceException e){
             if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
                 SQLServerException ex = (SQLServerException) e.getCause().getCause();
                 ret.put("Status", Status.ERROR);
@@ -45,6 +52,11 @@ public class PanicService implements PanicServiceInterface{
     }
 
 
+    /**
+     * Gets all PanicResponse objects as a list from the DB
+     * @param sessionID ID field of SessionRoom class
+     * @return Map containing Status, Code, and List of PanicResponse
+     */
     @Override
     @Transactional
     public Map<String, Object> getPanicResponses(Long sessionID) {

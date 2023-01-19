@@ -36,10 +36,10 @@ public class MessageService implements MessageServiceInterface {
     /**
      * Posts a comment to the database
      *
-     * @param posterID
-     * @param sessionID
-     * @param message
-     * @param iD
+     * @param posterID ID field of SessionUser class
+     * @param sessionID ID field of SessionRoom class
+     * @param message MsgContent of Message class
+     * @param iD INOUT ID for Message Class
      * @return HashMap<String, Object> containing:
      * 1.  Status
      * 2.  Exit code
@@ -57,8 +57,7 @@ public class MessageService implements MessageServiceInterface {
             if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
                 SQLServerException ex = (SQLServerException) e.getCause().getCause();
                 System.out.println(ex.getSQLServerError().getErrorMessage());
-                System.out.println(ex.getSQLServerError().getErrorState()); // This is the important one.
-                // Do further useful stuff
+                System.out.println(ex.getSQLServerError().getErrorState());
                 ret.put("Status", Status.ERROR);
                 ret.put("Code", ex.getSQLServerError().getErrorState());
                 ret.put("MessageID", 0L);
@@ -74,10 +73,10 @@ public class MessageService implements MessageServiceInterface {
 
     /**
      * Posts a reply to the database. Has very simple error checking that will return an ID of 0 if an error is encountered.
-     * @param posterID
-     * @param sessionID
-     * @param repliedToMessageID
-     * @param message
+     * @param posterID ID field of SessionUser
+     * @param sessionID ID field of SessionRoom
+     * @param repliedToMessageID ID field of Message
+     * @param message MsgContent field of Message
      * @return HashMap<String, Object> containing:
      *          1. STATUS
      *          2. EXIT CODE
@@ -99,8 +98,7 @@ public class MessageService implements MessageServiceInterface {
             if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
                 SQLServerException ex = (SQLServerException) e.getCause().getCause();
                 System.out.println(ex.getSQLServerError().getErrorMessage());
-                System.out.println(ex.getSQLServerError().getErrorState()); // This is the important one.
-                // Do further useful stuff
+                System.out.println(ex.getSQLServerError().getErrorState());
                 returnerMap.put("Status", Status.ERROR);
                 returnerMap.put("Code", ex.getSQLServerError().getErrorState());
                 returnerMap.put("messageID", 0L);
@@ -115,11 +113,11 @@ public class MessageService implements MessageServiceInterface {
     }
 
     /**
-     * @param sessionID
      *
+     * Gets all messages for a SessionRoom in the database
+     * @param sessionID ID field of SessionRoom class
      *
-     *
-     * @return
+     * @return Map containing status, code, and List of Message objects
      */
 
     @Override
@@ -141,8 +139,7 @@ public class MessageService implements MessageServiceInterface {
             for (int i = 0; i < returnerList.size(); i++) {
                 Message m = returnerList.get(i);
                 messageMap.put(i, m);
-                // messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo(), m.getTimestamp()));
-                // messageMap.put(i, new Message(m.getId(), new SessionUser(m.getPoster().getId(), m.getPoster().getDisplayName()), m.getMessageContents(), m.getLikes(), m.getVisible(), m.getReplyTo() == null ? null : new Message(m.getReplyTo().getId()), m.getTimestamp()));
+
             }
 
         } catch (PersistenceException e) {
@@ -150,8 +147,7 @@ public class MessageService implements MessageServiceInterface {
             if (e.getCause() != null && e.getCause().getCause() instanceof SQLServerException) {
                 SQLServerException ex = (SQLServerException) e.getCause().getCause();
                 System.out.println(ex.getSQLServerError().getErrorMessage());
-                System.out.println(ex.getSQLServerError().getErrorState()); // This is the important one.
-                // Do further useful stuff
+                System.out.println(ex.getSQLServerError().getErrorState());
                 returnerMap.put("Status", Status.ERROR);
                 returnerMap.put("Code", ex.getSQLServerError().getErrorState());
                 returnerMap.put("messageID", 0L);
@@ -186,11 +182,16 @@ public class MessageService implements MessageServiceInterface {
         return ret;
     }
 
-    @Override
-    public int changeMessageApproval() {
-        return 0;
-    }
 
+
+    /**
+     * Updates body text of Message object
+     * @param messageID ID field of Message class
+     * @param posterID ID field of SessionUser class
+     * @param sessionID ID field of SessionRoom class
+     * @param newContent new Body content for MsgContent
+     * @return Map containing Status and Code
+     */
     @Override
     public Map<String, Object> updateMessageContent(Long messageID, Long posterID, Long sessionID, String newContent) {
 
@@ -229,6 +230,13 @@ public class MessageService implements MessageServiceInterface {
         return returnerMap;
     }
 
+    /**
+     * Toggles message visibility
+     * @param messageID ID field of Message class
+     * @param posterID ID field of SessionUser class
+     * @param sessionID ID field of SessionRoom class
+     * @return Map containing Status and Code
+     */
     @Override
     public Map<String, Object> updateMessageVisibility(Long messageID, Long posterID, Long sessionID) {
 
@@ -255,6 +263,13 @@ public class MessageService implements MessageServiceInterface {
         return returnerMap;
     }
 
+    /**
+     * Deletes a message from the DB
+     * @param messageID ID field of Message class
+     * @param posterID ID field of SessionUser class
+     * @param sessionID ID field of SessionRoom class
+     * @return Map containing Status and Code
+     */
     @Override
     public Map<String, Object> deleteMessage(Long messageID, Long posterID, Long sessionID) {
 
@@ -282,6 +297,12 @@ public class MessageService implements MessageServiceInterface {
         return returnerMap;
     }
 
+    /**
+     * Toggles message like
+     * @param messageID ID field of Message class
+     * @param likerID ID field of SessionUser class
+     * @return Map containing Status, Code, and MessageLiked status (True or False)
+     */
     @Override
     @Transactional
     public Map<String, Object> likeMessage(Long messageID, Long likerID) {

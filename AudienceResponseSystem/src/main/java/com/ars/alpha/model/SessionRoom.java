@@ -41,7 +41,7 @@ public class SessionRoom {
     @JoinColumn(name = "OwnerID")
     private SessionUser owner;
 
-    @Column(name = "Timestamp") // This line might have to be removed? Can we do this just in Table definition?
+    @Column(name = "Timestamp")
     private Timestamp timestamp;
 
     public void setOwner(SessionUser owner) {
