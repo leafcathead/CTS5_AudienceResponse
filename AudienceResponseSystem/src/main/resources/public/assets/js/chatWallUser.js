@@ -189,7 +189,7 @@ fetch(SITE_URL + "/csrf", {
         return data.token;
     }).then((Toki) =>{
 
-    connect();
+        connect();
     });
 
 
@@ -2089,4 +2089,8 @@ function logOutUser(){
         .then((data) => {
             console.log(data)
             token = data.token;
-        });
+            return token;
+        }).then(async (t) => {
+        await connect();
+        checkSessionStatus()
+    })
