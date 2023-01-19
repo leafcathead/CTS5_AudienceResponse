@@ -55,7 +55,6 @@ public class MessageController {
             throw new IllegalArgumentException("You cannot send a message longer than 1024 characters.");
         }
         Map<String, Object> returnerMap = new HashMap<String, Object>();
-        //  System.out.println(newComment.toString());
         returnerMap = messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents(), 0L);
         messagingTemplate.convertAndSendToUser(Long.toString(newComment.getSession().getID()), GET_MESSAGE_PATH, getMessages(newComment.getSession()));
         return returnerMap;
@@ -118,8 +117,6 @@ public class MessageController {
      * }
      * }
      */
-    //Must be post type JS can't send GET request with body!!!
-    // LAME! -Connor
     @PostMapping("/getMessages")
     public @ResponseBody Map<String, Object> getMessages(@RequestBody SessionRoom session) {
 

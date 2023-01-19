@@ -32,8 +32,6 @@ public class SessionUserController {
      */
     @PutMapping("/updateDisplayName")
     Map<String, Object> updateMessageContent(@RequestBody SessionUser su) {
-        System.out.println("Updating display name...");
-        System.out.println(su.toString());
         return userService.updateDisplayName(su.getId(), su.getSession().getID(), su.getDisplayName());
     }
 
