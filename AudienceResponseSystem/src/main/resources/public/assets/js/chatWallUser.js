@@ -8,6 +8,7 @@
 //localStorage.setItem('password', '8D1F')
 
 
+
 //store data on the session storage will be removed by closing the browser
 //sessionStorage.setItem('password', '8D1F') .e.g
 const userID = localStorage.getItem('userID');
@@ -26,7 +27,7 @@ if(userID==null){
 
 //post comment
 function postComment() {
-    checkSessionStatus();
+    // checkSessionStatus();
 
 
 
@@ -69,18 +70,7 @@ function postComment() {
             return response.json()
         })
         .then((data) => {
-            console.log(data)
-            //getPosts();
-            const parg = `
-
-           
-          your comment has been successfully posted<br/>
-           <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
-            `;
-
-            answer.innerHTML = parg;
-            answer = "";
-            getPosts()
+            location.reload();
         })
 }else{
     showResultTextArea();
@@ -90,7 +80,7 @@ function postComment() {
 
 function postReply(posterID=$("#RposterID").val(),sessionID=$("#RsessionID").val(),msgID=$("#RmsgID").val(),msgContent=$("#RmsgContent").val()) {
     // let answer = document.getElementById('');
-    checkSessionStatus();
+    // checkSessionStatus();
 
     console.log(posterID, sessionID,msgID, msgContent);
 
@@ -143,16 +133,9 @@ function postReply(posterID=$("#RposterID").val(),sessionID=$("#RsessionID").val
 }
 
 
-/**
- *
- * webSocket
- *
- *
- * */
+
+//webSocket
 var stompClient = null;
-
-
-
 function connect(options) {
 
     console.log("ANYTHING");
@@ -207,27 +190,7 @@ fetch(SITE_URL + "/csrf", {
     }).then((Toki) =>{
 
     connect();
-    }
-
-);
-
-
-// function getPostWS() {
-//     // if(greeting() == false){
-// // checkSessionStatus();
-//     checkSessionStatus();
-//
-//
-// RUN THIS WHENEVER THE JAVASCRIPT FILE IS OPENED SO THAT IT AUTO CONNECTS
-
-//connect(); // MOVED TO VERY BOTTOM
-
-
-
-
-
-
-
+    });
 
 
 // get posts from DB WebSocket(Recommended way)receivedJson
@@ -588,11 +551,9 @@ fetch(SITE_URL + "/csrf", {
 
 
 
-
-
 // Restful API fetch comments replies
 function getPosts(receivedJson) {
-  checkSessionStatus();
+  // checkSessionStatus();
 
     let comments =[];
     let allUsers = 0;
@@ -949,7 +910,7 @@ function getPosts(receivedJson) {
 
 
 function likeMessage(msgID){
-    checkSessionStatus();
+    // checkSessionStatus();
 
     console.log(msgID);
 
@@ -996,17 +957,12 @@ function likeMessage(msgID){
 
 //show data model first then call updateComment();
 function showUpdateModal(posterID,sessionID, msgID, msgContent){
-    checkSessionStatus();
-
+    // checkSessionStatus();
     $("#exampleModal").modal('show');
-
     $("#msgID").val(msgID);
     $("#posterID").val(posterID);
     $("#sessionID").val(sessionID);
     $("#msgContent").val(msgContent);
-
-
-    console.log(posterID,sessionID, msgID, msgContent);
 
 }
 
@@ -1083,7 +1039,7 @@ function showUpdateModal(posterID,sessionID, msgID, msgContent){
 
 function updateComment(posterID = $("#posterID").val(), msgID = $("#msgID").val(), sessionID = $("#sessionID").val(), msgContent = $("#msgContent").val()) {
 
-    checkSessionStatus();
+    // checkSessionStatus();
 
     //test
     console.log("i am update comment   " + posterID + "  " + msgID + "  " + sessionID + "  " + msgContent);
@@ -1150,18 +1106,12 @@ function updateComment(posterID = $("#posterID").val(), msgID = $("#msgID").val(
 
 
 function showReplyModal(posterID,sessionID, msgID){
-    checkSessionStatus();
-
 
     $("#replyModal").modal('show');
-
     $("#RmsgID").val(msgID);
     $("#RposterID").val(posterID);
     $("#RsessionID").val(sessionID);
     $("#RmsgContent").val("");
-
-
-    console.log(posterID,sessionID, msgID);
 
 }
 
@@ -1172,24 +1122,15 @@ function showReplyModal(posterID,sessionID, msgID){
 
 //update displayname
 function updateDisplayname(){
-    checkSessionStatus();
-
-
+    // checkSessionStatus();
     $("#myModal").modal('show');
     $("#newDisNameField").val(displayname);
-    // data-toggle="modal" data-target="#myModal"
-    console.log("posterID: " + userID +"  sessionID: " + sessionID +"  displayname:  " + $("#newDisNameField").val());
-    //VPN is not working updateMessageContent type PUT is not yet tested
-
-    //  let answer = document.getElementById('answer');
-
-
 }
 
 
 
 function newDisplyname(){
-    checkSessionStatus();
+    // checkSessionStatus();
     console.log(userID, sessionID, $("#newDisNameField").val() )
 
 
@@ -1225,17 +1166,9 @@ function newDisplyname(){
 
 
             if (data.Status == "SUCCESS") {
-                const parg = `
-
-
-      your display name has been successfully updated<br/>
-
-        `;
-
-                answer.innerHTML = parg;
-
-
-                getPosts();
+                location.reload();
+                // const parg = ` your display name has been successfully updated<br/>`;
+                // answer.innerHTML = parg;
             } else {
 
                 console.log("Error has been occurred");
@@ -1243,8 +1176,7 @@ function newDisplyname(){
 
 
 
-        })
-
+        });
 
 }
 
@@ -1252,8 +1184,7 @@ function newDisplyname(){
 function panic(code){
 
 
-
-    checkSessionStatus();
+    // checkSessionStatus();
     console.log(userID, sessionID, $("#newDisNameField").val() )
 
 
@@ -1294,7 +1225,6 @@ function panic(code){
          //   if (data.Status == "SUCCESS") {
                 const parg = `
 
-
       your panic has been sent<br/>
 
         `;
@@ -1308,7 +1238,7 @@ function panic(code){
             //    console.log("Error has been occurred");
           //  }
 
-
+location.reload();
 
         })
 
@@ -1321,7 +1251,7 @@ function panic(code){
 
 
 function deleteMessage(msgID, posterID, sessionID){
-    checkSessionStatus();
+    // checkSessionStatus();
 
     console.log(msgID, posterID, sessionID);
     fetch(SITE_URL + "/message/deleteMessage", {
