@@ -3,15 +3,15 @@ const sessionID = localStorage.getItem('sessionID');
 const sessionPassword = localStorage.getItem('sessionPassword');
 
 // const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de";
-//  const SITE_URL = "https://rhit-r90y2r8w";
-const SITE_URL = "https://DESKTOP-FUO6UAL";
+  const SITE_URL = "https://rhit-r90y2r8w";
+// const SITE_URL = "https://DESKTOP-FUO6UAL";
 let displayname = localStorage.getItem('displayname');
 var token = "";
 
 // function fetching(){
 //     setTimeout(getPosts, 1000);}
 
-checkSessionStatus();
+
 
 
 //post comment
@@ -158,20 +158,6 @@ function connect(options) {
         var stringObj = JSON.stringify(myDate);
         stompClient.send("/app/getMessages", {}, stringObj);
 
-        fetch(SITE_URL + "/csrf", {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json;charset=UTF-8"
-            },
-            port: 443
-        })
-            .then((response) => {
-                return response.json()
-            })
-            .then((data) => {
-                console.log(data)
-                token = data.token;
-            });
 
 
 
@@ -252,7 +238,24 @@ function disconnect() {
 
 // RUN THIS WHENEVER THE JAVASCRIPT FILE IS OPENED SO THAT IT AUTO CONNECTS
 
-    connect();
+fetch(SITE_URL + "/csrf", {
+    method: 'GET',
+    headers: {
+        "Content-Type": "application/json;charset=UTF-8"
+    },
+    port: 443
+})
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        console.log(data)
+        token = data.token;
+        return token;
+    }).then(async (t) => {
+    await connect();
+    checkSessionStatus();
+});
 
 // function getPostWS() {
 //     // if(greeting() == false){
@@ -1181,7 +1184,7 @@ function deleteMessage(msgID, posterID, sessionID) {
     // checkSessionStatus();
     console.log(msgID, posterID, sessionID);
     fetch(SITE_URL + "/message/deleteMessage", {
-        method: 'DELETE',
+        method: 'POST',
         body: JSON.stringify({
 
             id: msgID,
@@ -1571,7 +1574,7 @@ function deleteSession() {
     if (confirm("Are you sure that you want to delete the session!")) {
 
         fetch(SITE_URL + "/session/closeSession", {
-            method: 'DELETE',
+            method: 'POST',
             body: JSON.stringify({
                 id: sessionID
             }),

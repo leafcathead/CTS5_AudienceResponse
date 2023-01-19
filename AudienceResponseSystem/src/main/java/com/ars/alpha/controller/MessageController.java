@@ -216,7 +216,7 @@ public class MessageController {
      * "Code": <int>
      * }
      */
-    @DeleteMapping("/deleteMessage")
+    @PostMapping("/deleteMessage")
     Map<String, Object> deleteComment(@RequestBody Message delComment) {
         Map<String, Object> returnerMap = new HashMap<String, Object>();
 

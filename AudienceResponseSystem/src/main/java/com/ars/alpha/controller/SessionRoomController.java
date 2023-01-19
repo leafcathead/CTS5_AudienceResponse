@@ -65,7 +65,7 @@ public class SessionRoomController {
      * "Code": <int>
      * }
      */
-    @DeleteMapping("/closeSession")
+    @PostMapping("/closeSession")
     Map<String, Object> closeSession(@RequestBody SessionRoom session) {
         System.out.println("Closing session: " + session.getID());
 

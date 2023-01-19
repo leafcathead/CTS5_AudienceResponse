@@ -14,8 +14,8 @@
 const userID = localStorage.getItem('userID');
 const sessionID = localStorage.getItem('sessionID');
 let displayname =  localStorage.getItem('displayname');
- const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de";
-// const SITE_URL = "https://rhit-r90y2r8w";
+ // const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de";
+ const SITE_URL = "https://rhit-r90y2r8w";
 // const SITE_URL = "https://DESKTOP-FUO6UAL";
 var token = "";
 
@@ -1255,7 +1255,7 @@ function deleteMessage(msgID, posterID, sessionID){
 
     console.log(msgID, posterID, sessionID);
     fetch(SITE_URL + "/message/deleteMessage", {
-        method: 'DELETE',
+        method: 'POST',
         body: JSON.stringify({
 
             id: msgID,
