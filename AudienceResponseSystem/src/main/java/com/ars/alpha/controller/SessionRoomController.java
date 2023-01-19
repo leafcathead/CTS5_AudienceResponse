@@ -5,8 +5,10 @@ import com.ars.alpha.other.Password;
 import com.ars.alpha.service.SessionService;
 import com.ars.alpha.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -15,11 +17,16 @@ import java.util.Map;
 @RequestMapping("/session")
 public class SessionRoomController {
 
+    static final String GET_MESSAGE_PATH = "/topic/sessionClosed";
+
     @Autowired
     private SessionService sessionService;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    SimpMessagingTemplate messagingTemplate;
 
 
     /**
@@ -68,8 +75,10 @@ public class SessionRoomController {
     @PostMapping("/closeSession")
     Map<String, Object> closeSession(@RequestBody SessionRoom session) {
         System.out.println("Closing session: " + session.getID());
-
-        return sessionService.closeSession(session.getID(), null);
+        Map<String, Object> returnerMap = new HashMap<String, Object>();
+        returnerMap = sessionService.closeSession(session.getID(), null);
+        messagingTemplate.convertAndSendToUser(Long.toString(session.getID()), GET_MESSAGE_PATH, returnerMap);
+        return returnerMap;
     }
 
     /**

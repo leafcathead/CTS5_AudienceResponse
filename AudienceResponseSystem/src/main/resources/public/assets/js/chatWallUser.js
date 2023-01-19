@@ -160,6 +160,9 @@ function connect(options) {
 
         let urlPanic ="/user/"+sessionID+"/topic/retrievePanic";
         stompClient.subscribe(urlPanic, panic);
+
+        let urlSession = "/user/"+sessionID+"/topic/sessionClosed";
+        stompClient.subscribe(urlSession, checkSessionStatus);
     });
 }
 
@@ -171,26 +174,6 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-
-// RUN THIS WHENEVER THE JAVASCRIPT FILE IS OPENED SO THAT IT AUTO CONNECTS
-fetch(SITE_URL + "/csrf", {
-    method: 'GET',
-    headers: {
-        "Content-Type": "application/json;charset=UTF-8"
-    },
-    port: 443
-})
-    .then((response) => {
-        return response.json()
-    })
-    .then((data) => {
-        console.log(data)
-        token = data.token;
-        return data.token;
-    }).then((Toki) =>{
-
-        connect();
-    });
 
 
 // get posts from DB WebSocket(Recommended way)receivedJson

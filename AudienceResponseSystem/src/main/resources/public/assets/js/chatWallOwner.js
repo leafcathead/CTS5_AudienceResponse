@@ -14,6 +14,7 @@ var token = "";
 
 
 
+
 //post comment
 function postComment() {
     // checkSessionStatus();
@@ -166,6 +167,9 @@ function connect(options) {
 
         let urlPanic ="/user/"+sessionID+"/topic/retrievePanic";
         stompClient.subscribe(urlPanic, panic);
+
+        let urlSession = "/user/"+sessionID+"/topic/sessionClosed";
+        stompClient.subscribe(urlSession, checkSessionStatus);
     });
 }
 
@@ -238,24 +242,6 @@ function disconnect() {
 
 // RUN THIS WHENEVER THE JAVASCRIPT FILE IS OPENED SO THAT IT AUTO CONNECTS
 
-fetch(SITE_URL + "/csrf", {
-    method: 'GET',
-    headers: {
-        "Content-Type": "application/json;charset=UTF-8"
-    },
-    port: 443
-})
-    .then((response) => {
-        return response.json()
-    })
-    .then((data) => {
-        console.log(data)
-        token = data.token;
-        return token;
-    }).then(async (t) => {
-    await connect();
-    checkSessionStatus();
-});
 
 // function getPostWS() {
 //     // if(greeting() == false){
@@ -1553,14 +1539,13 @@ function  checkSessionStatus() {
 
             console.log("SESSION STATUS" + receivedJson)
 
-            // if (receivedJson == true) {
-            //
-            //
-            // }
-            // if (receivedJson != true) {
-            //     alert("your session has been deleted by the owner!");
-            //     logOutOwner();
-            // }
+            if (receivedJson == "true") {
+
+
+            } else {
+                alert("your session has been deleted by the owner!");
+                logOutOwner();
+            }
 
 
         });
@@ -1615,6 +1600,24 @@ function logOutOwner() {
 
 
 // setInterval(getPosts,1000);
+fetch(SITE_URL + "/csrf", {
+    method: 'GET',
+    headers: {
+        "Content-Type": "application/json;charset=UTF-8"
+    },
+    port: 443
+})
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        console.log(data)
+        token = data.token;
+        return token;
+    }).then(async (t) => {
+    await connect();
+    checkSessionStatus();
+});
 
 
 
