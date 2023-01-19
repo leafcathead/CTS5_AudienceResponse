@@ -150,9 +150,7 @@ function connect(options) {
         //   var stringObj = JSON.stringify(myDate);
         //   stompClient.send("/app/getMessages", {}, stringObj);
 
-        var myDate = {id: sessionID};
-        var stringObj = JSON.stringify(myDate);
-        stompClient.send("/app/getMessages", {}, stringObj);
+
 
 
         let urlMessage = "/user/"+sessionID+"/topic/retrieveMessages";
@@ -163,6 +161,10 @@ function connect(options) {
 
         let urlSession = "/user/"+sessionID+"/topic/sessionClosed";
         stompClient.subscribe(urlSession, checkSessionStatus);
+
+        var myDate = {id: sessionID};
+        var stringObj = JSON.stringify(myDate);
+        stompClient.send("/app/getMessages", {}, stringObj);
     });
 }
 
@@ -1306,13 +1308,12 @@ function  checkSessionStatus() {
         })
         .then((receivedJson) => {
 
-            if(receivedJson == true){
+            if(receivedJson == "true"){
 
                 console.log("your session is exist!");
 
 
-            }
-            if(receivedJson != true){
+            } else {
                 alert("your session has been deleted by the owner!");
                 console.log("your session is NOT exist!")
                 logOutUser();
