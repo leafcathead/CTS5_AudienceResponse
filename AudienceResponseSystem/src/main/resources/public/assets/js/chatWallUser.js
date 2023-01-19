@@ -3,20 +3,16 @@
  * Author: Amer Aljamous
  * THU ULM
 * */
-
 //store data on the localstorage will be removed by user manually
 //localStorage.setItem('password', '8D1F')
-
-
-
 //store data on the session storage will be removed by closing the browser
 //sessionStorage.setItem('password', '8D1F') .e.g
 const userID = localStorage.getItem('userID');
 const sessionID = localStorage.getItem('sessionID');
 let displayname =  localStorage.getItem('displayname');
  // const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de";
- const SITE_URL = "https://rhit-r90y2r8w";
-// const SITE_URL = "https://DESKTOP-FUO6UAL";
+// const SITE_URL = "https://rhit-r90y2r8w";
+ const SITE_URL = "https://DESKTOP-FUO6UAL";
 var token = "";
 
 //check if user logged in
@@ -160,9 +156,6 @@ function connect(options) {
 
         let urlPanic ="/user/"+sessionID+"/topic/retrievePanic";
         stompClient.subscribe(urlPanic, panic);
-
-        let urlSession = "/user/"+sessionID+"/topic/sessionClosed";
-        stompClient.subscribe(urlSession, checkSessionStatus);
     });
 }
 
@@ -174,6 +167,26 @@ function disconnect() {
     console.log("Disconnected");
 }
 
+
+// RUN THIS WHENEVER THE JAVASCRIPT FILE IS OPENED SO THAT IT AUTO CONNECTS
+fetch(SITE_URL + "/csrf", {
+    method: 'GET',
+    headers: {
+        "Content-Type": "application/json;charset=UTF-8"
+    },
+    port: 443
+})
+    .then((response) => {
+        return response.json()
+    })
+    .then((data) => {
+        console.log(data)
+        token = data.token;
+        return data.token;
+    }).then((Toki) =>{
+
+    connect();
+    });
 
 
 // get posts from DB WebSocket(Recommended way)receivedJson
@@ -1238,7 +1251,7 @@ function deleteMessage(msgID, posterID, sessionID){
 
     console.log(msgID, posterID, sessionID);
     fetch(SITE_URL + "/message/deleteMessage", {
-        method: 'POST',
+        method: 'DELETE',
         body: JSON.stringify({
 
             id: msgID,
@@ -1312,7 +1325,7 @@ function  checkSessionStatus() {
 
 
             }
-            if(receivedJson != true){
+            else{
                 alert("your session has been deleted by the owner!");
                 console.log("your session is NOT exist!")
                 logOutUser();
@@ -2075,5 +2088,5 @@ function logOutUser(){
             return token;
         }).then(async (t) => {
         await connect();
-        checkSessionStatus()
-    })
+        checkSessionStatus();
+    });
