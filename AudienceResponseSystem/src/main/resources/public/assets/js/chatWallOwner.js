@@ -170,6 +170,10 @@ function connect(options) {
 
         let urlSession = "/user/"+sessionID+"/topic/sessionClosed";
         stompClient.subscribe(urlSession, checkSessionStatus);
+
+        var myDate = {id: sessionID};
+        var stringObj = JSON.stringify(myDate);
+        stompClient.send("/app/getMessages", {}, stringObj);
     });
 }
 
