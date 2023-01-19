@@ -140,10 +140,10 @@ function connect(options) {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-
         //  console.log('Connected: ' + frame);
         //   var myDate = {id: sessionID};
         //   var stringObj = JSON.stringify(myDate);
+        //
         //   stompClient.send("/app/getMessages", {}, stringObj);
 
         var myDate = {id: sessionID};
@@ -151,13 +151,23 @@ function connect(options) {
         stompClient.send("/app/getMessages", {}, stringObj);
 
 
+
+
         let urlMessage = "/user/"+sessionID+"/topic/retrieveMessages";
         stompClient.subscribe(urlMessage, getPosts);
 
         let urlPanic ="/user/"+sessionID+"/topic/retrievePanic";
         stompClient.subscribe(urlPanic, panic);
+
+        let urlSession = "/user/"+sessionID+"/topic/sessionClosed";
+        stompClient.subscribe(urlSession, checkSessionStatus);
+
+        var myDate = {id: sessionID};
+        var stringObj = JSON.stringify(myDate);
+        stompClient.send("/app/getMessages", {}, stringObj);
     });
 }
+
 
 function disconnect() {
     if (stompClient !== null) {

@@ -132,6 +132,12 @@ function postReply(posterID = $("#RposterID").val(), sessionID = $("#RsessionID"
 
 
 
+
+
+
+
+
+
 /**
  *
  * webSocket
@@ -142,6 +148,7 @@ var stompClient = null;
 
 
 
+
 function connect(options) {
 
 
@@ -149,11 +156,11 @@ function connect(options) {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-      //  console.log('Connected: ' + frame);
-      //   var myDate = {id: sessionID};
-      //   var stringObj = JSON.stringify(myDate);
-      //
-      //   stompClient.send("/app/getMessages", {}, stringObj);
+        //  console.log('Connected: ' + frame);
+        //   var myDate = {id: sessionID};
+        //   var stringObj = JSON.stringify(myDate);
+        //
+        //   stompClient.send("/app/getMessages", {}, stringObj);
 
         var myDate = {id: sessionID};
         var stringObj = JSON.stringify(myDate);
@@ -176,6 +183,7 @@ function connect(options) {
         stompClient.send("/app/getMessages", {}, stringObj);
     });
 }
+
 
 function disconnect() {
     if (stompClient !== null) {
@@ -641,30 +649,7 @@ ${visibilityButton}
 // }
 
 
-function ping(){
-let data = JSON.stringify({
-    id: sessionID
-}) ;
-    fetch(SITE_URL + "/message/getMessages", {
-        method: 'POST',
-        body: JSON.stringify({
-                id: sessionID
-        }),
-        headers: {
-            "Content-Type": "application/json;charset=UTF-8",
-            'X-CSRF-TOKEN': token
-        },
-        port: 443
-    })
-        .then((response) => {
-            return response.json()
-        })
-        .then((receivedJsonFetch) => {
 
-            console.log(receivedJsonFetch);
-        });
-
-}
 
 function panic(data) {
   //  console.log(data);

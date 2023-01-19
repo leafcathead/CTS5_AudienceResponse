@@ -64,12 +64,9 @@ else {
 //joinSession
 const inputPass = $("#sessionIdInput").val();
 function joinSession() {
-    const data = {
-
-        password: $("#sessionIdInput").val()
-
-    };
+    const data = { password: $("#sessionIdInput").val() };
     console.log(data);
+
     $.ajax({
         url: SITE_URL + '/session/joinSession',
         headers: {
@@ -110,7 +107,65 @@ function joinSession() {
 
     });
 
+
+//     fetch(SITE_URL + '/session/joinSession', {
+//         method: 'POST',
+//         body: JSON.stringify({
+//
+//             data
+//
+//         }),
+//         headers: {
+//     'Content-Type': 'application/json',
+//         'Accept': 'application/json',
+//         'X-CSRF-TOKEN': token
+//         }
+//
+//     })
+//         .then((response) => {
+//             return response.json()
+//         })
+//         .then((resp) => {
+//
+//
+//             if(resp.newUserID != null) {
+//                 console.log(resp);
+// //Setting the localstorages keys and values
+//                 localStorage.setItem('userID', resp.newUserID);
+//                 localStorage.setItem('sessionID', resp.newSessionID);
+//                 localStorage.setItem('displayname', resp.newUserID);
+//
+//
+//                 console.log("password is exist");
+//                 console.log(resp);
+//                 //   const userId = resp.newUserID;
+//                 // var par = `<p> USER NAME ID:  ${resp.newUserID} </p> <br/> <p>SESSION ID: ${resp.newSessionID}  </p>`;
+//                 // div.innerHTML = par;
+//                 //   document.getElementById('outputDiv').textContent = resp.newUserID;
+//                 location.replace("chatWallUser.html")
+//             }else{
+//
+//                 const wrong =  window.confirm("session is not exsit or password is incorrect");
+//                 console.log("your password is not exist");
+//                 //   document.getElementById('userMenuDiv').textContent = "Your password is NOT exist";
+//
+//             }
+//
+//         })
+//
+//
+
+
+
+
+
+
+
+
 }
+
+
+
 
 
 //createSession
