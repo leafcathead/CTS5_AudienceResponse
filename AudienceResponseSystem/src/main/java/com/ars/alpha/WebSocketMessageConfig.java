@@ -10,6 +10,10 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer
 {
+    /**
+     * Creates possible areas to connect to from front-end application
+     * @param registry
+     */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/message").setAllowedOrigins("http://localhost:63342").withSockJS();
@@ -17,6 +21,10 @@ public class WebSocketMessageConfig implements WebSocketMessageBrokerConfigurer
         registry.addEndpoint("/panic").setAllowedOrigins("http://localhost:63342").withSockJS();
     }
 
+    /**
+     * Creates distinction between sessions in connetion to the Spring Boot server
+     * @param registry
+     */
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/user");

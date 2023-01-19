@@ -24,20 +24,12 @@ public class MessageWebController {
     @Autowired
     SimpMessagingTemplate messagingTemplate;
 
-//    @MessageMapping("/postComment")
-//   // @SendTo("/topic/webMessage")
-//    public Map<String, Object> postMessage(Message newComment) {
-//        System.out.println("Got a response here");
-//        messagingTemplate.convertAndSendToUser(Long.toString(newComment.getSession().getID()), "/topic/webMessage", getMessages(newComment.getSession()));
-//        messagingTemplate.convertAndSendToUser(Long.toString(newComment.getSession().getID()), "/topic/webMessage", messageService.postComment(newComment.getPoster().getId(), newComment.getSession().getID(), newComment.getMessageContents(), 0L));
-//        return null;
-//    }
 
     /**
      * Get Messages using Web Sockets
      *
      * @param session
-     * @return
+     * @return Map<String, Object> containing all Message objects in a SessionRoom.
      */
     @MessageMapping("/getMessages")
     // @SendTo("/topic/webMessage")

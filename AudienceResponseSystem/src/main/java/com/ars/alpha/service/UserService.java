@@ -19,6 +19,13 @@ public class UserService implements UserServiceInterface {
     @Autowired
     UserRepository userRepository;
 
+    /**
+     * Updates the display name of a SessionUser
+     * @param userID ID field of SessionUser class
+     * @param sessionID ID field of SessionRoom class
+     * @param newName DisplayName field of SessionUser class
+     * @return Map containing Status and Code
+     */
     @Override
     public Map<String, Object> updateDisplayName(Long userID, Long sessionID, String newName) {
 

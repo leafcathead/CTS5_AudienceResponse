@@ -11,6 +11,12 @@ import java.util.Objects;
 @Configuration
 public class SecurityConfig {
 
+    /**
+     * Does Black Magic to allow HTTPS
+     * @param http
+     * @return
+     * @throws Exception
+     */
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http

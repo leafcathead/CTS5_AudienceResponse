@@ -75,6 +75,10 @@ public class PanicResponse {
         this.id = id;
     }
 
+    /**
+     * Makes sure the panic type is 4 or few characters.
+     * @return Whether the abbreviation is possible in the DB
+     */
     public boolean checkOverSize(){
         return panicType.getPanicType().length() > 4;
     }

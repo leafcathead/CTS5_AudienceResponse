@@ -40,7 +40,7 @@ public class PanicController {
      * "Status": <SUCCESS, WARNING, ERROR>,
      * "Code": <int>
      * }
-     * @throws Exception
+     * @throws Exception Generic exception
      */
     @PostMapping("/postPanic")
     Map<String, Object> postPanic(@RequestBody PanicResponse newPanic) throws Exception {
@@ -49,7 +49,6 @@ public class PanicController {
             throw new IllegalArgumentException("Panic type not accepted");
         }
 
-        //  System.out.println(newComment.toString());
 
         Map<String, Object> returnerMap = new HashMap<String, Object>();
 

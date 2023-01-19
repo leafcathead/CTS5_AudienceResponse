@@ -123,7 +123,7 @@
                             token = data.token;
                             return data.token;
                         }).then((csrf) =>{
-                    fetch("https://desktop-fuo6ual/message/getMessages", {
+                    fetch(SITE_URL + "/message/getMessages", {
                         method: 'POST',
                         body: JSON.stringify({
                             id: sessionID

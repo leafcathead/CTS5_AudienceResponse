@@ -45,6 +45,10 @@ public class Liked {
         this.id = id;
     }
 
+    /**
+     * toString method
+     * @return String representation of Liked
+     */
     @Override
     public String toString() {
         return "Liked{" +

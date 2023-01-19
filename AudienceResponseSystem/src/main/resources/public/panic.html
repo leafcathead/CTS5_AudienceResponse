@@ -114,7 +114,7 @@
                     token = data.token;
                     return data.token;
                   }).then((csrf) =>{
-            fetch("https://desktop-fuo6ual/panic/getPanicResponses", {
+            fetch(SITE_URL + "/panic/getPanicResponses", {
               method: 'POST',
               body: JSON.stringify({
                 id: sessionID

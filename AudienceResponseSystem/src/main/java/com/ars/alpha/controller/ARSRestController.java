@@ -13,15 +13,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+
 @RestController
 @CrossOrigin
 public class ARSRestController {
-
-//    @GetMapping("/")
-//    String tester () {
-//        System.out.println("Input received");
-//        return "Hello world";
-//    }
 
 
     @Autowired
@@ -34,6 +29,11 @@ public class ARSRestController {
     private MessageService messageService;
 
 
+    /**
+     * Returns the index of the site
+     *
+     * @return index.html
+     */
     @GetMapping("/")
     ModelAndView welcome() {
         System.out.println("Someone visited our website!");
@@ -42,6 +42,10 @@ public class ARSRestController {
         return modelAndView;
     }
 
+    /**
+     * A secret test site.
+     * @return WebSocketTest.html
+     */
     @GetMapping("/test")
     ModelAndView test() {
         System.out.println("Someone visited our website!");
@@ -50,12 +54,21 @@ public class ARSRestController {
         return modelAndView;
     }
 
+    /**
+     * Returns the current csrf token to prevent Cross-Site Forgery.
+     * @param token
+     * @return CSRF token
+     */
     @GetMapping("/csrf")
     public CsrfToken csrf(CsrfToken token) {
         return token;
     }
 
 
+    /**
+     * Returns 404
+     * @return 404.html
+     */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ModelAndView pageNotFound() {
         System.out.println("404: Page Not Found");

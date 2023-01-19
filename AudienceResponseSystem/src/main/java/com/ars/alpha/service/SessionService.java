@@ -58,8 +58,7 @@ public class SessionService implements SessionServiceInterface {
                 System.out.println(ex.getSQLServerError().getErrorNumber());
                 System.out.println(ex.getSQLServerError().getErrorMessage());
                 System.out.println(ex.getSQLServerError().getErrorSeverity());
-                System.out.println(ex.getSQLServerError().getErrorState()); // This is the important one.
-                // Do further useful stuff
+                System.out.println(ex.getSQLServerError().getErrorState());
             } else {
                 throw new IllegalStateException("How???");
             }
@@ -87,6 +86,12 @@ public class SessionService implements SessionServiceInterface {
         return (Map<String,Long>) returnMap;
     }
 
+    /**
+     * Deletes everything associated with a SessionID (Messages, Users, etc..)
+     * @param sessionID ID field for SessionRoom class
+     * @param ownerID ID field for SessionUser class
+     * @return Map containing Status and Code
+     */
     @Override
     public Map<String, Object> closeSession(Long sessionID, Long ownerID) {
 
@@ -113,6 +118,11 @@ public class SessionService implements SessionServiceInterface {
         return returnerMap;
     }
 
+    /**
+     * Checks whether a session still exists inside the DB.
+     * @param sessionID ID field of SessionRoom class
+     * @return boolean TRUE if session exists, otherwise FALSE
+     */
     @Override
     public boolean checkSessionStatus(Long sessionID) {
 

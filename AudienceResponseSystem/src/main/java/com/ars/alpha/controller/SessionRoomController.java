@@ -34,7 +34,6 @@ public class SessionRoomController {
      */
     @GetMapping("/createSession")
     Map<String, Object> createSession() {
-        System.out.println("Create session listener...");
         return sessionService.createSession();
     }
 
@@ -51,9 +50,6 @@ public class SessionRoomController {
      */
     @PostMapping("/joinSession")
     Map<String, Long> joinSession(@RequestBody Password password) {
-        System.out.println();
-        System.out.println("Join session");
-        System.out.println("Password: " + password.getPassword());
 
         return sessionService.joinSession(password.getPassword());
     }
@@ -85,10 +81,6 @@ public class SessionRoomController {
      */
     @PostMapping("/checkSessionStatus")
     boolean checkStatus(@RequestBody SessionRoom session) {
-//        boolean result = sessionService.checkSessionStatus(session.getID());
-//        Map<String, Boolean> returnerMap = new HashMap<String, Boolean>();
-//        returnerMap.put("Open", result);
-//        return returnerMap;
         return sessionService.checkSessionStatus(session.getID());
     }
 

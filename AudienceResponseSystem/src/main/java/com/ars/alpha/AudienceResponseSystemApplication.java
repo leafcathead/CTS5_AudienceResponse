@@ -13,8 +13,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+/**
+ * MAIN METHOD OF APPLICATION. RUN THIS TO RUN THE SERVER
+ */
 @SpringBootApplication(scanBasePackages = { "com.ars.alpha" })
-//@ImportResource("classpath:beans.xml")
 @EntityScan("com.ars.alpha.model")
 @EnableJpaRepositories("com.ars.alpha.dao")
 public class AudienceResponseSystemApplication {
