@@ -1,3 +1,9 @@
+/**
+ * ARS 2022 - 2023
+ * Author: Amer Aljamous
+ * THU ULM
+ * */
+
 const ownerID = localStorage.getItem('ownerID');
 const sessionID = localStorage.getItem('sessionID');
 const sessionPassword = localStorage.getItem('sessionPassword');
@@ -8,12 +14,6 @@ const SITE_URL = "https://DESKTOP-FUO6UAL";
 //const SITE_URL = "https://localhost";
 let displayname = localStorage.getItem('displayname');
 var token = "";
-
-// function fetching(){
-//     setTimeout(getPosts, 1000);}
-
-
-
 
 
 //post comment

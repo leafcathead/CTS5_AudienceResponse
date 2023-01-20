@@ -24,7 +24,6 @@ if(userID==null){
 
 //post comment
 function postComment() {
-    // checkSessionStatus();
 
 
 
@@ -111,16 +110,8 @@ function postReply(posterID=$("#RposterID").val(),sessionID=$("#RsessionID").val
         })
         .then((data) => {
             console.log(data)
-            getPosts();
-            //   const parg = `
-            //
-            //
-            // your comment has been successfully posted<br/>
-            //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
-            //   `;
-            //
-            //  answer.innerHTML = parg;
-            //  answer = "";
+
+
 
         })
 
@@ -140,14 +131,6 @@ function connect(options) {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        //  console.log('Connected: ' + frame);
-        //   var myDate = {id: sessionID};
-        //   var stringObj = JSON.stringify(myDate);
-        //
-        //   stompClient.send("/app/getMessages", {}, stringObj);
-
-
-
 
 
 
@@ -202,77 +185,15 @@ fetch(SITE_URL + "/csrf", {
 // Restful API fetch comments replies
 function getPosts(responseData) {
   // checkSessionStatus();
-    console.log(responseData);
     let receivedJson = JSON.parse(responseData.body);
     let comments =[];
     let allUsers = 0;
 
     let body = "";
-  //  $("#cardDiv").html("");
 
-  //  body = $("#cardDiv").html();
-  //  body = "";
 
-    // fetch(SITE_URL + "/message/getMessages", {
-    //     method: 'POST',
-    //     body: JSON.stringify({
-    //         id: sessionID
-    //     }),
-    //     headers: {
-    //         "Content-Type": "application/json;charset=UTF-8",
-    //         'X-CSRF-TOKEN': token
-    //     },
-    //     port: 443
-    // })
-    //     .then((response) => {
-    //         return response.json()
-    //     })
-    //     .then((receivedJson) => {
-
-            console.log(receivedJson);
             //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
 
-            // for (let i = 0; i < Object.keys(receivedJson.Messages).length; i++) {
-            //
-            //
-            //      // if(receivedJson.Messages[i].visible == true) {
-            //          for (let k = 0; k < Object.keys(receivedJson.Messages).length; k++) {
-            //
-            //              if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster) {
-            //
-            //                  comments.push({
-            //                      posterID: receivedJson.Messages[k].poster,
-            //                      displayName: receivedJson.Messages[i].poster.displayName,
-            //                      sessionID: receivedJson.Messages[k].session,
-            //                      msgID: receivedJson.Messages[k].id,
-            //                      timestamp: receivedJson.Messages[k].timestamp,
-            //                      msgContents: receivedJson.Messages[k].messageContents,
-            //                      replyTo: receivedJson.Messages[k].replyTo,
-            //                      visible: receivedJson.Messages[k].visible,
-            //                      likes: receivedJson.Messages[k].likes
-            //                  });
-            //
-            //              }
-            //          } //end of k loop
-            //          if (receivedJson.Messages[i].poster.id) {
-            //
-            //
-            //              comments.push({
-            //                  posterID: receivedJson.Messages[i].poster.id,
-            //                  displayName: receivedJson.Messages[i].poster.displayName,
-            //                  sessionID: receivedJson.Messages[i].session,
-            //                  msgID: receivedJson.Messages[i].id,
-            //                  timestamp: receivedJson.Messages[i].timestamp,
-            //                  msgContents: receivedJson.Messages[i].messageContents,
-            //                  replyTo: receivedJson.Messages[i].replyTo,
-            //                  visible: receivedJson.Messages[i].visible,
-            //                  likes: receivedJson.Messages[i].likes
-            //              });
-            //          }
-            //
-            //
-            //
-            // }
 
             for (let i = 0; i < Object.keys(receivedJson.Messages).length; i++) {
 
@@ -314,7 +235,6 @@ function getPosts(responseData) {
 
             } //if of receivedJson
 
-            console.log(comments );
 
 
             comments.sort((a, b) => a.msgID - b.msgID);
@@ -593,9 +513,7 @@ function getPosts(responseData) {
      //   }
         //) // end of .then(receivedJson)
 
-    console.log(comments);
 
-            console.log("end of getMessage");
 
     if(comments.length == 0){
 
@@ -656,7 +574,6 @@ function likeMessage(msgID){
 
 //show data model first then call updateComment();
 function showUpdateModal(posterID,sessionID, msgID, msgContent){
-    // checkSessionStatus();
     $("#exampleModal").modal('show');
     $("#msgID").val(msgID);
     $("#posterID").val(posterID);
@@ -665,102 +582,13 @@ function showUpdateModal(posterID,sessionID, msgID, msgContent){
 
 }
 
-
-//update comment
-// function updateComment(posterID=$("#posterID").val(),msgID=$("#msgID").val(),sessionID=$("#sessionID").val(),msgContent=$("#msgContent").val()){
-//     checkSessionStatus();
-//
-//
-//     //test
-//     console.log("i am update comment   " + posterID +"  " + msgID+"  " + sessionID+"  " + msgContent);
-//     //VPN is not working updateMessageContent type PUT is not yet tested
-//
-//
-//     let answer = document.getElementById('answer');
-//
-//     const data = {
-//
-//         id: msgID,
-//         poster: {
-//             id: posterID
-//         },
-//         session: {
-//             id: sessionID
-//         },
-//         messageContent: $("#updateTextArea").val()
-//
-//     };
-//     console.log(data);
-//     fetch(SITE_URL + "/message/updateMessageContent", {
-//         method: 'PUT',
-//         body: JSON.stringify({
-//
-//             id: msgID,
-//             poster: {
-//                 id: posterID
-//             },
-//             session: {
-//                 id: sessionID
-//             },
-//             messageContent: $("#updateTextArea").val()
-//
-//
-//         }),
-//         headers: {
-//             "Content-Type": "application/json;charset=UTF-8",
-//              'X-CSRF-TOKEN': token
-//         },
-//         port: 443
-//     })
-//         .then((response) => {
-//             return response.json()
-//         })
-//         .then((data) => {
-//             console.log(data)
-//
-//             const parg = `
-//
-//
-//       your comment has been successfully posted<br/>
-//        <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
-//         `;
-//
-//             answer.innerHTML = parg;
-//             answer = "";
-//         })
-//
-//     getPosts();
-//
-// }
-//
-
-
-
 function updateComment(posterID = $("#posterID").val(), msgID = $("#msgID").val(), sessionID = $("#sessionID").val(), msgContent = $("#msgContent").val()) {
-
-    // checkSessionStatus();
-
-    //test
-    console.log("i am update comment   " + posterID + "  " + msgID + "  " + sessionID + "  " + msgContent);
-    //VPN is not working updateMessageContent type PUT is not yet tested
-
 
     let answer = document.getElementById('answer');
 
-    // const data = {
-    //
-    //     id: msgID,
-    //     poster: {
-    //         id: posterID
-    //     },
-    //     session: {
-    //         id: sessionID
-    //     },
-    //     messageContent: $("#updateTextArea").val()
-    //
-    // };
-//last version
-    //  console.log(data);
+
+
+
     fetch(SITE_URL + "/message/updateMessageContent", {
         method: 'PUT',
         body: JSON.stringify({
@@ -786,16 +614,7 @@ function updateComment(posterID = $("#posterID").val(), msgID = $("#msgID").val(
         })
         .then((data) => {
             console.log(data)
-            getPosts();
-            //       const parg = `
-            //
-            //
-            // your comment has been successfully posted<br/>
-            //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
-            //   `;
-            //
-            //       answer.innerHTML = parg;
-            //       answer = "";
+
         });
 
 
@@ -821,7 +640,6 @@ function showReplyModal(posterID,sessionID, msgID){
 
 //update displayname
 function updateDisplayname(){
-    // checkSessionStatus();
     $("#myModal").modal('show');
     $("#newDisNameField").val(displayname);
 }
@@ -829,7 +647,6 @@ function updateDisplayname(){
 
 
 function newDisplyname(){
-    // checkSessionStatus();
     console.log(userID, sessionID, $("#newDisNameField").val() )
 
 
@@ -866,8 +683,7 @@ function newDisplyname(){
 
             if (data.Status == "SUCCESS") {
                 location.reload();
-                // const parg = ` your display name has been successfully updated<br/>`;
-                // answer.innerHTML = parg;
+
             } else {
 
                 console.log("Error has been occurred");
@@ -917,14 +733,13 @@ function panic(code){
             return response.json()
         })
         .then((data) => {
-            console.log(data)
             localStorage.setItem('displayname', $("#newDisNameField").val());
 
 
          //   if (data.Status == "SUCCESS") {
                 const parg = `
 
-      your panic has been sent<br/>
+      your panic has been sent!<br/>
 
         `;
 
@@ -932,10 +747,7 @@ function panic(code){
 
 
                 getPosts();
-           // } else {
 
-            //    console.log("Error has been occurred");
-          //  }
 
 location.reload();
 
@@ -950,7 +762,6 @@ location.reload();
 
 
 function deleteMessage(msgID, posterID, sessionID) {
-    // checkSessionStatus();
     console.log(msgID, posterID, sessionID);
     fetch(SITE_URL + "/message/deleteMessage", {
         method: 'POST',
@@ -976,27 +787,15 @@ function deleteMessage(msgID, posterID, sessionID) {
             return response.json()
         })
         .then((data) => {
-            console.log(data)
 
 
-            //       const parg = `
-            //
-            //
-            // your comment has been successfully posted<br/>
-            //  <button type="button" class="btn btn-primary btn-sm" onclick="postAgain()">post again</button>
-            //   `;
-            //
-            //       answer.innerHTML = parg;
-            //       answer = "";
         });
-    //getPosts();
+
 }
 
 
 
-function postAgain(){
-    location.replace("chatWallUser.html");
-}
+
 
 
 
@@ -1022,13 +821,11 @@ function  checkSessionStatus() {
 
             if(receivedJson == true){
 
-                console.log("your session is exist!");
 
 
             }
             else{
                 alert("your session has been deleted by the owner!");
-                console.log("your session is NOT exist!")
                 logOutUser();
             }
 
@@ -1049,12 +846,6 @@ function logOutUser(){
     localStorage.removeItem('displayname')
     location.replace("index.html")
 }
-
-
-
-
-// setInterval(getPosts,1000);
-
 
 
     //connect();
