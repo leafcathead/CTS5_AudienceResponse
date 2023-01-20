@@ -228,7 +228,6 @@ function getPosts(responseData) {
                 likes: receivedJson.Messages[i].likes
             });
         }
-
     }
 
             comments.sort((a, b) => a.msgID - b.msgID);
