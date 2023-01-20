@@ -165,43 +165,44 @@ function getPosts(responseData) {
 
 
             //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
-            for (let i = 0; i < Object.keys(receivedJson.Messages).length; i++) {
+    for (let i = 0; i < Object.keys(receivedJson.Messages).length; i++) {
 
 
-             //   for (let k = 0; k < Object.keys(receivedJson.Messages).length; k++) {
-                    if (receivedJson.Messages[i].poster.id) {
+        for (let k = 0; k < Object.keys(receivedJson.Messages).length; k++) {
 
-                        comments.push({
-                            posterID: receivedJson.Messages[i].poster.id,
-                            displayName: receivedJson.Messages[i].poster.displayName,
-                            sessionID: receivedJson.Messages[i].session,
-                            msgID: receivedJson.Messages[i].id,
-                            timestamp: receivedJson.Messages[i].timestamp,
-                            msgContents: receivedJson.Messages[i].messageContents,
-                            replyTo: receivedJson.Messages[i].replyTo,
-                            visible: receivedJson.Messages[i].visible,
-                            likes: receivedJson.Messages[i].likes
-                        });
+            if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster) {
 
-                    }
-              //  } //end of k loop
-                else  {
-
-
-                    comments.push({
-                        posterID: receivedJson.Messages[i].poster,
-                        displayName: "user#"+receivedJson.Messages[i].poster,
-                        sessionID: receivedJson.Messages[i].session,
-                        msgID: receivedJson.Messages[i].id,
-                        timestamp: receivedJson.Messages[i].timestamp,
-                        msgContents: receivedJson.Messages[i].messageContents,
-                        replyTo: receivedJson.Messages[i].replyTo,
-                        visible: receivedJson.Messages[i].visible,
-                        likes: receivedJson.Messages[i].likes
-                    });
-                }
+                comments.push({
+                    posterID: receivedJson.Messages[k].poster,
+                    displayName: receivedJson.Messages[i].poster.displayName,
+                    sessionID: receivedJson.Messages[k].session,
+                    msgID: receivedJson.Messages[k].id,
+                    timestamp: receivedJson.Messages[k].timestamp,
+                    msgContents: receivedJson.Messages[k].messageContents,
+                    replyTo: receivedJson.Messages[k].replyTo,
+                    visible: receivedJson.Messages[k].visible,
+                    likes: receivedJson.Messages[k].likes
+                });
 
             }
+        } //end of k loop
+        if (receivedJson.Messages[i].poster.id) {
+
+
+            comments.push({
+                posterID: receivedJson.Messages[i].poster.id,
+                displayName: receivedJson.Messages[i].poster.displayName,
+                sessionID: receivedJson.Messages[i].session,
+                msgID: receivedJson.Messages[i].id,
+                timestamp: receivedJson.Messages[i].timestamp,
+                msgContents: receivedJson.Messages[i].messageContents,
+                replyTo: receivedJson.Messages[i].replyTo,
+                visible: receivedJson.Messages[i].visible,
+                likes: receivedJson.Messages[i].likes
+            });
+        }
+
+    }
 
 
             comments.sort((a, b) => a.msgID - b.msgID);
