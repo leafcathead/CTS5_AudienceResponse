@@ -4,8 +4,8 @@ const sessionPassword = localStorage.getItem('sessionPassword');
 
 // const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de";
 //   const SITE_URL = "https://rhit-r90y2r8w";
-//const SITE_URL = "https://DESKTOP-FUO6UAL";
-const SITE_URL = "https://localhost";
+const SITE_URL = "https://DESKTOP-FUO6UAL";
+//const SITE_URL = "https://localhost";
 let displayname = localStorage.getItem('displayname');
 var token = "";
 
@@ -77,7 +77,6 @@ function postComment() {
 }
 
 
-
 //post reply
 function postReply(posterID = $("#RposterID").val(), sessionID = $("#RsessionID").val(), msgID = $("#RmsgID").val(), msgContent = $("#RmsgContent").val()) {
     // let answer = document.getElementById('');
@@ -134,20 +133,10 @@ function postReply(posterID = $("#RposterID").val(), sessionID = $("#RsessionID"
 
 
 
-
-
-
-
-
 /**
- *
  * webSocket
- *
- *
- * */
+ */
 var stompClient = null;
-
-
 
 
 function connect(options) {
@@ -173,6 +162,8 @@ function connect(options) {
         var myDate = {id: sessionID};
         var stringObj = JSON.stringify(myDate);
         stompClient.send("/app/getMessages", {}, stringObj);
+
+
     });
 }
 
@@ -184,86 +175,10 @@ function disconnect() {
     setConnected(false);
     console.log("Disconnected");
 }
-//
-// /**
-//  function postComment() {
-//     var myDate = {messageContent: "Good morning", poster: {id: "1"}, session: { id: "1"}};
-//     var stringObj = JSON.stringify(myDate);
-//
-//     stompClient.send("/app/getMessages", {}, stringObj);
-// }
 
-// function insertPanic() {
-//     var myDate = {id: 1};
-//     var stringObj = JSON.stringify(myDate);
-//
-// /**
-//  * Works with Restful API too, just use websocket for the get messages.
-//  */
-// // function postCommentsssssss() {
-// //
-// //     const data = {
-// //
-// //         poster: {
-// //             id:  1
-// //         },
-// //         session: {
-// //             id: 1
-// //         },
-// //         messageContent: "Austria"
-// //
-// //     };
-// //     console.log(data);
-// //     fetch(SITE_URL + "/message/postComment", {
-// //         method: 'POST',
-// //         body: JSON.stringify({
-// //
-// //             poster: {
-// //                 id:  1
-// //             },
-// //             session: {
-// //                 id: 1
-// //             },
-// //             messageContent: "Australia"
-// //
-// //
-// //         }),
-// //         headers: {
-// //             "Content-Type": "application/json;charset=UTF-8",
-// //              'X-CSRF-TOKEN': token
-// //         },
-//         port: 443
-// //     })
-// //         .then((response) => {
-// //             return response.json()
-// //         })
-// //         .then((data) => {
-// //             console.log(data)
-// //         })
-// // }
-//
-// }
-
-// RUN THIS WHENEVER THE JAVASCRIPT FILE IS OPENED SO THAT IT AUTO CONNECTS
-
-
-// function getPostWS() {
-//     // if(greeting() == false){
-// // checkSessionStatus();
-//     checkSessionStatus();
-//
-//
-// RUN THIS WHENEVER THE JAVASCRIPT FILE IS OPENED SO THAT IT AUTO CONNECTS
-
-    //connect(); // MOVED TO VERY BOTTOM
 
 //get posts from DB WebSocket(Recommended way)receivedJson
 function getPosts(responseData) {
-    // if(greeting() == false){
-    // checkSessionStatus();
-    //   console.log(checkSessionStatus());
-
-
 
     console.log(responseData);
     let receivedJson = JSON.parse(responseData.body);
@@ -271,38 +186,39 @@ function getPosts(responseData) {
     let allUsers = 0;
 
     let body = $("#cardDiv").html();
-            console.log("Websocket response v2")
+            console.log("Websocket response v2");
             console.log(receivedJson);
+
 
     body= "";
             //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
             for (let i = 0; i < Object.keys(receivedJson.Messages).length; i++) {
 
 
-                for (let k = 0; k < Object.keys(receivedJson.Messages).length; k++) {
+             //   for (let k = 0; k < Object.keys(receivedJson.Messages).length; k++) {
 
-                    if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster) {
+                    if (receivedJson.Messages[i].poster.id) {
 
                         comments.push({
-                            posterID: receivedJson.Messages[k].poster,
+                            posterID: receivedJson.Messages[i].poster.id,
                             displayName: receivedJson.Messages[i].poster.displayName,
-                            sessionID: receivedJson.Messages[k].session,
-                            msgID: receivedJson.Messages[k].id,
-                            timestamp: receivedJson.Messages[k].timestamp,
-                            msgContents: receivedJson.Messages[k].messageContents,
-                            replyTo: receivedJson.Messages[k].replyTo,
-                            visible: receivedJson.Messages[k].visible,
-                            likes: receivedJson.Messages[k].likes
+                            sessionID: receivedJson.Messages[i].session,
+                            msgID: receivedJson.Messages[i].id,
+                            timestamp: receivedJson.Messages[i].timestamp,
+                            msgContents: receivedJson.Messages[i].messageContents,
+                            replyTo: receivedJson.Messages[i].replyTo,
+                            visible: receivedJson.Messages[i].visible,
+                            likes: receivedJson.Messages[i].likes
                         });
 
                     }
-                } //end of k loop
-                if (receivedJson.Messages[i].poster.id) {
+              //  } //end of k loop
+                else  {
 
 
                     comments.push({
-                        posterID: receivedJson.Messages[i].poster.id,
-                        displayName: receivedJson.Messages[i].poster.displayName,
+                        posterID: receivedJson.Messages[i].poster,
+                        displayName: "user#"+receivedJson.Messages[i].poster,
                         sessionID: receivedJson.Messages[i].session,
                         msgID: receivedJson.Messages[i].id,
                         timestamp: receivedJson.Messages[i].timestamp,
@@ -616,7 +532,7 @@ ${visibilityButton}
          // end of .then(receivedJson)
 
 
-    comments = [];
+ //   comments = [];
     body = "";
 
 // }    //end of checking session status condition
@@ -1188,6 +1104,7 @@ function deleteMessage(msgID, posterID, sessionID) {
             //       answer = "";
         });
     //getPosts();
+
 }
 
 

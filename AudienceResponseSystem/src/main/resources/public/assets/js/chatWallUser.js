@@ -12,8 +12,8 @@ const sessionID = localStorage.getItem('sessionID');
 let displayname =  localStorage.getItem('displayname');
  // const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de";
  // const SITE_URL = "https://rhit-r90y2r8w";
-// const SITE_URL = "https://DESKTOP-FUO6UAL";
-const SITE_URL = "https://localhost";
+ const SITE_URL = "https://DESKTOP-FUO6UAL";
+// const SITE_URL = "https://localhost";
 var token = "";
 
 //check if user logged in
@@ -147,9 +147,7 @@ function connect(options) {
         //
         //   stompClient.send("/app/getMessages", {}, stringObj);
 
-        var myDate = {id: sessionID};
-        var stringObj = JSON.stringify(myDate);
-        stompClient.send("/app/getMessages", {}, stringObj);
+
 
 
 
@@ -166,6 +164,7 @@ function connect(options) {
         var myDate = {id: sessionID};
         var stringObj = JSON.stringify(myDate);
         stompClient.send("/app/getMessages", {}, stringObj);
+
     });
 }
 
@@ -559,74 +558,115 @@ fetch(SITE_URL + "/csrf", {
 
 
 // Restful API fetch comments replies
-function getPosts(receivedJson) {
+function getPosts(responseData) {
   // checkSessionStatus();
-
+    console.log(responseData);
+    let receivedJson = JSON.parse(responseData.body);
     let comments =[];
     let allUsers = 0;
     let body = $("#cardDiv").html();
-    fetch(SITE_URL + "/message/getMessages", {
-        method: 'POST',
-        body: JSON.stringify({
-            id: sessionID
-        }),
-        headers: {
-            "Content-Type": "application/json;charset=UTF-8",
-            'X-CSRF-TOKEN': token
-        },
-        port: 443
-    })
-        .then((response) => {
-            return response.json()
-        })
-        .then((receivedJson) => {
+    body = "";
+    // fetch(SITE_URL + "/message/getMessages", {
+    //     method: 'POST',
+    //     body: JSON.stringify({
+    //         id: sessionID
+    //     }),
+    //     headers: {
+    //         "Content-Type": "application/json;charset=UTF-8",
+    //         'X-CSRF-TOKEN': token
+    //     },
+    //     port: 443
+    // })
+    //     .then((response) => {
+    //         return response.json()
+    //     })
+    //     .then((receivedJson) => {
 
             console.log(receivedJson);
             //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
 
+            // for (let i = 0; i < Object.keys(receivedJson.Messages).length; i++) {
+            //
+            //
+            //      // if(receivedJson.Messages[i].visible == true) {
+            //          for (let k = 0; k < Object.keys(receivedJson.Messages).length; k++) {
+            //
+            //              if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster) {
+            //
+            //                  comments.push({
+            //                      posterID: receivedJson.Messages[k].poster,
+            //                      displayName: receivedJson.Messages[i].poster.displayName,
+            //                      sessionID: receivedJson.Messages[k].session,
+            //                      msgID: receivedJson.Messages[k].id,
+            //                      timestamp: receivedJson.Messages[k].timestamp,
+            //                      msgContents: receivedJson.Messages[k].messageContents,
+            //                      replyTo: receivedJson.Messages[k].replyTo,
+            //                      visible: receivedJson.Messages[k].visible,
+            //                      likes: receivedJson.Messages[k].likes
+            //                  });
+            //
+            //              }
+            //          } //end of k loop
+            //          if (receivedJson.Messages[i].poster.id) {
+            //
+            //
+            //              comments.push({
+            //                  posterID: receivedJson.Messages[i].poster.id,
+            //                  displayName: receivedJson.Messages[i].poster.displayName,
+            //                  sessionID: receivedJson.Messages[i].session,
+            //                  msgID: receivedJson.Messages[i].id,
+            //                  timestamp: receivedJson.Messages[i].timestamp,
+            //                  msgContents: receivedJson.Messages[i].messageContents,
+            //                  replyTo: receivedJson.Messages[i].replyTo,
+            //                  visible: receivedJson.Messages[i].visible,
+            //                  likes: receivedJson.Messages[i].likes
+            //              });
+            //          }
+            //
+            //
+            //
+            // }
+
             for (let i = 0; i < Object.keys(receivedJson.Messages).length; i++) {
 
 
-                 // if(receivedJson.Messages[i].visible == true) {
-                     for (let k = 0; k < Object.keys(receivedJson.Messages).length; k++) {
+                //   for (let k = 0; k < Object.keys(receivedJson.Messages).length; k++) {
 
-                         if (receivedJson.Messages[i].poster.id == receivedJson.Messages[k].poster) {
+                if (receivedJson.Messages[i].poster.id) {
 
-                             comments.push({
-                                 posterID: receivedJson.Messages[k].poster,
-                                 displayName: receivedJson.Messages[i].poster.displayName,
-                                 sessionID: receivedJson.Messages[k].session,
-                                 msgID: receivedJson.Messages[k].id,
-                                 timestamp: receivedJson.Messages[k].timestamp,
-                                 msgContents: receivedJson.Messages[k].messageContents,
-                                 replyTo: receivedJson.Messages[k].replyTo,
-                                 visible: receivedJson.Messages[k].visible,
-                                 likes: receivedJson.Messages[k].likes
-                             });
+                    comments.push({
+                        posterID: receivedJson.Messages[i].poster.id,
+                        displayName: receivedJson.Messages[i].poster.displayName,
+                        sessionID: receivedJson.Messages[i].session,
+                        msgID: receivedJson.Messages[i].id,
+                        timestamp: receivedJson.Messages[i].timestamp,
+                        msgContents: receivedJson.Messages[i].messageContents,
+                        replyTo: receivedJson.Messages[i].replyTo,
+                        visible: receivedJson.Messages[i].visible,
+                        likes: receivedJson.Messages[i].likes
+                    });
 
-                         }
-                     } //end of k loop
-                     if (receivedJson.Messages[i].poster.id) {
-
-
-                         comments.push({
-                             posterID: receivedJson.Messages[i].poster.id,
-                             displayName: receivedJson.Messages[i].poster.displayName,
-                             sessionID: receivedJson.Messages[i].session,
-                             msgID: receivedJson.Messages[i].id,
-                             timestamp: receivedJson.Messages[i].timestamp,
-                             msgContents: receivedJson.Messages[i].messageContents,
-                             replyTo: receivedJson.Messages[i].replyTo,
-                             visible: receivedJson.Messages[i].visible,
-                             likes: receivedJson.Messages[i].likes
-                         });
-                     }
+                }
+                //  } //end of k loop
+                else  {
 
 
+                    comments.push({
+                        posterID: receivedJson.Messages[i].poster,
+                        displayName: "user#"+receivedJson.Messages[i].poster,
+                        sessionID: receivedJson.Messages[i].session,
+                        msgID: receivedJson.Messages[i].id,
+                        timestamp: receivedJson.Messages[i].timestamp,
+                        msgContents: receivedJson.Messages[i].messageContents,
+                        replyTo: receivedJson.Messages[i].replyTo,
+                        visible: receivedJson.Messages[i].visible,
+                        likes: receivedJson.Messages[i].likes
+                    });
+                }
 
             }
 
-            console.log(comments);
+            console.log(comments );
 
 
             comments.sort((a, b) => a.msgID - b.msgID);
@@ -905,7 +945,8 @@ function getPosts(receivedJson) {
 
 
             }
-        }) // end of .then(receivedJson)
+     //   }
+        //) // end of .then(receivedJson)
 
     console.log(comments);
     comments= [];
@@ -1257,12 +1298,11 @@ location.reload();
 
 
 
-function deleteMessage(msgID, posterID, sessionID){
+function deleteMessage(msgID, posterID, sessionID) {
     // checkSessionStatus();
-
     console.log(msgID, posterID, sessionID);
     fetch(SITE_URL + "/message/deleteMessage", {
-        method: 'DELETE',
+        method: 'POST',
         body: JSON.stringify({
 
             id: msgID,
@@ -1287,7 +1327,7 @@ function deleteMessage(msgID, posterID, sessionID){
         .then((data) => {
             console.log(data)
 
-            getPosts();
+
             //       const parg = `
             //
             //
@@ -1298,9 +1338,8 @@ function deleteMessage(msgID, posterID, sessionID){
             //       answer.innerHTML = parg;
             //       answer = "";
         });
-
+    //getPosts();
 }
-
 
 
 
