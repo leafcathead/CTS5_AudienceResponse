@@ -4,7 +4,8 @@ const sessionPassword = localStorage.getItem('sessionPassword');
 
 // const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de";
 //   const SITE_URL = "https://rhit-r90y2r8w";
- const SITE_URL = "https://DESKTOP-FUO6UAL";
+//const SITE_URL = "https://DESKTOP-FUO6UAL";
+const SITE_URL = "https://localhost";
 let displayname = localStorage.getItem('displayname');
 var token = "";
 
@@ -156,15 +157,6 @@ function connect(options) {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        //  console.log('Connected: ' + frame);
-        //   var myDate = {id: sessionID};
-        //   var stringObj = JSON.stringify(myDate);
-        //
-        //   stompClient.send("/app/getMessages", {}, stringObj);
-
-        var myDate = {id: sessionID};
-        var stringObj = JSON.stringify(myDate);
-        stompClient.send("/app/getMessages", {}, stringObj);
 
 
 
