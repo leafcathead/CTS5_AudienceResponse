@@ -1,0 +1,64 @@
+@startuml
+package com.ars.alpha.model {
+
+class SessionUser
+class SessionRoom
+class Message
+class Liked
+class PanicButton
+class PanicResponse
+
+}
+
+package com.ars.alpha.service {
+
+class SessionService implements SessionServiceInterface
+class UserService implements UserServiceInterface
+class MessageService implements UserServiceInterface
+class PanicService implements PanicServiceInterface
+
+
+interface SessionServiceInterface
+interface UserServiceInterface
+interface MessageServiceInterface
+interface PanicServiceInterface
+
+}
+
+package com.ars.alpha.dao {
+
+interface SessionRepository extends JpaRepository
+interface UserRepository extends JpaRepository
+interface MessageRepository extends JpaRepository
+interface PanicRepository extends JpaRepository
+
+}
+
+package com.ars.alpha.controller {
+
+class ARSRestController
+class MessageController
+class MessageWebController
+class PanicController
+class SessionRoomController
+class SessionUserController
+
+}
+
+package com.ars.alpha.other {
+
+class Password
+enum Status
+
+}
+
+
+UserService -- UserRepository
+SessionService -- SessionRepository
+MessageService -- MessageRepository
+
+
+UserService -- ARSRestController
+SessionService -- ARSRestController
+MessageService -- ARSRestController
+@enduml
