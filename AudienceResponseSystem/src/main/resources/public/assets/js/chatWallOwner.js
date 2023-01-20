@@ -10,8 +10,8 @@ const sessionPassword = localStorage.getItem('sessionPassword');
 
 // const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de";
 //   const SITE_URL = "https://rhit-r90y2r8w";
-const SITE_URL = "https://DESKTOP-FUO6UAL";
-//const SITE_URL = "https://localhost";
+//const SITE_URL = "https://DESKTOP-FUO6UAL";
+const SITE_URL = "https://localhost";
 let displayname = localStorage.getItem('displayname');
 var token = "";
 
@@ -156,16 +156,12 @@ function disconnect() {
 //get posts from DB WebSocket(Recommended way)receivedJson
 function getPosts(responseData) {
 
-    console.log(responseData);
     let receivedJson = JSON.parse(responseData.body);
     let comments = [];
     let allUsers = 0;
     let body = "";
     $("#cardDiv").html("");
     //  body = $("#cardDiv").html();
-
-            console.log("Websocket response v2");
-            console.log(receivedJson);
 
 
             //pulling data from Json server side file and pushing the comments inside well-ordered js array[]
@@ -208,7 +204,6 @@ function getPosts(responseData) {
             }
 
 
-            console.log("comments before for comments loop", comments)
             comments.sort((a, b) => a.msgID - b.msgID);
 
 
@@ -484,9 +479,7 @@ ${visibilityButton}
                     //  comments.pop();
                 }
 
-                console.log("comments after for comments loop", comments)
 
-                // repliesTmp = "";
 
                 $("#cardDiv").html(body);
 
@@ -522,18 +515,7 @@ function panic(data) {
     var panicNotification = Object.keys(dataJson.PanicResponse).length ;
              panicSpan.textContent = panicNotification;
                  for (var i = 0; i < Object.keys(dataJson).length; i++) {
-                     console.log(dataJson.PanicResponse[i].panicker.displayName);
-                     console.log(dataJson.PanicResponse[i].panicType.desc);
                  }
-//alternative results
-    //         let a = ` <table class="table table-hover"> <tr>
-    //   <th scope="col">ID</th>
-    //   <th scope="col">Name</th><br/>
-    //   <th scope="col">Code</th>
-    //   <th scope="col">Content</th>
-    // </tr></table>`;
-    //
-    //         panicDiv.innerHTML = a+body;
 
 }
 
@@ -542,7 +524,6 @@ function panic(data) {
 
 
 function likeMessage(msgID) {
-    console.log(msgID);
 
 
     fetch(SITE_URL + "/message/likeMessage", {
@@ -568,8 +549,6 @@ function likeMessage(msgID) {
             return response.json()
         })
         .then((data) => {
-            console.log(data)
-            //getPosts();
 
         })
 
@@ -578,7 +557,6 @@ function likeMessage(msgID) {
 
 
 function deleteMessage(msgID, posterID, sessionID) {
-    console.log(msgID, posterID, sessionID);
     fetch(SITE_URL + "/message/deleteMessage", {
         method: 'POST',
         body: JSON.stringify({
@@ -605,7 +583,6 @@ function deleteMessage(msgID, posterID, sessionID) {
             return response.json()
         })
         .then((data) => {
-            console.log(data)
 
         });
 
@@ -645,10 +622,8 @@ function getVisibility(msgID, posterID, visible) {
                 return response.json()
             })
             .then((data) => {
-                console.log(data)
             });
 
-        console.log("is visible" + visible);
     } else {
         fetch(SITE_URL + "/message/updateVisibility", {
             method: 'PUT',
@@ -673,12 +648,10 @@ function getVisibility(msgID, posterID, visible) {
                 return response.json()
             })
             .then((data) => {
-                console.log(data)
 
             });
 
 
-        console.log("is visible" + visible);
     }
 
 
@@ -705,12 +678,10 @@ function showUpdateModal(posterID, sessionID, msgID, msgContent) {
     $("#msgContent").val(msgContent);
 
 
-    console.log(posterID, sessionID, msgID, msgContent);
 
 }
 
 function showReplyModal(posterID, sessionID, msgID) {
-    // checkSessionStatus();
     $("#replyModal").modal('show');
 
     $("#RmsgID").val(msgID);
@@ -753,7 +724,6 @@ function updateComment(posterID = $("#posterID").val(), msgID = $("#msgID").val(
             return response.json()
         })
         .then((data) => {
-            console.log(data)
         });
 
 
@@ -762,8 +732,7 @@ function updateComment(posterID = $("#posterID").val(), msgID = $("#msgID").val(
 
 //update comment
 function updateDisplayname() {
-    //test
-    // checkSessionStatus();
+
     $("#myModal").modal('show');
     $("#newDisNameField").val(displayname);
 
@@ -804,7 +773,6 @@ function newDisplyname() {
             return response.json()
         })
         .then((data) => {
-            console.log(data)
             localStorage.setItem('displayname', $("#newDisNameField").val());
 
 
@@ -812,7 +780,6 @@ function newDisplyname() {
                 location.reload();
             } else {
 
-                console.log("Error has been occurred");
             }
 
 
@@ -849,7 +816,6 @@ function  checkSessionStatus() {
         })
         .then((receivedJson) => {
 
-            console.log("SESSION STATUS" + receivedJson)
 
             if (receivedJson == true) {
 
@@ -890,7 +856,6 @@ function deleteSession() {
             })
             .then((receivedJson) => {
 
-                console.log("Delete testing")
                 logOutOwner();
 
                 return receivedJson;
