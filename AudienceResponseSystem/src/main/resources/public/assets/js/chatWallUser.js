@@ -7,10 +7,10 @@
 const userID = localStorage.getItem('userID');
 const sessionID = localStorage.getItem('sessionID');
 let displayname =  localStorage.getItem('displayname');
- // const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de";
+  const SITE_URL = "https://i-lv-sopr-01.informatik.hs-ulm.de";
  // const SITE_URL = "https://rhit-r90y2r8w";
-// const SITE_URL = "https://DESKTOP-FUO6UAL";
- const SITE_URL = "https://localhost";
+ //const SITE_URL = "https://DESKTOP-FUO6UAL";
+ //const SITE_URL = "https://localhost";
 var token = "";
 
 //check if user logged in
@@ -240,7 +240,7 @@ function getPosts(responseData) {
                     let countReplies = 0;
 
 
-//hide comment's owner controllers "never give body any js executing codes (variables & []  only)"
+//hide comment's USER controllers "never give body any js executing codes (variables & []  only)"
                     let editBtn = "";
                     let deleteBtn = "";
                     if (userID == comments[i].posterID) {
@@ -562,9 +562,6 @@ function likeMessage(msgID){
 }
 
 
-
-
-
 //show data model first then call updateComment();
 function showUpdateModal(posterID,sessionID, msgID, msgContent){
     $("#exampleModal").modal('show');
@@ -614,8 +611,6 @@ function updateComment(posterID = $("#posterID").val(), msgID = $("#msgID").val(
 }
 
 
-
-
 function showReplyModal(posterID,sessionID, msgID){
 
     $("#replyModal").modal('show');
@@ -627,17 +622,11 @@ function showReplyModal(posterID,sessionID, msgID){
 }
 
 
-
-
-
-
 //update displayname
 function updateDisplayname(){
     $("#myModal").modal('show');
     $("#newDisNameField").val(displayname);
 }
-
-
 
 function newDisplyname(){
     console.log(userID, sessionID, $("#newDisNameField").val() )
@@ -687,7 +676,6 @@ function newDisplyname(){
         });
 
 }
-
 
 function panic(code){
 
@@ -751,9 +739,6 @@ location.reload();
 
 }
 
-
-
-
 function deleteMessage(msgID, posterID, sessionID) {
     console.log(msgID, posterID, sessionID);
     fetch(SITE_URL + "/message/deleteMessage", {
@@ -785,12 +770,6 @@ function deleteMessage(msgID, posterID, sessionID) {
         });
 
 }
-
-
-
-
-
-
 
 function  checkSessionStatus() {
 
